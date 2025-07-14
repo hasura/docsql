@@ -1,0 +1,53 @@
+kind: DataConnectorLink
+version: v1
+definition:
+  name: ts
+  url:
+    readWriteUrls:
+      read:
+        valueFromEnv: APP_TS_READ_URL
+      write:
+        valueFromEnv: APP_TS_WRITE_URL
+  headers:
+    Authorization:
+      valueFromEnv: APP_TS_AUTHORIZATION_HEADER
+  schema:
+    version: v0.1
+    schema:
+      collections: []
+      functions:
+        - arguments:
+            text:
+              type:
+                name: String
+                type: named
+          name: transformQueryIntoEmbedding
+          result_type:
+            element_type:
+              name: Float
+              type: named
+            type: array
+      object_types: {}
+      procedures: []
+      scalar_types:
+        Float:
+          aggregate_functions: {}
+          comparison_operators:
+            _eq:
+              type: equal
+          representation:
+            type: float64
+        String:
+          aggregate_functions: {}
+          comparison_operators:
+            _eq:
+              type: equal
+          representation:
+            type: string
+    capabilities:
+      capabilities:
+        mutation: {}
+        query:
+          nested_fields: {}
+          variables: {}
+      version: 0.1.6
