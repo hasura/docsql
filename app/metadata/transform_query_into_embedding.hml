@@ -1,0 +1,26 @@
+---
+kind: Command
+version: v1
+definition:
+  name: transform_query_into_embedding
+  outputType: "[Float!]!"
+  arguments:
+    - name: text
+      type: String!
+  source:
+    dataConnectorName: ts
+    dataConnectorCommand:
+      function: transformQueryIntoEmbedding
+  graphql:
+    rootFieldName: transform_query_into_embedding
+    rootFieldKind: Query
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: transform_query_into_embedding
+  permissions:
+    - role: admin
+      allowExecution: true
+

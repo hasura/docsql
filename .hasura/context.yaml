@@ -13,7 +13,7 @@ definition:
     docker-start:
       bash:
         HASURA_DDN_PAT=$(ddn auth print-access-token) PROMPTQL_SECRET_KEY=$(ddn auth print-promptql-secret-key) docker
-        compose -f compose.yaml --env-file .env up --build --pull always -d
+        compose -f compose.yaml --env-file .env up --build --pull always --watch
       powershell:
         $Env:HASURA_DDN_PAT = ddn auth print-access-token; $Env:PROMPTQL_SECRET_KEY = ddn auth
         print-promptql-secret-key; docker compose -f compose.yaml --env-file .env up --build --pull always

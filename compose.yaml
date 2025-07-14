@@ -1,5 +1,6 @@
 include:
   - path: app/connector/pg/compose.yaml
+  - path: app/connector/ts/compose.yaml
 services:
   engine:
     build:
