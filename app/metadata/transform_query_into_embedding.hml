@@ -1,9 +1,35 @@
 ---
+kind: ObjectType
+version: v1
+definition:
+  name: embedding_result
+  fields:
+    - name: values
+      type: "[Float!]!"
+  graphql:
+    typeName: embedding_result
+    inputTypeName: embedding_result_input
+  dataConnectorTypeMapping:
+    - dataConnectorName: ts
+      dataConnectorObjectType: EmbeddingResult
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: embedding_result
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - values
+
+---
 kind: Command
 version: v1
 definition:
   name: transform_query_into_embedding
-  outputType: "[Float!]!"
+  outputType: embedding_result!
   arguments:
     - name: text
       type: String!

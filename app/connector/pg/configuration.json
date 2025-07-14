@@ -710,5 +710,105 @@
             ],
             "foreign_keys": {}
         }
-    ]
+    ],
+    "native_queries": {
+        "embeddings_vector_distance": {
+            "sqlFile": "native_operations/queries/embeddings_vector_distance.sql",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": {
+                        "type": "scalar_type",
+                        "value": "other"
+                    },
+                    "nullable": false,
+                    "description": null
+                },
+                "chunk_content": {
+                    "name": "chunk_content",
+                    "type": {
+                        "type": "scalar_type",
+                        "value": "varchar"
+                    },
+                    "nullable": false,
+                    "description": null
+                },
+                "page_title": {
+                    "name": "page_title",
+                    "type": {
+                        "type": "scalar_type",
+                        "value": "varchar"
+                    },
+                    "nullable": true,
+                    "description": null
+                },
+                "page_url": {
+                    "name": "page_url",
+                    "type": {
+                        "type": "scalar_type",
+                        "value": "varchar"
+                    },
+                    "nullable": false,
+                    "description": null
+                },
+                "page_description": {
+                    "name": "page_description",
+                    "type": {
+                        "type": "scalar_type",
+                        "value": "varchar"
+                    },
+                    "nullable": true,
+                    "description": null
+                },
+                "version": {
+                    "name": "version",
+                    "type": {
+                        "type": "scalar_type",
+                        "value": "varchar"
+                    },
+                    "nullable": true,
+                    "description": null
+                },
+                "distance": {
+                    "name": "distance",
+                    "type": {
+                        "type": "scalar_type",
+                        "value": "bit"
+                    },
+                    "nullable": true,
+                    "description": null
+                }
+            },
+            "arguments": {
+                "query_vector": {
+                    "type": {
+                        "type": "scalar_type",
+                        "value": "other"
+                    },
+                    "nullable": true,
+                    "position": 3,
+                    "description": null
+                },
+                "version_filter": {
+                    "type": {
+                        "type": "scalar_type",
+                        "value": "varchar"
+                    },
+                    "nullable": true,
+                    "position": 2,
+                    "description": null
+                },
+                "limit_count": {
+                    "type": {
+                        "type": "scalar_type",
+                        "value": "bigint"
+                    },
+                    "nullable": true,
+                    "position": 4,
+                    "description": null
+                }
+            },
+            "description": null
+        }
+    }
 }

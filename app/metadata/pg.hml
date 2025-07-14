@@ -67,6 +67,28 @@ definition:
             primary_key:
               unique_columns:
                 - id
+        - arguments:
+            limit_count:
+              type:
+                type: nullable
+                underlying_type:
+                  name: bigint
+                  type: named
+            query_vector:
+              type:
+                type: nullable
+                underlying_type:
+                  name: jsonb
+                  type: named
+            version_filter:
+              type:
+                type: nullable
+                underlying_type:
+                  name: varchar
+                  type: named
+          name: embeddings_vector_distance
+          type: embeddings_vector_distance
+          uniqueness_constraints: {}
       functions: []
       object_types:
         array_set_input:
@@ -1264,6 +1286,52 @@ definition:
                   name: text_set_input
                   type: named
           foreign_keys: {}
+        embeddings_vector_distance:
+          fields:
+            chunk_content:
+              arguments: {}
+              type:
+                name: varchar
+                type: named
+            distance:
+              arguments: {}
+              type:
+                type: nullable
+                underlying_type:
+                  name: boolean
+                  type: named
+            id:
+              arguments: {}
+              type:
+                name: jsonb
+                type: named
+            page_description:
+              arguments: {}
+              type:
+                type: nullable
+                underlying_type:
+                  name: varchar
+                  type: named
+            page_title:
+              arguments: {}
+              type:
+                type: nullable
+                underlying_type:
+                  name: varchar
+                  type: named
+            page_url:
+              arguments: {}
+              type:
+                name: varchar
+                type: named
+            version:
+              arguments: {}
+              type:
+                type: nullable
+                underlying_type:
+                  name: varchar
+                  type: named
+          foreign_keys: {}
         insert_docs_bot.doc_chunk_result:
           description: insert from docs_bot.doc_chunk result
           fields:
@@ -1412,6 +1480,18 @@ definition:
                 type: nullable
                 underlying_type:
                   name: integer
+                  type: named
+          foreign_keys: {}
+        jsonb_set_input:
+          description: Wrapper for setting scalar jsonb
+          fields:
+            value:
+              arguments: {}
+              description: New value for scalar jsonb
+              type:
+                type: nullable
+                underlying_type:
+                  name: jsonb
                   type: named
           foreign_keys: {}
         public.connectors:
@@ -1992,6 +2072,18 @@ definition:
                   name: uuid
                   type: named
           foreign_keys: {}
+        varchar_set_input:
+          description: Wrapper for setting scalar varchar
+          fields:
+            value:
+              arguments: {}
+              description: New value for scalar varchar
+              type:
+                type: nullable
+                underlying_type:
+                  name: varchar
+                  type: named
+          foreign_keys: {}
         vector(1536)_set_input:
           description: Wrapper for setting scalar vector(1536)
           fields:
@@ -2540,7 +2632,7 @@ definition:
                 type: named
               type: custom
           representation:
-            type: biginteger
+            type: int64
         boolean:
           aggregate_functions:
             max:
@@ -2715,6 +2807,66 @@ definition:
               type: custom
           representation:
             type: int32
+        jsonb:
+          aggregate_functions:
+            max:
+              type: max
+            min:
+              type: min
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              type: greater_than
+            _gte:
+              type: greater_than_or_equal
+            _ilike:
+              type: contains_insensitive
+            _in:
+              type: in
+            _iregex:
+              argument_type:
+                name: jsonb
+                type: named
+              type: custom
+            _like:
+              type: contains
+            _lt:
+              type: less_than
+            _lte:
+              type: less_than_or_equal
+            _neq:
+              argument_type:
+                name: jsonb
+                type: named
+              type: custom
+            _nilike:
+              argument_type:
+                name: jsonb
+                type: named
+              type: custom
+            _niregex:
+              argument_type:
+                name: jsonb
+                type: named
+              type: custom
+            _nlike:
+              argument_type:
+                name: jsonb
+                type: named
+              type: custom
+            _nregex:
+              argument_type:
+                name: jsonb
+                type: named
+              type: custom
+            _regex:
+              argument_type:
+                name: jsonb
+                type: named
+              type: custom
+          representation:
+            type: string
         string:
           aggregate_functions:
             max:
@@ -2917,6 +3069,66 @@ definition:
             _regex:
               argument_type:
                 name: uuid
+                type: named
+              type: custom
+          representation:
+            type: string
+        varchar:
+          aggregate_functions:
+            max:
+              type: max
+            min:
+              type: min
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              type: greater_than
+            _gte:
+              type: greater_than_or_equal
+            _ilike:
+              type: contains_insensitive
+            _in:
+              type: in
+            _iregex:
+              argument_type:
+                name: varchar
+                type: named
+              type: custom
+            _like:
+              type: contains
+            _lt:
+              type: less_than
+            _lte:
+              type: less_than_or_equal
+            _neq:
+              argument_type:
+                name: varchar
+                type: named
+              type: custom
+            _nilike:
+              argument_type:
+                name: varchar
+                type: named
+              type: custom
+            _niregex:
+              argument_type:
+                name: varchar
+                type: named
+              type: custom
+            _nlike:
+              argument_type:
+                name: varchar
+                type: named
+              type: custom
+            _nregex:
+              argument_type:
+                name: varchar
+                type: named
+              type: custom
+            _regex:
+              argument_type:
+                name: varchar
                 type: named
               type: custom
           representation:

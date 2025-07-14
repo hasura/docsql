@@ -23,11 +23,17 @@ definition:
                 type: named
           name: transformQueryIntoEmbedding
           result_type:
-            element_type:
-              name: Float
-              type: named
-            type: array
-      object_types: {}
+            name: EmbeddingResult
+            type: named
+      object_types:
+        EmbeddingResult:
+          fields:
+            values:
+              type:
+                element_type:
+                  name: Float
+                  type: named
+                type: array
       procedures: []
       scalar_types:
         Float:

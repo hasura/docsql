@@ -347,40 +347,6 @@ definition:
     typeName: bigdecimal
 
 ---
-kind: BooleanExpressionType
-version: v1
-definition:
-  name: decimal_bool_exp
-  operand:
-    scalar:
-      type: bigdecimal
-      comparisonOperators:
-        - name: _eq
-          argumentType: bigdecimal!
-        - name: _gt
-          argumentType: bigdecimal!
-        - name: _gte
-          argumentType: bigdecimal!
-        - name: _in
-          argumentType: "[bigdecimal!]!"
-        - name: _lt
-          argumentType: bigdecimal!
-        - name: _lte
-          argumentType: bigdecimal!
-        - name: _neq
-          argumentType: bigdecimal!
-      dataConnectorOperatorMapping:
-        - dataConnectorName: pg
-          dataConnectorScalarType: decimal
-          operatorMapping: {}
-  logicalOperators:
-    enable: true
-  isNull:
-    enable: true
-  graphql:
-    typeName: decimal_bool_exp
-
----
 kind: DataConnectorScalarRepresentation
 version: v1
 definition:
@@ -397,40 +363,6 @@ definition:
   name: biginteger
   graphql:
     typeName: biginteger
-
----
-kind: BooleanExpressionType
-version: v1
-definition:
-  name: bigint_bool_exp
-  operand:
-    scalar:
-      type: biginteger
-      comparisonOperators:
-        - name: _eq
-          argumentType: biginteger!
-        - name: _gt
-          argumentType: biginteger!
-        - name: _gte
-          argumentType: biginteger!
-        - name: _in
-          argumentType: "[biginteger!]!"
-        - name: _lt
-          argumentType: biginteger!
-        - name: _lte
-          argumentType: biginteger!
-        - name: _neq
-          argumentType: biginteger!
-      dataConnectorOperatorMapping:
-        - dataConnectorName: pg
-          dataConnectorScalarType: bigint
-          operatorMapping: {}
-  logicalOperators:
-    enable: true
-  isNull:
-    enable: true
-  graphql:
-    typeName: bigint_bool_exp
 
 ---
 kind: DataConnectorScalarRepresentation
@@ -726,4 +658,248 @@ definition:
         enableAll: true
   graphql:
     expressionTypeName: boolean_order_by_exp
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: decimal_bool_exp
+  operand:
+    scalar:
+      type: bigdecimal
+      comparisonOperators:
+        - name: _eq
+          argumentType: bigdecimal!
+        - name: _gt
+          argumentType: bigdecimal!
+        - name: _gte
+          argumentType: bigdecimal!
+        - name: _in
+          argumentType: "[bigdecimal!]!"
+        - name: _lt
+          argumentType: bigdecimal!
+        - name: _lte
+          argumentType: bigdecimal!
+        - name: _neq
+          argumentType: bigdecimal!
+      dataConnectorOperatorMapping:
+        - dataConnectorName: pg
+          dataConnectorScalarType: decimal
+          operatorMapping: {}
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: decimal_bool_exp
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: bigint_bool_exp
+  operand:
+    scalar:
+      type: biginteger
+      comparisonOperators:
+        - name: _eq
+          argumentType: biginteger!
+        - name: _gt
+          argumentType: biginteger!
+        - name: _gte
+          argumentType: biginteger!
+        - name: _in
+          argumentType: "[biginteger!]!"
+        - name: _lt
+          argumentType: biginteger!
+        - name: _lte
+          argumentType: biginteger!
+        - name: _neq
+          argumentType: biginteger!
+      dataConnectorOperatorMapping:
+        - dataConnectorName: pg
+          dataConnectorScalarType: bigint
+          operatorMapping: {}
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: bigint_bool_exp
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: jsonb_bool_exp
+  operand:
+    scalar:
+      type: string
+      comparisonOperators:
+        - name: _eq
+          argumentType: string!
+        - name: _gt
+          argumentType: string!
+        - name: _gte
+          argumentType: string!
+        - name: _ilike
+          argumentType: string!
+        - name: _in
+          argumentType: "[string!]!"
+        - name: _iregex
+          argumentType: string!
+        - name: _like
+          argumentType: string!
+        - name: _lt
+          argumentType: string!
+        - name: _lte
+          argumentType: string!
+        - name: _neq
+          argumentType: string!
+        - name: _nilike
+          argumentType: string!
+        - name: _niregex
+          argumentType: string!
+        - name: _nlike
+          argumentType: string!
+        - name: _nregex
+          argumentType: string!
+        - name: _regex
+          argumentType: string!
+      dataConnectorOperatorMapping:
+        - dataConnectorName: pg
+          dataConnectorScalarType: jsonb
+          operatorMapping: {}
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: jsonb_bool_exp
+
+---
+kind: DataConnectorScalarRepresentation
+version: v1
+definition:
+  dataConnectorName: pg
+  dataConnectorScalarType: jsonb
+  representation: string
+  graphql:
+    comparisonExpressionTypeName: string_comparison_exp_3
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: varchar_bool_exp
+  operand:
+    scalar:
+      type: string
+      comparisonOperators:
+        - name: _eq
+          argumentType: string!
+        - name: _gt
+          argumentType: string!
+        - name: _gte
+          argumentType: string!
+        - name: _ilike
+          argumentType: string!
+        - name: _in
+          argumentType: "[string!]!"
+        - name: _iregex
+          argumentType: string!
+        - name: _like
+          argumentType: string!
+        - name: _lt
+          argumentType: string!
+        - name: _lte
+          argumentType: string!
+        - name: _neq
+          argumentType: string!
+        - name: _nilike
+          argumentType: string!
+        - name: _niregex
+          argumentType: string!
+        - name: _nlike
+          argumentType: string!
+        - name: _nregex
+          argumentType: string!
+        - name: _regex
+          argumentType: string!
+      dataConnectorOperatorMapping:
+        - dataConnectorName: pg
+          dataConnectorScalarType: varchar
+          operatorMapping: {}
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: varchar_bool_exp
+
+---
+kind: DataConnectorScalarRepresentation
+version: v1
+definition:
+  dataConnectorName: pg
+  dataConnectorScalarType: varchar
+  representation: string
+  graphql:
+    comparisonExpressionTypeName: string_comparison_exp_4
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: varchar_agg_exp
+  operand:
+    scalar:
+      aggregatedType: string
+      aggregationFunctions:
+        - name: max
+          returnType: string
+        - name: min
+          returnType: string
+      dataConnectorAggregationFunctionMapping:
+        - dataConnectorName: pg
+          dataConnectorScalarType: varchar
+          functionMapping:
+            max:
+              name: max
+            min:
+              name: min
+  count:
+    enable: true
+  countDistinct:
+    enable: true
+  graphql:
+    selectTypeName: varchar_agg_exp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: jsonb_agg_exp
+  operand:
+    scalar:
+      aggregatedType: string
+      aggregationFunctions:
+        - name: max
+          returnType: string
+        - name: min
+          returnType: string
+      dataConnectorAggregationFunctionMapping:
+        - dataConnectorName: pg
+          dataConnectorScalarType: jsonb
+          functionMapping:
+            max:
+              name: max
+            min:
+              name: min
+  count:
+    enable: true
+  countDistinct:
+    enable: true
+  graphql:
+    selectTypeName: jsonb_agg_exp
 
