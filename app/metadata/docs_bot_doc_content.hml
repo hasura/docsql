@@ -198,3 +198,20 @@ definition:
         filter: null
         allowSubscriptions: true
 
+---
+kind: Relationship
+version: v1
+definition:
+  name: embeddings
+  sourceType: docs_bot_doc_content
+  target:
+    model:
+      name: docs_bot_doc_chunk
+      relationshipType: Object
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: page_url
+      target:
+        modelField:
+          - fieldName: page_url

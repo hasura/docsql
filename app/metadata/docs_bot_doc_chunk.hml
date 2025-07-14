@@ -224,3 +224,20 @@ definition:
         filter: null
         allowSubscriptions: true
 
+---
+kind: Relationship
+version: v1
+definition:
+  name: content
+  sourceType: docs_bot_doc_chunk
+  target:
+    model:
+      name: docs_bot_doc_content
+      relationshipType: Object
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: page_url
+      target:
+        modelField:
+          - fieldName: page_url
