@@ -180,7 +180,8 @@ definition:
           orderByExpression: timestamptz_order_by_exp
         - fieldName: version
           orderByExpression: string_order_by_exp
-      orderableRelationships: []
+      orderableRelationships:
+        - relationshipName: content
   graphql:
     expressionTypeName: docs_bot_doc_chunk_order_by_exp
 
@@ -241,3 +242,4 @@ definition:
       target:
         modelField:
           - fieldName: page_url
+

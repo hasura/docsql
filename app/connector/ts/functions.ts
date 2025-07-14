@@ -7,11 +7,15 @@ const openai = new OpenAI({
     "[REMOVED]",
 });
 
+export type EmbeddingResult = {
+  values: number[];
+};
+
 /**
  *
  * @readonly
  */
-export async function transformQueryIntoEmbedding(text: string): Promise<number[]> {
+export async function transformQueryIntoEmbedding(text: string): Promise<EmbeddingResult> {
   try {
     const response = await openai.embeddings.create({
       model: "text-embedding-3-small",
@@ -19,7 +23,9 @@ export async function transformQueryIntoEmbedding(text: string): Promise<number[
       encoding_format: "float",
     });
 
-    return response.data[0].embedding;
+    return {
+      values: response.data[0].embedding,
+    };
   } catch (error) {
     console.error("Error generating embedding:", error);
     throw new Error(`Failed to generate embedding: ${error instanceof Error ? error.message : "Unknown error"}`);
