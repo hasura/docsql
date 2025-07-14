@@ -1,0 +1,3645 @@
+kind: DataConnectorLink
+version: v1
+definition:
+  name: pg
+  url:
+    readWriteUrls:
+      read:
+        valueFromEnv: APP_PG_READ_URL
+      write:
+        valueFromEnv: APP_PG_WRITE_URL
+  headers:
+    Authorization:
+      valueFromEnv: APP_PG_AUTHORIZATION_HEADER
+  schema:
+    version: v0.2
+    schema:
+      collections:
+        - arguments: {}
+          name: docs_bot.doc_chunk
+          type: docs_bot.doc_chunk
+          uniqueness_constraints:
+            primary_key:
+              unique_columns:
+                - id
+        - arguments: {}
+          name: docs_bot.doc_content
+          type: docs_bot.doc_content
+          uniqueness_constraints:
+            primary_key:
+              unique_columns:
+                - id
+        - arguments: {}
+          name: docs_bot.message
+          type: docs_bot.message
+          uniqueness_constraints:
+            primary_key:
+              unique_columns:
+                - id
+        - arguments: {}
+          name: docs_bot.message_thread
+          type: docs_bot.message_thread
+          uniqueness_constraints:
+            primary_key:
+              unique_columns:
+                - id
+        - arguments: {}
+          description: Collection of user feedback from the docs feedback component
+          name: docs_feedback.doc_feedback
+          type: docs_feedback.doc_feedback
+          uniqueness_constraints:
+            primary_key:
+              unique_columns:
+                - id
+        - arguments: {}
+          description: Stores metadata about DDN Native Data Connectors including associated GitHub repository, unique connector identifier, and designated responsible individual (DRI) which is a relation to the username_mapping table
+          name: public.connectors
+          type: public.connectors
+          uniqueness_constraints:
+            primary_key:
+              unique_columns:
+                - id
+        - arguments: {}
+          description: Maps user identity information including names and various platform handles
+          name: public.username_mapping
+          type: public.username_mapping
+          uniqueness_constraints:
+            primary_key:
+              unique_columns:
+                - id
+      functions: []
+      object_types:
+        array_set_input:
+          description: Wrapper for setting scalar array
+          fields:
+            value:
+              arguments: {}
+              description: New value for scalar array
+              type:
+                type: nullable
+                underlying_type:
+                  name: array
+                  type: named
+          foreign_keys: {}
+        bigint_set_input:
+          description: Wrapper for setting scalar bigint
+          fields:
+            value:
+              arguments: {}
+              description: New value for scalar bigint
+              type:
+                type: nullable
+                underlying_type:
+                  name: bigint
+                  type: named
+          foreign_keys: {}
+        boolean_set_input:
+          description: Wrapper for setting scalar boolean
+          fields:
+            value:
+              arguments: {}
+              description: New value for scalar boolean
+              type:
+                type: nullable
+                underlying_type:
+                  name: boolean
+                  type: named
+          foreign_keys: {}
+        decimal_set_input:
+          description: Wrapper for setting scalar decimal
+          fields:
+            value:
+              arguments: {}
+              description: New value for scalar decimal
+              type:
+                type: nullable
+                underlying_type:
+                  name: decimal
+                  type: named
+          foreign_keys: {}
+        delete_docs_bot.doc_chunk_result:
+          description: delete from docs_bot.doc_chunk result
+          fields:
+            affected_rows:
+              arguments: {}
+              description: Number of affected rows
+              type:
+                name: int
+                type: named
+            returning:
+              arguments: {}
+              description: Objects that were affected by delete
+              type:
+                element_type:
+                  name: docs_bot.doc_chunk
+                  type: named
+                type: array
+          foreign_keys: {}
+        delete_docs_bot.doc_content_result:
+          description: delete from docs_bot.doc_content result
+          fields:
+            affected_rows:
+              arguments: {}
+              description: Number of affected rows
+              type:
+                name: int
+                type: named
+            returning:
+              arguments: {}
+              description: Objects that were affected by delete
+              type:
+                element_type:
+                  name: docs_bot.doc_content
+                  type: named
+                type: array
+          foreign_keys: {}
+        delete_docs_bot.message_result:
+          description: delete from docs_bot.message result
+          fields:
+            affected_rows:
+              arguments: {}
+              description: Number of affected rows
+              type:
+                name: int
+                type: named
+            returning:
+              arguments: {}
+              description: Objects that were affected by delete
+              type:
+                element_type:
+                  name: docs_bot.message
+                  type: named
+                type: array
+          foreign_keys: {}
+        delete_docs_bot.message_thread_result:
+          description: delete from docs_bot.message_thread result
+          fields:
+            affected_rows:
+              arguments: {}
+              description: Number of affected rows
+              type:
+                name: int
+                type: named
+            returning:
+              arguments: {}
+              description: Objects that were affected by delete
+              type:
+                element_type:
+                  name: docs_bot.message_thread
+                  type: named
+                type: array
+          foreign_keys: {}
+        delete_docs_feedback.doc_feedback_result:
+          description: delete from docs_feedback.doc_feedback result
+          fields:
+            affected_rows:
+              arguments: {}
+              description: Number of affected rows
+              type:
+                name: int
+                type: named
+            returning:
+              arguments: {}
+              description: Objects that were affected by delete
+              type:
+                element_type:
+                  name: docs_feedback.doc_feedback
+                  type: named
+                type: array
+          foreign_keys: {}
+        delete_public.connectors_result:
+          description: delete from public.connectors result
+          fields:
+            affected_rows:
+              arguments: {}
+              description: Number of affected rows
+              type:
+                name: int
+                type: named
+            returning:
+              arguments: {}
+              description: Objects that were affected by delete
+              type:
+                element_type:
+                  name: public.connectors
+                  type: named
+                type: array
+          foreign_keys: {}
+        delete_public.username_mapping_result:
+          description: delete from public.username_mapping result
+          fields:
+            affected_rows:
+              arguments: {}
+              description: Number of affected rows
+              type:
+                name: int
+                type: named
+            returning:
+              arguments: {}
+              description: Objects that were affected by delete
+              type:
+                element_type:
+                  name: public.username_mapping
+                  type: named
+                type: array
+          foreign_keys: {}
+        docs_bot.doc_chunk:
+          description: 'Object type for docs_bot.doc_chunk. Description: null'
+          fields:
+            chunk_content:
+              arguments: {}
+              type:
+                name: text
+                type: named
+            chunk_line_end:
+              arguments: {}
+              type:
+                type: nullable
+                underlying_type:
+                  name: integer
+                  type: named
+            chunk_line_start:
+              arguments: {}
+              type:
+                name: integer
+                type: named
+            created_at:
+              arguments: {}
+              type:
+                name: timestamp_with_time_zone
+                type: named
+            doc_content_id_fk:
+              arguments: {}
+              type:
+                name: uuid
+                type: named
+            embedding:
+              arguments: {}
+              type:
+                type: nullable
+                underlying_type:
+                  name: vector(1536)
+                  type: named
+            id:
+              arguments: {}
+              type:
+                name: uuid
+                type: named
+            page_description:
+              arguments: {}
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            page_keywords:
+              arguments: {}
+              type:
+                type: nullable
+                underlying_type:
+                  name: array
+                  type: named
+            page_title:
+              arguments: {}
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            page_url:
+              arguments: {}
+              type:
+                name: text
+                type: named
+            updated_at:
+              arguments: {}
+              type:
+                name: timestamp_with_time_zone
+                type: named
+            version:
+              arguments: {}
+              description: Version of Hasura that this chunk belongs to. "2", "3" or "promptql".
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+          foreign_keys: {}
+        docs_bot.doc_chunk_insert_input:
+          description: Input type for inserting into docs_bot.doc_chunk
+          fields:
+            chunk_content:
+              arguments: {}
+              description: New value for docs_bot.doc_chunk.chunk_content
+              type:
+                name: text
+                type: named
+            chunk_line_end:
+              arguments: {}
+              description: New value for docs_bot.doc_chunk.chunk_line_end
+              type:
+                type: nullable
+                underlying_type:
+                  name: integer
+                  type: named
+            chunk_line_start:
+              arguments: {}
+              description: New value for docs_bot.doc_chunk.chunk_line_start
+              type:
+                name: integer
+                type: named
+            created_at:
+              arguments: {}
+              description: New value for docs_bot.doc_chunk.created_at
+              type:
+                name: timestamp_with_time_zone
+                type: named
+            doc_content_id_fk:
+              arguments: {}
+              description: New value for docs_bot.doc_chunk.doc_content_id_fk
+              type:
+                name: uuid
+                type: named
+            embedding:
+              arguments: {}
+              description: New value for docs_bot.doc_chunk.embedding
+              type:
+                type: nullable
+                underlying_type:
+                  name: vector(1536)
+                  type: named
+            id:
+              arguments: {}
+              description: New value for docs_bot.doc_chunk.id
+              type:
+                name: uuid
+                type: named
+            page_description:
+              arguments: {}
+              description: New value for docs_bot.doc_chunk.page_description
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            page_keywords:
+              arguments: {}
+              description: New value for docs_bot.doc_chunk.page_keywords
+              type:
+                type: nullable
+                underlying_type:
+                  name: array
+                  type: named
+            page_title:
+              arguments: {}
+              description: New value for docs_bot.doc_chunk.page_title
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            page_url:
+              arguments: {}
+              description: New value for docs_bot.doc_chunk.page_url
+              type:
+                name: text
+                type: named
+            updated_at:
+              arguments: {}
+              description: New value for docs_bot.doc_chunk.updated_at
+              type:
+                name: timestamp_with_time_zone
+                type: named
+            version:
+              arguments: {}
+              description: New value for docs_bot.doc_chunk.version
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+          foreign_keys: {}
+        docs_bot.doc_chunk_set_input:
+          description: Input type for updating docs_bot.doc_chunk
+          fields:
+            chunk_content:
+              arguments: {}
+              description: New value wrapper for docs_bot.doc_chunk.chunk_content
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+            chunk_line_end:
+              arguments: {}
+              description: New value wrapper for docs_bot.doc_chunk.chunk_line_end
+              type:
+                type: nullable
+                underlying_type:
+                  name: integer_set_input
+                  type: named
+            chunk_line_start:
+              arguments: {}
+              description: New value wrapper for docs_bot.doc_chunk.chunk_line_start
+              type:
+                type: nullable
+                underlying_type:
+                  name: integer_set_input
+                  type: named
+            created_at:
+              arguments: {}
+              description: New value wrapper for docs_bot.doc_chunk.created_at
+              type:
+                type: nullable
+                underlying_type:
+                  name: timestamp_with_time_zone_set_input
+                  type: named
+            doc_content_id_fk:
+              arguments: {}
+              description: New value wrapper for docs_bot.doc_chunk.doc_content_id_fk
+              type:
+                type: nullable
+                underlying_type:
+                  name: uuid_set_input
+                  type: named
+            embedding:
+              arguments: {}
+              description: New value wrapper for docs_bot.doc_chunk.embedding
+              type:
+                type: nullable
+                underlying_type:
+                  name: vector(1536)_set_input
+                  type: named
+            id:
+              arguments: {}
+              description: New value wrapper for docs_bot.doc_chunk.id
+              type:
+                type: nullable
+                underlying_type:
+                  name: uuid_set_input
+                  type: named
+            page_description:
+              arguments: {}
+              description: New value wrapper for docs_bot.doc_chunk.page_description
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+            page_keywords:
+              arguments: {}
+              description: New value wrapper for docs_bot.doc_chunk.page_keywords
+              type:
+                type: nullable
+                underlying_type:
+                  name: array_set_input
+                  type: named
+            page_title:
+              arguments: {}
+              description: New value wrapper for docs_bot.doc_chunk.page_title
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+            page_url:
+              arguments: {}
+              description: New value wrapper for docs_bot.doc_chunk.page_url
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+            updated_at:
+              arguments: {}
+              description: New value wrapper for docs_bot.doc_chunk.updated_at
+              type:
+                type: nullable
+                underlying_type:
+                  name: timestamp_with_time_zone_set_input
+                  type: named
+            version:
+              arguments: {}
+              description: New value wrapper for docs_bot.doc_chunk.version
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+          foreign_keys: {}
+        docs_bot.doc_content:
+          description: 'Object type for docs_bot.doc_content. Description: null'
+          fields:
+            content:
+              arguments: {}
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            created_at:
+              arguments: {}
+              type:
+                name: timestamp_with_time_zone
+                type: named
+            description:
+              arguments: {}
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            id:
+              arguments: {}
+              type:
+                name: uuid
+                type: named
+            is_checked:
+              arguments: {}
+              type:
+                name: boolean
+                type: named
+            keywords:
+              arguments: {}
+              type:
+                type: nullable
+                underlying_type:
+                  name: array
+                  type: named
+            page_url:
+              arguments: {}
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            title:
+              arguments: {}
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            updated_at:
+              arguments: {}
+              type:
+                name: timestamp_with_time_zone
+                type: named
+            version:
+              arguments: {}
+              description: Version of Hasura that this documentation page belongs to. "2", "3" or "promptql".
+              type:
+                name: text
+                type: named
+          foreign_keys: {}
+        docs_bot.doc_content_insert_input:
+          description: Input type for inserting into docs_bot.doc_content
+          fields:
+            content:
+              arguments: {}
+              description: New value for docs_bot.doc_content.content
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            created_at:
+              arguments: {}
+              description: New value for docs_bot.doc_content.created_at
+              type:
+                name: timestamp_with_time_zone
+                type: named
+            description:
+              arguments: {}
+              description: New value for docs_bot.doc_content.description
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            id:
+              arguments: {}
+              description: New value for docs_bot.doc_content.id
+              type:
+                name: uuid
+                type: named
+            is_checked:
+              arguments: {}
+              description: New value for docs_bot.doc_content.is_checked
+              type:
+                name: boolean
+                type: named
+            keywords:
+              arguments: {}
+              description: New value for docs_bot.doc_content.keywords
+              type:
+                type: nullable
+                underlying_type:
+                  name: array
+                  type: named
+            page_url:
+              arguments: {}
+              description: New value for docs_bot.doc_content.page_url
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            title:
+              arguments: {}
+              description: New value for docs_bot.doc_content.title
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            updated_at:
+              arguments: {}
+              description: New value for docs_bot.doc_content.updated_at
+              type:
+                name: timestamp_with_time_zone
+                type: named
+            version:
+              arguments: {}
+              description: New value for docs_bot.doc_content.version
+              type:
+                name: text
+                type: named
+          foreign_keys: {}
+        docs_bot.doc_content_set_input:
+          description: Input type for updating docs_bot.doc_content
+          fields:
+            content:
+              arguments: {}
+              description: New value wrapper for docs_bot.doc_content.content
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+            created_at:
+              arguments: {}
+              description: New value wrapper for docs_bot.doc_content.created_at
+              type:
+                type: nullable
+                underlying_type:
+                  name: timestamp_with_time_zone_set_input
+                  type: named
+            description:
+              arguments: {}
+              description: New value wrapper for docs_bot.doc_content.description
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+            id:
+              arguments: {}
+              description: New value wrapper for docs_bot.doc_content.id
+              type:
+                type: nullable
+                underlying_type:
+                  name: uuid_set_input
+                  type: named
+            is_checked:
+              arguments: {}
+              description: New value wrapper for docs_bot.doc_content.is_checked
+              type:
+                type: nullable
+                underlying_type:
+                  name: boolean_set_input
+                  type: named
+            keywords:
+              arguments: {}
+              description: New value wrapper for docs_bot.doc_content.keywords
+              type:
+                type: nullable
+                underlying_type:
+                  name: array_set_input
+                  type: named
+            page_url:
+              arguments: {}
+              description: New value wrapper for docs_bot.doc_content.page_url
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+            title:
+              arguments: {}
+              description: New value wrapper for docs_bot.doc_content.title
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+            updated_at:
+              arguments: {}
+              description: New value wrapper for docs_bot.doc_content.updated_at
+              type:
+                type: nullable
+                underlying_type:
+                  name: timestamp_with_time_zone_set_input
+                  type: named
+            version:
+              arguments: {}
+              description: New value wrapper for docs_bot.doc_content.version
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+          foreign_keys: {}
+        docs_bot.message:
+          description: 'Object type for docs_bot.message. Description: null'
+          fields:
+            bot_response:
+              arguments: {}
+              type:
+                name: text
+                type: named
+            client_message_thread_id:
+              arguments: {}
+              type:
+                name: uuid
+                type: named
+            created_at:
+              arguments: {}
+              type:
+                name: timestamp_with_time_zone
+                type: named
+            docs_user_id:
+              arguments: {}
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            id:
+              arguments: {}
+              type:
+                name: uuid
+                type: named
+            updated_at:
+              arguments: {}
+              type:
+                name: timestamp_with_time_zone
+                type: named
+            user_good_quality_bool:
+              arguments: {}
+              type:
+                type: nullable
+                underlying_type:
+                  name: boolean
+                  type: named
+            user_message:
+              arguments: {}
+              type:
+                name: text
+                type: named
+            user_quality_feedback:
+              arguments: {}
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            version:
+              arguments: {}
+              description: Version of Hasura that this message interaction relates to. "2", "3" or "promptql".
+              type:
+                name: text
+                type: named
+          foreign_keys: {}
+        docs_bot.message_insert_input:
+          description: Input type for inserting into docs_bot.message
+          fields:
+            bot_response:
+              arguments: {}
+              description: New value for docs_bot.message.bot_response
+              type:
+                name: text
+                type: named
+            client_message_thread_id:
+              arguments: {}
+              description: New value for docs_bot.message.client_message_thread_id
+              type:
+                name: uuid
+                type: named
+            created_at:
+              arguments: {}
+              description: New value for docs_bot.message.created_at
+              type:
+                name: timestamp_with_time_zone
+                type: named
+            docs_user_id:
+              arguments: {}
+              description: New value for docs_bot.message.docs_user_id
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            id:
+              arguments: {}
+              description: New value for docs_bot.message.id
+              type:
+                name: uuid
+                type: named
+            updated_at:
+              arguments: {}
+              description: New value for docs_bot.message.updated_at
+              type:
+                name: timestamp_with_time_zone
+                type: named
+            user_good_quality_bool:
+              arguments: {}
+              description: New value for docs_bot.message.user_good_quality_bool
+              type:
+                type: nullable
+                underlying_type:
+                  name: boolean
+                  type: named
+            user_message:
+              arguments: {}
+              description: New value for docs_bot.message.user_message
+              type:
+                name: text
+                type: named
+            user_quality_feedback:
+              arguments: {}
+              description: New value for docs_bot.message.user_quality_feedback
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            version:
+              arguments: {}
+              description: New value for docs_bot.message.version
+              type:
+                name: text
+                type: named
+          foreign_keys: {}
+        docs_bot.message_set_input:
+          description: Input type for updating docs_bot.message
+          fields:
+            bot_response:
+              arguments: {}
+              description: New value wrapper for docs_bot.message.bot_response
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+            client_message_thread_id:
+              arguments: {}
+              description: New value wrapper for docs_bot.message.client_message_thread_id
+              type:
+                type: nullable
+                underlying_type:
+                  name: uuid_set_input
+                  type: named
+            created_at:
+              arguments: {}
+              description: New value wrapper for docs_bot.message.created_at
+              type:
+                type: nullable
+                underlying_type:
+                  name: timestamp_with_time_zone_set_input
+                  type: named
+            docs_user_id:
+              arguments: {}
+              description: New value wrapper for docs_bot.message.docs_user_id
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+            id:
+              arguments: {}
+              description: New value wrapper for docs_bot.message.id
+              type:
+                type: nullable
+                underlying_type:
+                  name: uuid_set_input
+                  type: named
+            updated_at:
+              arguments: {}
+              description: New value wrapper for docs_bot.message.updated_at
+              type:
+                type: nullable
+                underlying_type:
+                  name: timestamp_with_time_zone_set_input
+                  type: named
+            user_good_quality_bool:
+              arguments: {}
+              description: New value wrapper for docs_bot.message.user_good_quality_bool
+              type:
+                type: nullable
+                underlying_type:
+                  name: boolean_set_input
+                  type: named
+            user_message:
+              arguments: {}
+              description: New value wrapper for docs_bot.message.user_message
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+            user_quality_feedback:
+              arguments: {}
+              description: New value wrapper for docs_bot.message.user_quality_feedback
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+            version:
+              arguments: {}
+              description: New value wrapper for docs_bot.message.version
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+          foreign_keys: {}
+        docs_bot.message_thread:
+          description: 'Object type for docs_bot.message_thread. Description: null'
+          fields:
+            client_message_thread_id:
+              arguments: {}
+              type:
+                name: uuid
+                type: named
+            created_at:
+              arguments: {}
+              type:
+                name: timestamp_with_time_zone
+                type: named
+            id:
+              arguments: {}
+              type:
+                name: uuid
+                type: named
+            slack_thread:
+              arguments: {}
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            updated_at:
+              arguments: {}
+              type:
+                name: timestamp_with_time_zone
+                type: named
+          foreign_keys: {}
+        docs_bot.message_thread_insert_input:
+          description: Input type for inserting into docs_bot.message_thread
+          fields:
+            client_message_thread_id:
+              arguments: {}
+              description: New value for docs_bot.message_thread.client_message_thread_id
+              type:
+                name: uuid
+                type: named
+            created_at:
+              arguments: {}
+              description: New value for docs_bot.message_thread.created_at
+              type:
+                name: timestamp_with_time_zone
+                type: named
+            id:
+              arguments: {}
+              description: New value for docs_bot.message_thread.id
+              type:
+                name: uuid
+                type: named
+            slack_thread:
+              arguments: {}
+              description: New value for docs_bot.message_thread.slack_thread
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            updated_at:
+              arguments: {}
+              description: New value for docs_bot.message_thread.updated_at
+              type:
+                name: timestamp_with_time_zone
+                type: named
+          foreign_keys: {}
+        docs_bot.message_thread_set_input:
+          description: Input type for updating docs_bot.message_thread
+          fields:
+            client_message_thread_id:
+              arguments: {}
+              description: New value wrapper for docs_bot.message_thread.client_message_thread_id
+              type:
+                type: nullable
+                underlying_type:
+                  name: uuid_set_input
+                  type: named
+            created_at:
+              arguments: {}
+              description: New value wrapper for docs_bot.message_thread.created_at
+              type:
+                type: nullable
+                underlying_type:
+                  name: timestamp_with_time_zone_set_input
+                  type: named
+            id:
+              arguments: {}
+              description: New value wrapper for docs_bot.message_thread.id
+              type:
+                type: nullable
+                underlying_type:
+                  name: uuid_set_input
+                  type: named
+            slack_thread:
+              arguments: {}
+              description: New value wrapper for docs_bot.message_thread.slack_thread
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+            updated_at:
+              arguments: {}
+              description: New value wrapper for docs_bot.message_thread.updated_at
+              type:
+                type: nullable
+                underlying_type:
+                  name: timestamp_with_time_zone_set_input
+                  type: named
+          foreign_keys: {}
+        docs_feedback.doc_feedback:
+          description: 'Object type for docs_feedback.doc_feedback. Description: Collection of user feedback from the docs feedback component'
+          fields:
+            created_at:
+              arguments: {}
+              type:
+                name: timestamp_with_time_zone
+                type: named
+            docs_user_id:
+              arguments: {}
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            id:
+              arguments: {}
+              type:
+                name: uuid
+                type: named
+            page_title:
+              arguments: {}
+              type:
+                name: text
+                type: named
+            page_url:
+              arguments: {}
+              type:
+                name: text
+                type: named
+            score:
+              arguments: {}
+              type:
+                name: integer
+                type: named
+            updated_at:
+              arguments: {}
+              type:
+                name: timestamp_with_time_zone
+                type: named
+            user_feedback:
+              arguments: {}
+              type:
+                name: text
+                type: named
+            version:
+              arguments: {}
+              description: Version of Hasura that this feedback relates to. "2", "3" or "promptql".
+              type:
+                name: text
+                type: named
+          foreign_keys: {}
+        docs_feedback.doc_feedback_insert_input:
+          description: Input type for inserting into docs_feedback.doc_feedback
+          fields:
+            created_at:
+              arguments: {}
+              description: New value for docs_feedback.doc_feedback.created_at
+              type:
+                name: timestamp_with_time_zone
+                type: named
+            docs_user_id:
+              arguments: {}
+              description: New value for docs_feedback.doc_feedback.docs_user_id
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            id:
+              arguments: {}
+              description: New value for docs_feedback.doc_feedback.id
+              type:
+                name: uuid
+                type: named
+            page_title:
+              arguments: {}
+              description: New value for docs_feedback.doc_feedback.page_title
+              type:
+                name: text
+                type: named
+            page_url:
+              arguments: {}
+              description: New value for docs_feedback.doc_feedback.page_url
+              type:
+                name: text
+                type: named
+            score:
+              arguments: {}
+              description: New value for docs_feedback.doc_feedback.score
+              type:
+                name: integer
+                type: named
+            updated_at:
+              arguments: {}
+              description: New value for docs_feedback.doc_feedback.updated_at
+              type:
+                name: timestamp_with_time_zone
+                type: named
+            user_feedback:
+              arguments: {}
+              description: New value for docs_feedback.doc_feedback.user_feedback
+              type:
+                name: text
+                type: named
+            version:
+              arguments: {}
+              description: New value for docs_feedback.doc_feedback.version
+              type:
+                name: text
+                type: named
+          foreign_keys: {}
+        docs_feedback.doc_feedback_set_input:
+          description: Input type for updating docs_feedback.doc_feedback
+          fields:
+            created_at:
+              arguments: {}
+              description: New value wrapper for docs_feedback.doc_feedback.created_at
+              type:
+                type: nullable
+                underlying_type:
+                  name: timestamp_with_time_zone_set_input
+                  type: named
+            docs_user_id:
+              arguments: {}
+              description: New value wrapper for docs_feedback.doc_feedback.docs_user_id
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+            id:
+              arguments: {}
+              description: New value wrapper for docs_feedback.doc_feedback.id
+              type:
+                type: nullable
+                underlying_type:
+                  name: uuid_set_input
+                  type: named
+            page_title:
+              arguments: {}
+              description: New value wrapper for docs_feedback.doc_feedback.page_title
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+            page_url:
+              arguments: {}
+              description: New value wrapper for docs_feedback.doc_feedback.page_url
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+            score:
+              arguments: {}
+              description: New value wrapper for docs_feedback.doc_feedback.score
+              type:
+                type: nullable
+                underlying_type:
+                  name: integer_set_input
+                  type: named
+            updated_at:
+              arguments: {}
+              description: New value wrapper for docs_feedback.doc_feedback.updated_at
+              type:
+                type: nullable
+                underlying_type:
+                  name: timestamp_with_time_zone_set_input
+                  type: named
+            user_feedback:
+              arguments: {}
+              description: New value wrapper for docs_feedback.doc_feedback.user_feedback
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+            version:
+              arguments: {}
+              description: New value wrapper for docs_feedback.doc_feedback.version
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+          foreign_keys: {}
+        insert_docs_bot.doc_chunk_result:
+          description: insert from docs_bot.doc_chunk result
+          fields:
+            affected_rows:
+              arguments: {}
+              description: Number of affected rows
+              type:
+                name: int
+                type: named
+            returning:
+              arguments: {}
+              description: Objects that were affected by insert
+              type:
+                element_type:
+                  name: docs_bot.doc_chunk
+                  type: named
+                type: array
+          foreign_keys: {}
+        insert_docs_bot.doc_content_result:
+          description: insert from docs_bot.doc_content result
+          fields:
+            affected_rows:
+              arguments: {}
+              description: Number of affected rows
+              type:
+                name: int
+                type: named
+            returning:
+              arguments: {}
+              description: Objects that were affected by insert
+              type:
+                element_type:
+                  name: docs_bot.doc_content
+                  type: named
+                type: array
+          foreign_keys: {}
+        insert_docs_bot.message_result:
+          description: insert from docs_bot.message result
+          fields:
+            affected_rows:
+              arguments: {}
+              description: Number of affected rows
+              type:
+                name: int
+                type: named
+            returning:
+              arguments: {}
+              description: Objects that were affected by insert
+              type:
+                element_type:
+                  name: docs_bot.message
+                  type: named
+                type: array
+          foreign_keys: {}
+        insert_docs_bot.message_thread_result:
+          description: insert from docs_bot.message_thread result
+          fields:
+            affected_rows:
+              arguments: {}
+              description: Number of affected rows
+              type:
+                name: int
+                type: named
+            returning:
+              arguments: {}
+              description: Objects that were affected by insert
+              type:
+                element_type:
+                  name: docs_bot.message_thread
+                  type: named
+                type: array
+          foreign_keys: {}
+        insert_docs_feedback.doc_feedback_result:
+          description: insert from docs_feedback.doc_feedback result
+          fields:
+            affected_rows:
+              arguments: {}
+              description: Number of affected rows
+              type:
+                name: int
+                type: named
+            returning:
+              arguments: {}
+              description: Objects that were affected by insert
+              type:
+                element_type:
+                  name: docs_feedback.doc_feedback
+                  type: named
+                type: array
+          foreign_keys: {}
+        insert_public.connectors_result:
+          description: insert from public.connectors result
+          fields:
+            affected_rows:
+              arguments: {}
+              description: Number of affected rows
+              type:
+                name: int
+                type: named
+            returning:
+              arguments: {}
+              description: Objects that were affected by insert
+              type:
+                element_type:
+                  name: public.connectors
+                  type: named
+                type: array
+          foreign_keys: {}
+        insert_public.username_mapping_result:
+          description: insert from public.username_mapping result
+          fields:
+            affected_rows:
+              arguments: {}
+              description: Number of affected rows
+              type:
+                name: int
+                type: named
+            returning:
+              arguments: {}
+              description: Objects that were affected by insert
+              type:
+                element_type:
+                  name: public.username_mapping
+                  type: named
+                type: array
+          foreign_keys: {}
+        int_set_input:
+          description: Wrapper for setting scalar int
+          fields:
+            value:
+              arguments: {}
+              description: New value for scalar int
+              type:
+                type: nullable
+                underlying_type:
+                  name: int
+                  type: named
+          foreign_keys: {}
+        integer_set_input:
+          description: Wrapper for setting scalar integer
+          fields:
+            value:
+              arguments: {}
+              description: New value for scalar integer
+              type:
+                type: nullable
+                underlying_type:
+                  name: integer
+                  type: named
+          foreign_keys: {}
+        public.connectors:
+          description: 'Object type for public.connectors. Description: Stores metadata about DDN Native Data Connectors including associated GitHub repository, unique connector identifier, and designated responsible individual (DRI) which is a relation to the username_mapping table'
+          fields:
+            connector_id:
+              arguments: {}
+              description: Unique identifier string for the connector within the DDN ecosystem
+              type:
+                name: text
+                type: named
+            connector_name:
+              arguments: {}
+              description: Human-readable name of the DDN Native Data Connector
+              type:
+                name: text
+                type: named
+            dri_id:
+              arguments: {}
+              description: Foreign key to username_mapping(id) identifying the Designated Responsible Individual for this connector
+              type:
+                name: uuid
+                type: named
+            github_repo:
+              arguments: {}
+              description: GitHub repository URL or identifier for the connector (unique)
+              type:
+                name: text
+                type: named
+            id:
+              arguments: {}
+              description: Primary key UUID identifying this connector record
+              type:
+                name: uuid
+                type: named
+          foreign_keys: {}
+        public.connectors_insert_input:
+          description: Input type for inserting into public.connectors
+          fields:
+            connector_id:
+              arguments: {}
+              description: New value for public.connectors.connector_id
+              type:
+                name: text
+                type: named
+            connector_name:
+              arguments: {}
+              description: New value for public.connectors.connector_name
+              type:
+                name: text
+                type: named
+            dri_id:
+              arguments: {}
+              description: New value for public.connectors.dri_id
+              type:
+                name: uuid
+                type: named
+            github_repo:
+              arguments: {}
+              description: New value for public.connectors.github_repo
+              type:
+                name: text
+                type: named
+            id:
+              arguments: {}
+              description: New value for public.connectors.id
+              type:
+                name: uuid
+                type: named
+          foreign_keys: {}
+        public.connectors_set_input:
+          description: Input type for updating public.connectors
+          fields:
+            connector_id:
+              arguments: {}
+              description: New value wrapper for public.connectors.connector_id
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+            connector_name:
+              arguments: {}
+              description: New value wrapper for public.connectors.connector_name
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+            dri_id:
+              arguments: {}
+              description: New value wrapper for public.connectors.dri_id
+              type:
+                type: nullable
+                underlying_type:
+                  name: uuid_set_input
+                  type: named
+            github_repo:
+              arguments: {}
+              description: New value wrapper for public.connectors.github_repo
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+            id:
+              arguments: {}
+              description: New value wrapper for public.connectors.id
+              type:
+                type: nullable
+                underlying_type:
+                  name: uuid_set_input
+                  type: named
+          foreign_keys: {}
+        public.username_mapping:
+          description: 'Object type for public.username_mapping. Description: Maps user identity information including names and various platform handles'
+          fields:
+            email:
+              arguments: {}
+              description: Email address of the user (unique)
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            github_user_id:
+              arguments: {}
+              description: Unique GitHub user ID for the user
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            github_username:
+              arguments: {}
+              description: GitHub username for the user (unique)
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            id:
+              arguments: {}
+              description: Primary key UUID identifying this user mapping record
+              type:
+                name: uuid
+                type: named
+            linear_user_id:
+              arguments: {}
+              description: Unique Linear user ID for the user
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            linear_username:
+              arguments: {}
+              description: Linear username for the user (unique)
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            name:
+              arguments: {}
+              description: Full name or display name of the user
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            slack_user_id:
+              arguments: {}
+              description: Unique Slack user ID for the user
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            slack_username:
+              arguments: {}
+              description: Slack username for the user (unique, required)
+              type:
+                name: text
+                type: named
+            timezone:
+              arguments: {}
+              description: IANA timezone identifier for the user, e.g., America/Los_Angeles
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            timezone_label:
+              arguments: {}
+              description: Human-readable label for the users timezone
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            timezone_offset:
+              arguments: {}
+              description: UTC offset in minutes for the users timezone
+              type:
+                type: nullable
+                underlying_type:
+                  name: integer
+                  type: named
+          foreign_keys: {}
+        public.username_mapping_insert_input:
+          description: Input type for inserting into public.username_mapping
+          fields:
+            email:
+              arguments: {}
+              description: New value for public.username_mapping.email
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            github_user_id:
+              arguments: {}
+              description: New value for public.username_mapping.github_user_id
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            github_username:
+              arguments: {}
+              description: New value for public.username_mapping.github_username
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            id:
+              arguments: {}
+              description: New value for public.username_mapping.id
+              type:
+                name: uuid
+                type: named
+            linear_user_id:
+              arguments: {}
+              description: New value for public.username_mapping.linear_user_id
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            linear_username:
+              arguments: {}
+              description: New value for public.username_mapping.linear_username
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            name:
+              arguments: {}
+              description: New value for public.username_mapping.name
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            slack_user_id:
+              arguments: {}
+              description: New value for public.username_mapping.slack_user_id
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            slack_username:
+              arguments: {}
+              description: New value for public.username_mapping.slack_username
+              type:
+                name: text
+                type: named
+            timezone:
+              arguments: {}
+              description: New value for public.username_mapping.timezone
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            timezone_label:
+              arguments: {}
+              description: New value for public.username_mapping.timezone_label
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            timezone_offset:
+              arguments: {}
+              description: New value for public.username_mapping.timezone_offset
+              type:
+                type: nullable
+                underlying_type:
+                  name: integer
+                  type: named
+          foreign_keys: {}
+        public.username_mapping_set_input:
+          description: Input type for updating public.username_mapping
+          fields:
+            email:
+              arguments: {}
+              description: New value wrapper for public.username_mapping.email
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+            github_user_id:
+              arguments: {}
+              description: New value wrapper for public.username_mapping.github_user_id
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+            github_username:
+              arguments: {}
+              description: New value wrapper for public.username_mapping.github_username
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+            id:
+              arguments: {}
+              description: New value wrapper for public.username_mapping.id
+              type:
+                type: nullable
+                underlying_type:
+                  name: uuid_set_input
+                  type: named
+            linear_user_id:
+              arguments: {}
+              description: New value wrapper for public.username_mapping.linear_user_id
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+            linear_username:
+              arguments: {}
+              description: New value wrapper for public.username_mapping.linear_username
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+            name:
+              arguments: {}
+              description: New value wrapper for public.username_mapping.name
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+            slack_user_id:
+              arguments: {}
+              description: New value wrapper for public.username_mapping.slack_user_id
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+            slack_username:
+              arguments: {}
+              description: New value wrapper for public.username_mapping.slack_username
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+            timezone:
+              arguments: {}
+              description: New value wrapper for public.username_mapping.timezone
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+            timezone_label:
+              arguments: {}
+              description: New value wrapper for public.username_mapping.timezone_label
+              type:
+                type: nullable
+                underlying_type:
+                  name: text_set_input
+                  type: named
+            timezone_offset:
+              arguments: {}
+              description: New value wrapper for public.username_mapping.timezone_offset
+              type:
+                type: nullable
+                underlying_type:
+                  name: integer_set_input
+                  type: named
+          foreign_keys: {}
+        string_set_input:
+          description: Wrapper for setting scalar string
+          fields:
+            value:
+              arguments: {}
+              description: New value for scalar string
+              type:
+                type: nullable
+                underlying_type:
+                  name: string
+                  type: named
+          foreign_keys: {}
+        text_set_input:
+          description: Wrapper for setting scalar text
+          fields:
+            value:
+              arguments: {}
+              description: New value for scalar text
+              type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+          foreign_keys: {}
+        timestamp_with_time_zone_set_input:
+          description: Wrapper for setting scalar timestamp_with_time_zone
+          fields:
+            value:
+              arguments: {}
+              description: New value for scalar timestamp_with_time_zone
+              type:
+                type: nullable
+                underlying_type:
+                  name: timestamp_with_time_zone
+                  type: named
+          foreign_keys: {}
+        update_docs_bot.doc_chunk_result:
+          description: update from docs_bot.doc_chunk result
+          fields:
+            affected_rows:
+              arguments: {}
+              description: Number of affected rows
+              type:
+                name: int
+                type: named
+            returning:
+              arguments: {}
+              description: Objects that were affected by update
+              type:
+                element_type:
+                  name: docs_bot.doc_chunk
+                  type: named
+                type: array
+          foreign_keys: {}
+        update_docs_bot.doc_content_result:
+          description: update from docs_bot.doc_content result
+          fields:
+            affected_rows:
+              arguments: {}
+              description: Number of affected rows
+              type:
+                name: int
+                type: named
+            returning:
+              arguments: {}
+              description: Objects that were affected by update
+              type:
+                element_type:
+                  name: docs_bot.doc_content
+                  type: named
+                type: array
+          foreign_keys: {}
+        update_docs_bot.message_result:
+          description: update from docs_bot.message result
+          fields:
+            affected_rows:
+              arguments: {}
+              description: Number of affected rows
+              type:
+                name: int
+                type: named
+            returning:
+              arguments: {}
+              description: Objects that were affected by update
+              type:
+                element_type:
+                  name: docs_bot.message
+                  type: named
+                type: array
+          foreign_keys: {}
+        update_docs_bot.message_thread_result:
+          description: update from docs_bot.message_thread result
+          fields:
+            affected_rows:
+              arguments: {}
+              description: Number of affected rows
+              type:
+                name: int
+                type: named
+            returning:
+              arguments: {}
+              description: Objects that were affected by update
+              type:
+                element_type:
+                  name: docs_bot.message_thread
+                  type: named
+                type: array
+          foreign_keys: {}
+        update_docs_feedback.doc_feedback_result:
+          description: update from docs_feedback.doc_feedback result
+          fields:
+            affected_rows:
+              arguments: {}
+              description: Number of affected rows
+              type:
+                name: int
+                type: named
+            returning:
+              arguments: {}
+              description: Objects that were affected by update
+              type:
+                element_type:
+                  name: docs_feedback.doc_feedback
+                  type: named
+                type: array
+          foreign_keys: {}
+        update_public.connectors_result:
+          description: update from public.connectors result
+          fields:
+            affected_rows:
+              arguments: {}
+              description: Number of affected rows
+              type:
+                name: int
+                type: named
+            returning:
+              arguments: {}
+              description: Objects that were affected by update
+              type:
+                element_type:
+                  name: public.connectors
+                  type: named
+                type: array
+          foreign_keys: {}
+        update_public.username_mapping_result:
+          description: update from public.username_mapping result
+          fields:
+            affected_rows:
+              arguments: {}
+              description: Number of affected rows
+              type:
+                name: int
+                type: named
+            returning:
+              arguments: {}
+              description: Objects that were affected by update
+              type:
+                element_type:
+                  name: public.username_mapping
+                  type: named
+                type: array
+          foreign_keys: {}
+        uuid_set_input:
+          description: Wrapper for setting scalar uuid
+          fields:
+            value:
+              arguments: {}
+              description: New value for scalar uuid
+              type:
+                type: nullable
+                underlying_type:
+                  name: uuid
+                  type: named
+          foreign_keys: {}
+        vector(1536)_set_input:
+          description: Wrapper for setting scalar vector(1536)
+          fields:
+            value:
+              arguments: {}
+              description: New value for scalar vector(1536)
+              type:
+                type: nullable
+                underlying_type:
+                  name: vector(1536)
+                  type: named
+          foreign_keys: {}
+      procedures:
+        - arguments:
+            objects:
+              description: Objects to insert
+              type:
+                element_type:
+                  name: docs_bot.doc_chunk_insert_input
+                  type: named
+                type: array
+            returning:
+              description: Fields to return
+              type:
+                type: nullable
+                underlying_type:
+                  element_type:
+                    name: string
+                    type: named
+                  type: array
+          description: Insert into docs_bot.doc_chunk
+          name: insert_docs_bot.doc_chunk
+          result_type:
+            name: insert_docs_bot.doc_chunk_result
+            type: named
+        - arguments:
+            returning:
+              description: Fields to return
+              type:
+                type: nullable
+                underlying_type:
+                  element_type:
+                    name: string
+                    type: named
+                  type: array
+            set:
+              description: Values to set
+              type:
+                name: docs_bot.doc_chunk_set_input
+                type: named
+            where:
+              description: Filter for rows to update
+              type:
+                object_type_name: docs_bot.doc_chunk
+                type: predicate
+          description: Update docs_bot.doc_chunk
+          name: update_docs_bot.doc_chunk
+          result_type:
+            name: update_docs_bot.doc_chunk_result
+            type: named
+        - arguments:
+            returning:
+              description: Fields to return
+              type:
+                type: nullable
+                underlying_type:
+                  element_type:
+                    name: string
+                    type: named
+                  type: array
+            where:
+              description: Filter for rows to delete
+              type:
+                object_type_name: docs_bot.doc_chunk
+                type: predicate
+          description: Delete from docs_bot.doc_chunk
+          name: delete_docs_bot.doc_chunk
+          result_type:
+            name: delete_docs_bot.doc_chunk_result
+            type: named
+        - arguments:
+            objects:
+              description: Objects to insert
+              type:
+                element_type:
+                  name: docs_bot.doc_content_insert_input
+                  type: named
+                type: array
+            returning:
+              description: Fields to return
+              type:
+                type: nullable
+                underlying_type:
+                  element_type:
+                    name: string
+                    type: named
+                  type: array
+          description: Insert into docs_bot.doc_content
+          name: insert_docs_bot.doc_content
+          result_type:
+            name: insert_docs_bot.doc_content_result
+            type: named
+        - arguments:
+            returning:
+              description: Fields to return
+              type:
+                type: nullable
+                underlying_type:
+                  element_type:
+                    name: string
+                    type: named
+                  type: array
+            set:
+              description: Values to set
+              type:
+                name: docs_bot.doc_content_set_input
+                type: named
+            where:
+              description: Filter for rows to update
+              type:
+                object_type_name: docs_bot.doc_content
+                type: predicate
+          description: Update docs_bot.doc_content
+          name: update_docs_bot.doc_content
+          result_type:
+            name: update_docs_bot.doc_content_result
+            type: named
+        - arguments:
+            returning:
+              description: Fields to return
+              type:
+                type: nullable
+                underlying_type:
+                  element_type:
+                    name: string
+                    type: named
+                  type: array
+            where:
+              description: Filter for rows to delete
+              type:
+                object_type_name: docs_bot.doc_content
+                type: predicate
+          description: Delete from docs_bot.doc_content
+          name: delete_docs_bot.doc_content
+          result_type:
+            name: delete_docs_bot.doc_content_result
+            type: named
+        - arguments:
+            objects:
+              description: Objects to insert
+              type:
+                element_type:
+                  name: docs_bot.message_insert_input
+                  type: named
+                type: array
+            returning:
+              description: Fields to return
+              type:
+                type: nullable
+                underlying_type:
+                  element_type:
+                    name: string
+                    type: named
+                  type: array
+          description: Insert into docs_bot.message
+          name: insert_docs_bot.message
+          result_type:
+            name: insert_docs_bot.message_result
+            type: named
+        - arguments:
+            returning:
+              description: Fields to return
+              type:
+                type: nullable
+                underlying_type:
+                  element_type:
+                    name: string
+                    type: named
+                  type: array
+            set:
+              description: Values to set
+              type:
+                name: docs_bot.message_set_input
+                type: named
+            where:
+              description: Filter for rows to update
+              type:
+                object_type_name: docs_bot.message
+                type: predicate
+          description: Update docs_bot.message
+          name: update_docs_bot.message
+          result_type:
+            name: update_docs_bot.message_result
+            type: named
+        - arguments:
+            returning:
+              description: Fields to return
+              type:
+                type: nullable
+                underlying_type:
+                  element_type:
+                    name: string
+                    type: named
+                  type: array
+            where:
+              description: Filter for rows to delete
+              type:
+                object_type_name: docs_bot.message
+                type: predicate
+          description: Delete from docs_bot.message
+          name: delete_docs_bot.message
+          result_type:
+            name: delete_docs_bot.message_result
+            type: named
+        - arguments:
+            objects:
+              description: Objects to insert
+              type:
+                element_type:
+                  name: docs_bot.message_thread_insert_input
+                  type: named
+                type: array
+            returning:
+              description: Fields to return
+              type:
+                type: nullable
+                underlying_type:
+                  element_type:
+                    name: string
+                    type: named
+                  type: array
+          description: Insert into docs_bot.message_thread
+          name: insert_docs_bot.message_thread
+          result_type:
+            name: insert_docs_bot.message_thread_result
+            type: named
+        - arguments:
+            returning:
+              description: Fields to return
+              type:
+                type: nullable
+                underlying_type:
+                  element_type:
+                    name: string
+                    type: named
+                  type: array
+            set:
+              description: Values to set
+              type:
+                name: docs_bot.message_thread_set_input
+                type: named
+            where:
+              description: Filter for rows to update
+              type:
+                object_type_name: docs_bot.message_thread
+                type: predicate
+          description: Update docs_bot.message_thread
+          name: update_docs_bot.message_thread
+          result_type:
+            name: update_docs_bot.message_thread_result
+            type: named
+        - arguments:
+            returning:
+              description: Fields to return
+              type:
+                type: nullable
+                underlying_type:
+                  element_type:
+                    name: string
+                    type: named
+                  type: array
+            where:
+              description: Filter for rows to delete
+              type:
+                object_type_name: docs_bot.message_thread
+                type: predicate
+          description: Delete from docs_bot.message_thread
+          name: delete_docs_bot.message_thread
+          result_type:
+            name: delete_docs_bot.message_thread_result
+            type: named
+        - arguments:
+            objects:
+              description: Objects to insert
+              type:
+                element_type:
+                  name: docs_feedback.doc_feedback_insert_input
+                  type: named
+                type: array
+            returning:
+              description: Fields to return
+              type:
+                type: nullable
+                underlying_type:
+                  element_type:
+                    name: string
+                    type: named
+                  type: array
+          description: Insert into docs_feedback.doc_feedback
+          name: insert_docs_feedback.doc_feedback
+          result_type:
+            name: insert_docs_feedback.doc_feedback_result
+            type: named
+        - arguments:
+            returning:
+              description: Fields to return
+              type:
+                type: nullable
+                underlying_type:
+                  element_type:
+                    name: string
+                    type: named
+                  type: array
+            set:
+              description: Values to set
+              type:
+                name: docs_feedback.doc_feedback_set_input
+                type: named
+            where:
+              description: Filter for rows to update
+              type:
+                object_type_name: docs_feedback.doc_feedback
+                type: predicate
+          description: Update docs_feedback.doc_feedback
+          name: update_docs_feedback.doc_feedback
+          result_type:
+            name: update_docs_feedback.doc_feedback_result
+            type: named
+        - arguments:
+            returning:
+              description: Fields to return
+              type:
+                type: nullable
+                underlying_type:
+                  element_type:
+                    name: string
+                    type: named
+                  type: array
+            where:
+              description: Filter for rows to delete
+              type:
+                object_type_name: docs_feedback.doc_feedback
+                type: predicate
+          description: Delete from docs_feedback.doc_feedback
+          name: delete_docs_feedback.doc_feedback
+          result_type:
+            name: delete_docs_feedback.doc_feedback_result
+            type: named
+        - arguments:
+            objects:
+              description: Objects to insert
+              type:
+                element_type:
+                  name: public.connectors_insert_input
+                  type: named
+                type: array
+            returning:
+              description: Fields to return
+              type:
+                type: nullable
+                underlying_type:
+                  element_type:
+                    name: string
+                    type: named
+                  type: array
+          description: Insert into public.connectors
+          name: insert_public.connectors
+          result_type:
+            name: insert_public.connectors_result
+            type: named
+        - arguments:
+            returning:
+              description: Fields to return
+              type:
+                type: nullable
+                underlying_type:
+                  element_type:
+                    name: string
+                    type: named
+                  type: array
+            set:
+              description: Values to set
+              type:
+                name: public.connectors_set_input
+                type: named
+            where:
+              description: Filter for rows to update
+              type:
+                object_type_name: public.connectors
+                type: predicate
+          description: Update public.connectors
+          name: update_public.connectors
+          result_type:
+            name: update_public.connectors_result
+            type: named
+        - arguments:
+            returning:
+              description: Fields to return
+              type:
+                type: nullable
+                underlying_type:
+                  element_type:
+                    name: string
+                    type: named
+                  type: array
+            where:
+              description: Filter for rows to delete
+              type:
+                object_type_name: public.connectors
+                type: predicate
+          description: Delete from public.connectors
+          name: delete_public.connectors
+          result_type:
+            name: delete_public.connectors_result
+            type: named
+        - arguments:
+            objects:
+              description: Objects to insert
+              type:
+                element_type:
+                  name: public.username_mapping_insert_input
+                  type: named
+                type: array
+            returning:
+              description: Fields to return
+              type:
+                type: nullable
+                underlying_type:
+                  element_type:
+                    name: string
+                    type: named
+                  type: array
+          description: Insert into public.username_mapping
+          name: insert_public.username_mapping
+          result_type:
+            name: insert_public.username_mapping_result
+            type: named
+        - arguments:
+            returning:
+              description: Fields to return
+              type:
+                type: nullable
+                underlying_type:
+                  element_type:
+                    name: string
+                    type: named
+                  type: array
+            set:
+              description: Values to set
+              type:
+                name: public.username_mapping_set_input
+                type: named
+            where:
+              description: Filter for rows to update
+              type:
+                object_type_name: public.username_mapping
+                type: predicate
+          description: Update public.username_mapping
+          name: update_public.username_mapping
+          result_type:
+            name: update_public.username_mapping_result
+            type: named
+        - arguments:
+            returning:
+              description: Fields to return
+              type:
+                type: nullable
+                underlying_type:
+                  element_type:
+                    name: string
+                    type: named
+                  type: array
+            where:
+              description: Filter for rows to delete
+              type:
+                object_type_name: public.username_mapping
+                type: predicate
+          description: Delete from public.username_mapping
+          name: delete_public.username_mapping
+          result_type:
+            name: delete_public.username_mapping_result
+            type: named
+      scalar_types:
+        array:
+          aggregate_functions: {}
+          comparison_operators:
+            _eq:
+              type: equal
+            _in:
+              type: in
+            _neq:
+              argument_type:
+                name: array
+                type: named
+              type: custom
+          representation:
+            type: json
+        bigint:
+          aggregate_functions:
+            avg:
+              result_type: decimal
+              type: average
+            max:
+              type: max
+            min:
+              type: min
+            stddev_pop:
+              result_type:
+                name: bigint
+                type: named
+              type: custom
+            stddev_samp:
+              result_type:
+                name: bigint
+                type: named
+              type: custom
+            sum:
+              result_type: bigint
+              type: sum
+            var_pop:
+              result_type:
+                name: bigint
+                type: named
+              type: custom
+            var_samp:
+              result_type:
+                name: bigint
+                type: named
+              type: custom
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              type: greater_than
+            _gte:
+              type: greater_than_or_equal
+            _in:
+              type: in
+            _lt:
+              type: less_than
+            _lte:
+              type: less_than_or_equal
+            _neq:
+              argument_type:
+                name: bigint
+                type: named
+              type: custom
+          representation:
+            type: biginteger
+        boolean:
+          aggregate_functions:
+            max:
+              type: max
+            min:
+              type: min
+          comparison_operators:
+            _eq:
+              type: equal
+            _in:
+              type: in
+            _neq:
+              argument_type:
+                name: boolean
+                type: named
+              type: custom
+          representation:
+            type: boolean
+        decimal:
+          aggregate_functions:
+            avg:
+              result_type: decimal
+              type: average
+            max:
+              type: max
+            min:
+              type: min
+            stddev_pop:
+              result_type:
+                name: decimal
+                type: named
+              type: custom
+            stddev_samp:
+              result_type:
+                name: decimal
+                type: named
+              type: custom
+            sum:
+              result_type: decimal
+              type: sum
+            var_pop:
+              result_type:
+                name: decimal
+                type: named
+              type: custom
+            var_samp:
+              result_type:
+                name: decimal
+                type: named
+              type: custom
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              type: greater_than
+            _gte:
+              type: greater_than_or_equal
+            _in:
+              type: in
+            _lt:
+              type: less_than
+            _lte:
+              type: less_than_or_equal
+            _neq:
+              argument_type:
+                name: decimal
+                type: named
+              type: custom
+          representation:
+            type: bigdecimal
+        int:
+          aggregate_functions:
+            avg:
+              result_type: decimal
+              type: average
+            max:
+              type: max
+            min:
+              type: min
+            stddev_pop:
+              result_type:
+                name: int
+                type: named
+              type: custom
+            stddev_samp:
+              result_type:
+                name: int
+                type: named
+              type: custom
+            sum:
+              result_type: bigint
+              type: sum
+            var_pop:
+              result_type:
+                name: int
+                type: named
+              type: custom
+            var_samp:
+              result_type:
+                name: int
+                type: named
+              type: custom
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              type: greater_than
+            _gte:
+              type: greater_than_or_equal
+            _in:
+              type: in
+            _lt:
+              type: less_than
+            _lte:
+              type: less_than_or_equal
+            _neq:
+              argument_type:
+                name: int
+                type: named
+              type: custom
+          representation:
+            type: int32
+        integer:
+          aggregate_functions:
+            avg:
+              result_type: decimal
+              type: average
+            max:
+              type: max
+            min:
+              type: min
+            stddev_pop:
+              result_type:
+                name: integer
+                type: named
+              type: custom
+            stddev_samp:
+              result_type:
+                name: integer
+                type: named
+              type: custom
+            sum:
+              result_type: bigint
+              type: sum
+            var_pop:
+              result_type:
+                name: integer
+                type: named
+              type: custom
+            var_samp:
+              result_type:
+                name: integer
+                type: named
+              type: custom
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              type: greater_than
+            _gte:
+              type: greater_than_or_equal
+            _in:
+              type: in
+            _lt:
+              type: less_than
+            _lte:
+              type: less_than_or_equal
+            _neq:
+              argument_type:
+                name: integer
+                type: named
+              type: custom
+          representation:
+            type: int32
+        string:
+          aggregate_functions:
+            max:
+              type: max
+            min:
+              type: min
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              type: greater_than
+            _gte:
+              type: greater_than_or_equal
+            _ilike:
+              type: contains_insensitive
+            _in:
+              type: in
+            _iregex:
+              argument_type:
+                name: string
+                type: named
+              type: custom
+            _like:
+              type: contains
+            _lt:
+              type: less_than
+            _lte:
+              type: less_than_or_equal
+            _neq:
+              argument_type:
+                name: string
+                type: named
+              type: custom
+            _nilike:
+              argument_type:
+                name: string
+                type: named
+              type: custom
+            _niregex:
+              argument_type:
+                name: string
+                type: named
+              type: custom
+            _nlike:
+              argument_type:
+                name: string
+                type: named
+              type: custom
+            _nregex:
+              argument_type:
+                name: string
+                type: named
+              type: custom
+            _regex:
+              argument_type:
+                name: string
+                type: named
+              type: custom
+          representation:
+            type: string
+        text:
+          aggregate_functions:
+            max:
+              type: max
+            min:
+              type: min
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              type: greater_than
+            _gte:
+              type: greater_than_or_equal
+            _ilike:
+              type: contains_insensitive
+            _in:
+              type: in
+            _iregex:
+              argument_type:
+                name: text
+                type: named
+              type: custom
+            _like:
+              type: contains
+            _lt:
+              type: less_than
+            _lte:
+              type: less_than_or_equal
+            _neq:
+              argument_type:
+                name: text
+                type: named
+              type: custom
+            _nilike:
+              argument_type:
+                name: text
+                type: named
+              type: custom
+            _niregex:
+              argument_type:
+                name: text
+                type: named
+              type: custom
+            _nlike:
+              argument_type:
+                name: text
+                type: named
+              type: custom
+            _nregex:
+              argument_type:
+                name: text
+                type: named
+              type: custom
+            _regex:
+              argument_type:
+                name: text
+                type: named
+              type: custom
+          representation:
+            type: string
+        timestamp_with_time_zone:
+          aggregate_functions:
+            max:
+              type: max
+            min:
+              type: min
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              type: greater_than
+            _gte:
+              type: greater_than_or_equal
+            _in:
+              type: in
+            _lt:
+              type: less_than
+            _lte:
+              type: less_than_or_equal
+            _neq:
+              argument_type:
+                name: timestamp_with_time_zone
+                type: named
+              type: custom
+          representation:
+            type: timestamptz
+        uuid:
+          aggregate_functions:
+            max:
+              type: max
+            min:
+              type: min
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              type: greater_than
+            _gte:
+              type: greater_than_or_equal
+            _ilike:
+              type: contains_insensitive
+            _in:
+              type: in
+            _iregex:
+              argument_type:
+                name: uuid
+                type: named
+              type: custom
+            _like:
+              type: contains
+            _lt:
+              type: less_than
+            _lte:
+              type: less_than_or_equal
+            _neq:
+              argument_type:
+                name: uuid
+                type: named
+              type: custom
+            _nilike:
+              argument_type:
+                name: uuid
+                type: named
+              type: custom
+            _niregex:
+              argument_type:
+                name: uuid
+                type: named
+              type: custom
+            _nlike:
+              argument_type:
+                name: uuid
+                type: named
+              type: custom
+            _nregex:
+              argument_type:
+                name: uuid
+                type: named
+              type: custom
+            _regex:
+              argument_type:
+                name: uuid
+                type: named
+              type: custom
+          representation:
+            type: string
+        vector(1536):
+          aggregate_functions: {}
+          comparison_operators:
+            _eq:
+              type: equal
+            _in:
+              type: in
+            _neq:
+              argument_type:
+                name: vector(1536)
+                type: named
+              type: custom
+          representation:
+            type: json
+    capabilities:
+      capabilities:
+        mutation:
+          explain: {}
+          transactional: {}
+        query:
+          aggregates:
+            filter_by: {}
+          exists: {}
+          explain: {}
+          nested_fields: {}
+          variables: {}
+        relational_query:
+          aggregate:
+            expression:
+              aggregate:
+                approx_distinct: {}
+                approx_percentile_cont: {}
+                avg: {}
+                bool_and: {}
+                bool_or: {}
+                count:
+                  distinct: {}
+                first_value: {}
+                last_value: {}
+                max: {}
+                median: {}
+                min: {}
+                stddev: {}
+                stddev_pop: {}
+                string_agg: {}
+                sum: {}
+                var: {}
+              comparison:
+                between: {}
+                contains: {}
+                greater_than: {}
+                greater_than_eq: {}
+                ilike: {}
+                in_list: {}
+                is_false: {}
+                is_nan: {}
+                is_null: {}
+                is_true: {}
+                is_zero: {}
+                less_than: {}
+                less_than_eq: {}
+                like: {}
+              conditional:
+                case: {}
+                nullif: {}
+              scalar:
+                abs: {}
+                and: {}
+                array_element: {}
+                binary_concat: {}
+                btrim: {}
+                ceil: {}
+                character_length: {}
+                coalesce: {}
+                concat: {}
+                cos: {}
+                current_date: {}
+                current_time: {}
+                current_timestamp: {}
+                date_part:
+                  day: {}
+                  day_of_week: {}
+                  day_of_year: {}
+                  epoch: {}
+                  hour: {}
+                  microsecond: {}
+                  millisecond: {}
+                  minute: {}
+                  month: {}
+                  nanosecond: {}
+                  quarter: {}
+                  second: {}
+                  week: {}
+                  year: {}
+                date_trunc: {}
+                divide: {}
+                exp: {}
+                floor: {}
+                get_field: {}
+                greatest: {}
+                least: {}
+                left: {}
+                ln: {}
+                log: {}
+                log2: {}
+                log10: {}
+                lpad: {}
+                ltrim: {}
+                minus: {}
+                modulo: {}
+                multiply: {}
+                negate: {}
+                not: {}
+                nvl: {}
+                or: {}
+                plus: {}
+                power: {}
+                random: {}
+                replace: {}
+                reverse: {}
+                right: {}
+                round: {}
+                rpad: {}
+                rtrim: {}
+                sqrt: {}
+                str_pos: {}
+                substr: {}
+                substr_index: {}
+                tan: {}
+                to_date: {}
+                to_lower: {}
+                to_timestamp: {}
+                to_upper: {}
+                trunc: {}
+              window:
+                cume_dist: {}
+                dense_rank: {}
+                ntile: {}
+                percent_rank: {}
+                rank: {}
+                row_number: {}
+            group_by: {}
+          filter:
+            aggregate:
+              approx_distinct: {}
+              approx_percentile_cont: {}
+              avg: {}
+              bool_and: {}
+              bool_or: {}
+              count:
+                distinct: {}
+              first_value: {}
+              last_value: {}
+              max: {}
+              median: {}
+              min: {}
+              stddev: {}
+              stddev_pop: {}
+              string_agg: {}
+              sum: {}
+              var: {}
+            comparison:
+              between: {}
+              contains: {}
+              greater_than: {}
+              greater_than_eq: {}
+              ilike: {}
+              in_list: {}
+              is_false: {}
+              is_nan: {}
+              is_null: {}
+              is_true: {}
+              is_zero: {}
+              less_than: {}
+              less_than_eq: {}
+              like: {}
+            conditional:
+              case: {}
+              nullif: {}
+            scalar:
+              abs: {}
+              and: {}
+              array_element: {}
+              binary_concat: {}
+              btrim: {}
+              ceil: {}
+              character_length: {}
+              coalesce: {}
+              concat: {}
+              cos: {}
+              current_date: {}
+              current_time: {}
+              current_timestamp: {}
+              date_part:
+                day: {}
+                day_of_week: {}
+                day_of_year: {}
+                epoch: {}
+                hour: {}
+                microsecond: {}
+                millisecond: {}
+                minute: {}
+                month: {}
+                nanosecond: {}
+                quarter: {}
+                second: {}
+                week: {}
+                year: {}
+              date_trunc: {}
+              divide: {}
+              exp: {}
+              floor: {}
+              get_field: {}
+              greatest: {}
+              least: {}
+              left: {}
+              ln: {}
+              log: {}
+              log2: {}
+              log10: {}
+              lpad: {}
+              ltrim: {}
+              minus: {}
+              modulo: {}
+              multiply: {}
+              negate: {}
+              not: {}
+              nvl: {}
+              or: {}
+              plus: {}
+              power: {}
+              random: {}
+              replace: {}
+              reverse: {}
+              right: {}
+              round: {}
+              rpad: {}
+              rtrim: {}
+              sqrt: {}
+              str_pos: {}
+              substr: {}
+              substr_index: {}
+              tan: {}
+              to_date: {}
+              to_lower: {}
+              to_timestamp: {}
+              to_upper: {}
+              trunc: {}
+            window:
+              cume_dist: {}
+              dense_rank: {}
+              ntile: {}
+              percent_rank: {}
+              rank: {}
+              row_number: {}
+          join:
+            expression:
+              aggregate:
+                approx_distinct: {}
+                approx_percentile_cont: {}
+                avg: {}
+                bool_and: {}
+                bool_or: {}
+                count:
+                  distinct: {}
+                first_value: {}
+                last_value: {}
+                max: {}
+                median: {}
+                min: {}
+                stddev: {}
+                stddev_pop: {}
+                string_agg: {}
+                sum: {}
+                var: {}
+              comparison:
+                between: {}
+                contains: {}
+                greater_than: {}
+                greater_than_eq: {}
+                ilike: {}
+                in_list: {}
+                is_false: {}
+                is_nan: {}
+                is_null: {}
+                is_true: {}
+                is_zero: {}
+                less_than: {}
+                less_than_eq: {}
+                like: {}
+              conditional:
+                case: {}
+                nullif: {}
+              scalar:
+                abs: {}
+                and: {}
+                array_element: {}
+                binary_concat: {}
+                btrim: {}
+                ceil: {}
+                character_length: {}
+                coalesce: {}
+                concat: {}
+                cos: {}
+                current_date: {}
+                current_time: {}
+                current_timestamp: {}
+                date_part:
+                  day: {}
+                  day_of_week: {}
+                  day_of_year: {}
+                  epoch: {}
+                  hour: {}
+                  microsecond: {}
+                  millisecond: {}
+                  minute: {}
+                  month: {}
+                  nanosecond: {}
+                  quarter: {}
+                  second: {}
+                  week: {}
+                  year: {}
+                date_trunc: {}
+                divide: {}
+                exp: {}
+                floor: {}
+                get_field: {}
+                greatest: {}
+                least: {}
+                left: {}
+                ln: {}
+                log: {}
+                log2: {}
+                log10: {}
+                lpad: {}
+                ltrim: {}
+                minus: {}
+                modulo: {}
+                multiply: {}
+                negate: {}
+                not: {}
+                nvl: {}
+                or: {}
+                plus: {}
+                power: {}
+                random: {}
+                replace: {}
+                reverse: {}
+                right: {}
+                round: {}
+                rpad: {}
+                rtrim: {}
+                sqrt: {}
+                str_pos: {}
+                substr: {}
+                substr_index: {}
+                tan: {}
+                to_date: {}
+                to_lower: {}
+                to_timestamp: {}
+                to_upper: {}
+                trunc: {}
+              window:
+                cume_dist: {}
+                dense_rank: {}
+                ntile: {}
+                percent_rank: {}
+                rank: {}
+                row_number: {}
+            join_types:
+              full: {}
+              inner: {}
+              left: {}
+              left_anti: {}
+              left_semi: {}
+              right: {}
+              right_anti: {}
+              right_semi: {}
+          project:
+            expression:
+              aggregate:
+                approx_distinct: {}
+                approx_percentile_cont: {}
+                avg: {}
+                bool_and: {}
+                bool_or: {}
+                count:
+                  distinct: {}
+                first_value: {}
+                last_value: {}
+                max: {}
+                median: {}
+                min: {}
+                stddev: {}
+                stddev_pop: {}
+                string_agg: {}
+                sum: {}
+                var: {}
+              comparison:
+                between: {}
+                contains: {}
+                greater_than: {}
+                greater_than_eq: {}
+                ilike: {}
+                in_list: {}
+                is_false: {}
+                is_nan: {}
+                is_null: {}
+                is_true: {}
+                is_zero: {}
+                less_than: {}
+                less_than_eq: {}
+                like: {}
+              conditional:
+                case: {}
+                nullif: {}
+              scalar:
+                abs: {}
+                and: {}
+                array_element: {}
+                binary_concat: {}
+                btrim: {}
+                ceil: {}
+                character_length: {}
+                coalesce: {}
+                concat: {}
+                cos: {}
+                current_date: {}
+                current_time: {}
+                current_timestamp: {}
+                date_part:
+                  day: {}
+                  day_of_week: {}
+                  day_of_year: {}
+                  epoch: {}
+                  hour: {}
+                  microsecond: {}
+                  millisecond: {}
+                  minute: {}
+                  month: {}
+                  nanosecond: {}
+                  quarter: {}
+                  second: {}
+                  week: {}
+                  year: {}
+                date_trunc: {}
+                divide: {}
+                exp: {}
+                floor: {}
+                get_field: {}
+                greatest: {}
+                least: {}
+                left: {}
+                ln: {}
+                log: {}
+                log2: {}
+                log10: {}
+                lpad: {}
+                ltrim: {}
+                minus: {}
+                modulo: {}
+                multiply: {}
+                negate: {}
+                not: {}
+                nvl: {}
+                or: {}
+                plus: {}
+                power: {}
+                random: {}
+                replace: {}
+                reverse: {}
+                right: {}
+                round: {}
+                rpad: {}
+                rtrim: {}
+                sqrt: {}
+                str_pos: {}
+                substr: {}
+                substr_index: {}
+                tan: {}
+                to_date: {}
+                to_lower: {}
+                to_timestamp: {}
+                to_upper: {}
+                trunc: {}
+              window:
+                cume_dist: {}
+                dense_rank: {}
+                ntile: {}
+                percent_rank: {}
+                rank: {}
+                row_number: {}
+          sort:
+            expression:
+              aggregate:
+                approx_distinct: {}
+                approx_percentile_cont: {}
+                avg: {}
+                bool_and: {}
+                bool_or: {}
+                count:
+                  distinct: {}
+                first_value: {}
+                last_value: {}
+                max: {}
+                median: {}
+                min: {}
+                stddev: {}
+                stddev_pop: {}
+                string_agg: {}
+                sum: {}
+                var: {}
+              comparison:
+                between: {}
+                contains: {}
+                greater_than: {}
+                greater_than_eq: {}
+                ilike: {}
+                in_list: {}
+                is_false: {}
+                is_nan: {}
+                is_null: {}
+                is_true: {}
+                is_zero: {}
+                less_than: {}
+                less_than_eq: {}
+                like: {}
+              conditional:
+                case: {}
+                nullif: {}
+              scalar:
+                abs: {}
+                and: {}
+                array_element: {}
+                binary_concat: {}
+                btrim: {}
+                ceil: {}
+                character_length: {}
+                coalesce: {}
+                concat: {}
+                cos: {}
+                current_date: {}
+                current_time: {}
+                current_timestamp: {}
+                date_part:
+                  day: {}
+                  day_of_week: {}
+                  day_of_year: {}
+                  epoch: {}
+                  hour: {}
+                  microsecond: {}
+                  millisecond: {}
+                  minute: {}
+                  month: {}
+                  nanosecond: {}
+                  quarter: {}
+                  second: {}
+                  week: {}
+                  year: {}
+                date_trunc: {}
+                divide: {}
+                exp: {}
+                floor: {}
+                get_field: {}
+                greatest: {}
+                least: {}
+                left: {}
+                ln: {}
+                log: {}
+                log2: {}
+                log10: {}
+                lpad: {}
+                ltrim: {}
+                minus: {}
+                modulo: {}
+                multiply: {}
+                negate: {}
+                not: {}
+                nvl: {}
+                or: {}
+                plus: {}
+                power: {}
+                random: {}
+                replace: {}
+                reverse: {}
+                right: {}
+                round: {}
+                rpad: {}
+                rtrim: {}
+                sqrt: {}
+                str_pos: {}
+                substr: {}
+                substr_index: {}
+                tan: {}
+                to_date: {}
+                to_lower: {}
+                to_timestamp: {}
+                to_upper: {}
+                trunc: {}
+              window:
+                cume_dist: {}
+                dense_rank: {}
+                ntile: {}
+                percent_rank: {}
+                rank: {}
+                row_number: {}
+          union: {}
+          window:
+            expression:
+              aggregate:
+                approx_distinct: {}
+                approx_percentile_cont: {}
+                avg: {}
+                bool_and: {}
+                bool_or: {}
+                count:
+                  distinct: {}
+                first_value: {}
+                last_value: {}
+                max: {}
+                median: {}
+                min: {}
+                stddev: {}
+                stddev_pop: {}
+                string_agg: {}
+                sum: {}
+                var: {}
+              comparison:
+                between: {}
+                contains: {}
+                greater_than: {}
+                greater_than_eq: {}
+                ilike: {}
+                in_list: {}
+                is_false: {}
+                is_nan: {}
+                is_null: {}
+                is_true: {}
+                is_zero: {}
+                less_than: {}
+                less_than_eq: {}
+                like: {}
+              conditional:
+                case: {}
+                nullif: {}
+              scalar:
+                abs: {}
+                and: {}
+                array_element: {}
+                binary_concat: {}
+                btrim: {}
+                ceil: {}
+                character_length: {}
+                coalesce: {}
+                concat: {}
+                cos: {}
+                current_date: {}
+                current_time: {}
+                current_timestamp: {}
+                date_part:
+                  day: {}
+                  day_of_week: {}
+                  day_of_year: {}
+                  epoch: {}
+                  hour: {}
+                  microsecond: {}
+                  millisecond: {}
+                  minute: {}
+                  month: {}
+                  nanosecond: {}
+                  quarter: {}
+                  second: {}
+                  week: {}
+                  year: {}
+                date_trunc: {}
+                divide: {}
+                exp: {}
+                floor: {}
+                get_field: {}
+                greatest: {}
+                least: {}
+                left: {}
+                ln: {}
+                log: {}
+                log2: {}
+                log10: {}
+                lpad: {}
+                ltrim: {}
+                minus: {}
+                modulo: {}
+                multiply: {}
+                negate: {}
+                not: {}
+                nvl: {}
+                or: {}
+                plus: {}
+                power: {}
+                random: {}
+                replace: {}
+                reverse: {}
+                right: {}
+                round: {}
+                rpad: {}
+                rtrim: {}
+                sqrt: {}
+                str_pos: {}
+                substr: {}
+                substr_index: {}
+                tan: {}
+                to_date: {}
+                to_lower: {}
+                to_timestamp: {}
+                to_upper: {}
+                trunc: {}
+              window:
+                cume_dist: {}
+                dense_rank: {}
+                ntile: {}
+                percent_rank: {}
+                rank: {}
+                row_number: {}
+      version: 0.2.5

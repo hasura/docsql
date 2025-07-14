@@ -1,0 +1,226 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: docs_bot_doc_chunk
+  description: "Object type for docs_bot.doc_chunk. Description: null"
+  fields:
+    - name: chunk_content
+      type: string!
+    - name: chunk_line_end
+      type: int_32
+    - name: chunk_line_start
+      type: int_32!
+    - name: created_at
+      type: timestamptz!
+    - name: doc_content_id_fk
+      type: string!
+    - name: embedding
+      type: json
+    - name: id
+      type: string!
+    - name: page_description
+      type: string
+    - name: page_keywords
+      type: json
+    - name: page_title
+      type: string
+    - name: page_url
+      type: string!
+    - name: updated_at
+      type: timestamptz!
+    - name: version
+      type: string
+      description: Version of Hasura that this chunk belongs to. "2", "3" or "promptql".
+  graphql:
+    typeName: docs_bot_doc_chunk
+    inputTypeName: docs_bot_doc_chunk_input
+  dataConnectorTypeMapping:
+    - dataConnectorName: pg
+      dataConnectorObjectType: docs_bot.doc_chunk
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: docs_bot_doc_chunk
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - chunk_content
+          - chunk_line_end
+          - chunk_line_start
+          - created_at
+          - doc_content_id_fk
+          - embedding
+          - id
+          - page_description
+          - page_keywords
+          - page_title
+          - page_url
+          - updated_at
+          - version
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: docs_bot_doc_chunk_bool_exp
+  operand:
+    object:
+      type: docs_bot_doc_chunk
+      comparableFields:
+        - fieldName: chunk_content
+          booleanExpressionType: text_bool_exp
+        - fieldName: chunk_line_end
+          booleanExpressionType: integer_bool_exp
+        - fieldName: chunk_line_start
+          booleanExpressionType: integer_bool_exp
+        - fieldName: created_at
+          booleanExpressionType: timestamp_with_time_zone_bool_exp
+        - fieldName: doc_content_id_fk
+          booleanExpressionType: uuid_bool_exp
+        - fieldName: embedding
+          booleanExpressionType: vector_1536_bool_exp
+        - fieldName: id
+          booleanExpressionType: uuid_bool_exp
+        - fieldName: page_description
+          booleanExpressionType: text_bool_exp
+        - fieldName: page_keywords
+          booleanExpressionType: array_bool_exp
+        - fieldName: page_title
+          booleanExpressionType: text_bool_exp
+        - fieldName: page_url
+          booleanExpressionType: text_bool_exp
+        - fieldName: updated_at
+          booleanExpressionType: timestamp_with_time_zone_bool_exp
+        - fieldName: version
+          booleanExpressionType: text_bool_exp
+      comparableRelationships: []
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: docs_bot_doc_chunk_bool_exp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: docs_bot_doc_chunk_agg_exp
+  operand:
+    object:
+      aggregatedType: docs_bot_doc_chunk
+      aggregatableFields:
+        - fieldName: chunk_content
+          aggregateExpression: text_agg_exp
+        - fieldName: chunk_line_end
+          aggregateExpression: integer_agg_exp
+        - fieldName: chunk_line_start
+          aggregateExpression: integer_agg_exp
+        - fieldName: created_at
+          aggregateExpression: timestamp_with_time_zone_agg_exp
+        - fieldName: doc_content_id_fk
+          aggregateExpression: uuid_agg_exp
+        - fieldName: embedding
+          aggregateExpression: vector_1536_agg_exp
+        - fieldName: id
+          aggregateExpression: uuid_agg_exp
+        - fieldName: page_description
+          aggregateExpression: text_agg_exp
+        - fieldName: page_keywords
+          aggregateExpression: array_agg_exp
+        - fieldName: page_title
+          aggregateExpression: text_agg_exp
+        - fieldName: page_url
+          aggregateExpression: text_agg_exp
+        - fieldName: updated_at
+          aggregateExpression: timestamp_with_time_zone_agg_exp
+        - fieldName: version
+          aggregateExpression: text_agg_exp
+  count:
+    enable: true
+  graphql:
+    selectTypeName: docs_bot_doc_chunk_agg_exp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: docs_bot_doc_chunk_order_by_exp
+  operand:
+    object:
+      orderedType: docs_bot_doc_chunk
+      orderableFields:
+        - fieldName: chunk_content
+          orderByExpression: string_order_by_exp
+        - fieldName: chunk_line_end
+          orderByExpression: int_32_order_by_exp
+        - fieldName: chunk_line_start
+          orderByExpression: int_32_order_by_exp
+        - fieldName: created_at
+          orderByExpression: timestamptz_order_by_exp
+        - fieldName: doc_content_id_fk
+          orderByExpression: string_order_by_exp
+        - fieldName: embedding
+          orderByExpression: json_order_by_exp
+        - fieldName: id
+          orderByExpression: string_order_by_exp
+        - fieldName: page_description
+          orderByExpression: string_order_by_exp
+        - fieldName: page_keywords
+          orderByExpression: json_order_by_exp
+        - fieldName: page_title
+          orderByExpression: string_order_by_exp
+        - fieldName: page_url
+          orderByExpression: string_order_by_exp
+        - fieldName: updated_at
+          orderByExpression: timestamptz_order_by_exp
+        - fieldName: version
+          orderByExpression: string_order_by_exp
+      orderableRelationships: []
+  graphql:
+    expressionTypeName: docs_bot_doc_chunk_order_by_exp
+
+---
+kind: Model
+version: v2
+definition:
+  name: docs_bot_doc_chunk
+  objectType: docs_bot_doc_chunk
+  source:
+    dataConnectorName: pg
+    collection: docs_bot.doc_chunk
+  filterExpressionType: docs_bot_doc_chunk_bool_exp
+  aggregateExpression: docs_bot_doc_chunk_agg_exp
+  orderByExpression: docs_bot_doc_chunk_order_by_exp
+  graphql:
+    selectMany:
+      queryRootField: docs_bot_doc_chunk
+      subscription:
+        rootField: docs_bot_doc_chunk
+    selectUniques:
+      - queryRootField: docs_bot_doc_chunk_by_id
+        uniqueIdentifier:
+          - id
+        subscription:
+          rootField: docs_bot_doc_chunk_by_id
+    filterInputTypeName: docs_bot_doc_chunk_filter_input
+    aggregate:
+      queryRootField: docs_bot_doc_chunk_aggregate
+      subscription:
+        rootField: docs_bot_doc_chunk_aggregate
+
+---
+kind: ModelPermissions
+version: v1
+definition:
+  modelName: docs_bot_doc_chunk
+  permissions:
+    - role: admin
+      select:
+        filter: null
+        allowSubscriptions: true
+

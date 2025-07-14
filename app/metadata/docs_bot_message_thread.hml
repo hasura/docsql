@@ -1,0 +1,153 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: docs_bot_message_thread
+  description: "Object type for docs_bot.message_thread. Description: null"
+  fields:
+    - name: client_message_thread_id
+      type: string!
+    - name: created_at
+      type: timestamptz!
+    - name: id
+      type: string!
+    - name: slack_thread
+      type: string
+    - name: updated_at
+      type: timestamptz!
+  graphql:
+    typeName: docs_bot_message_thread
+    inputTypeName: docs_bot_message_thread_input
+  dataConnectorTypeMapping:
+    - dataConnectorName: pg
+      dataConnectorObjectType: docs_bot.message_thread
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: docs_bot_message_thread
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - client_message_thread_id
+          - created_at
+          - id
+          - slack_thread
+          - updated_at
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: docs_bot_message_thread_bool_exp
+  operand:
+    object:
+      type: docs_bot_message_thread
+      comparableFields:
+        - fieldName: client_message_thread_id
+          booleanExpressionType: uuid_bool_exp
+        - fieldName: created_at
+          booleanExpressionType: timestamp_with_time_zone_bool_exp
+        - fieldName: id
+          booleanExpressionType: uuid_bool_exp
+        - fieldName: slack_thread
+          booleanExpressionType: text_bool_exp
+        - fieldName: updated_at
+          booleanExpressionType: timestamp_with_time_zone_bool_exp
+      comparableRelationships: []
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: docs_bot_message_thread_bool_exp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: docs_bot_message_thread_agg_exp
+  operand:
+    object:
+      aggregatedType: docs_bot_message_thread
+      aggregatableFields:
+        - fieldName: client_message_thread_id
+          aggregateExpression: uuid_agg_exp
+        - fieldName: created_at
+          aggregateExpression: timestamp_with_time_zone_agg_exp
+        - fieldName: id
+          aggregateExpression: uuid_agg_exp
+        - fieldName: slack_thread
+          aggregateExpression: text_agg_exp
+        - fieldName: updated_at
+          aggregateExpression: timestamp_with_time_zone_agg_exp
+  count:
+    enable: true
+  graphql:
+    selectTypeName: docs_bot_message_thread_agg_exp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: docs_bot_message_thread_order_by_exp
+  operand:
+    object:
+      orderedType: docs_bot_message_thread
+      orderableFields:
+        - fieldName: client_message_thread_id
+          orderByExpression: string_order_by_exp
+        - fieldName: created_at
+          orderByExpression: timestamptz_order_by_exp
+        - fieldName: id
+          orderByExpression: string_order_by_exp
+        - fieldName: slack_thread
+          orderByExpression: string_order_by_exp
+        - fieldName: updated_at
+          orderByExpression: timestamptz_order_by_exp
+      orderableRelationships: []
+  graphql:
+    expressionTypeName: docs_bot_message_thread_order_by_exp
+
+---
+kind: Model
+version: v2
+definition:
+  name: docs_bot_message_thread
+  objectType: docs_bot_message_thread
+  source:
+    dataConnectorName: pg
+    collection: docs_bot.message_thread
+  filterExpressionType: docs_bot_message_thread_bool_exp
+  aggregateExpression: docs_bot_message_thread_agg_exp
+  orderByExpression: docs_bot_message_thread_order_by_exp
+  graphql:
+    selectMany:
+      queryRootField: docs_bot_message_thread
+      subscription:
+        rootField: docs_bot_message_thread
+    selectUniques:
+      - queryRootField: docs_bot_message_thread_by_id
+        uniqueIdentifier:
+          - id
+        subscription:
+          rootField: docs_bot_message_thread_by_id
+    filterInputTypeName: docs_bot_message_thread_filter_input
+    aggregate:
+      queryRootField: docs_bot_message_thread_aggregate
+      subscription:
+        rootField: docs_bot_message_thread_aggregate
+
+---
+kind: ModelPermissions
+version: v1
+definition:
+  modelName: docs_bot_message_thread
+  permissions:
+    - role: admin
+      select:
+        filter: null
+        allowSubscriptions: true
+
