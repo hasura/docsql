@@ -7,7 +7,7 @@ definition:
     - name: chunk_content
       type: string!
     - name: distance
-      type: boolean
+      type: Float
     - name: id
       type: string!
     - name: page_description
@@ -43,92 +43,6 @@ definition:
           - version
 
 ---
-kind: BooleanExpressionType
-version: v1
-definition:
-  name: embeddings_vector_distance_bool_exp
-  operand:
-    object:
-      type: embeddings_vector_distance
-      comparableFields:
-        - fieldName: chunk_content
-          booleanExpressionType: varchar_bool_exp
-        - fieldName: distance
-          booleanExpressionType: boolean_bool_exp
-        - fieldName: id
-          booleanExpressionType: jsonb_bool_exp
-        - fieldName: page_description
-          booleanExpressionType: varchar_bool_exp
-        - fieldName: page_title
-          booleanExpressionType: varchar_bool_exp
-        - fieldName: page_url
-          booleanExpressionType: varchar_bool_exp
-        - fieldName: version
-          booleanExpressionType: varchar_bool_exp
-      comparableRelationships: []
-  logicalOperators:
-    enable: true
-  isNull:
-    enable: true
-  graphql:
-    typeName: embeddings_vector_distance_bool_exp
-
----
-kind: AggregateExpression
-version: v1
-definition:
-  name: embeddings_vector_distance_agg_exp
-  operand:
-    object:
-      aggregatedType: embeddings_vector_distance
-      aggregatableFields:
-        - fieldName: chunk_content
-          aggregateExpression: varchar_agg_exp
-        - fieldName: distance
-          aggregateExpression: boolean_agg_exp
-        - fieldName: id
-          aggregateExpression: jsonb_agg_exp
-        - fieldName: page_description
-          aggregateExpression: varchar_agg_exp
-        - fieldName: page_title
-          aggregateExpression: varchar_agg_exp
-        - fieldName: page_url
-          aggregateExpression: varchar_agg_exp
-        - fieldName: version
-          aggregateExpression: varchar_agg_exp
-  count:
-    enable: true
-  graphql:
-    selectTypeName: embeddings_vector_distance_agg_exp
-
----
-kind: OrderByExpression
-version: v1
-definition:
-  name: embeddings_vector_distance_order_by_exp
-  operand:
-    object:
-      orderedType: embeddings_vector_distance
-      orderableFields:
-        - fieldName: chunk_content
-          orderByExpression: string_order_by_exp
-        - fieldName: distance
-          orderByExpression: boolean_order_by_exp
-        - fieldName: id
-          orderByExpression: string_order_by_exp
-        - fieldName: page_description
-          orderByExpression: string_order_by_exp
-        - fieldName: page_title
-          orderByExpression: string_order_by_exp
-        - fieldName: page_url
-          orderByExpression: string_order_by_exp
-        - fieldName: version
-          orderByExpression: string_order_by_exp
-      orderableRelationships: []
-  graphql:
-    expressionTypeName: embeddings_vector_distance_order_by_exp
-
----
 kind: Model
 version: v2
 definition:
@@ -144,9 +58,6 @@ definition:
   source:
     dataConnectorName: pg
     collection: embeddings_vector_distance
-  filterExpressionType: embeddings_vector_distance_bool_exp
-  aggregateExpression: embeddings_vector_distance_agg_exp
-  orderByExpression: embeddings_vector_distance_order_by_exp
   graphql:
     selectMany:
       queryRootField: embeddings_vector_distance
