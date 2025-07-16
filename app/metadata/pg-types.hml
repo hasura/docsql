@@ -663,74 +663,6 @@ definition:
 kind: BooleanExpressionType
 version: v1
 definition:
-  name: decimal_bool_exp
-  operand:
-    scalar:
-      type: bigdecimal
-      comparisonOperators:
-        - name: _eq
-          argumentType: bigdecimal!
-        - name: _gt
-          argumentType: bigdecimal!
-        - name: _gte
-          argumentType: bigdecimal!
-        - name: _in
-          argumentType: "[bigdecimal!]!"
-        - name: _lt
-          argumentType: bigdecimal!
-        - name: _lte
-          argumentType: bigdecimal!
-        - name: _neq
-          argumentType: bigdecimal!
-      dataConnectorOperatorMapping:
-        - dataConnectorName: pg
-          dataConnectorScalarType: decimal
-          operatorMapping: {}
-  logicalOperators:
-    enable: true
-  isNull:
-    enable: true
-  graphql:
-    typeName: decimal_bool_exp
-
----
-kind: BooleanExpressionType
-version: v1
-definition:
-  name: bigint_bool_exp
-  operand:
-    scalar:
-      type: biginteger
-      comparisonOperators:
-        - name: _eq
-          argumentType: biginteger!
-        - name: _gt
-          argumentType: biginteger!
-        - name: _gte
-          argumentType: biginteger!
-        - name: _in
-          argumentType: "[biginteger!]!"
-        - name: _lt
-          argumentType: biginteger!
-        - name: _lte
-          argumentType: biginteger!
-        - name: _neq
-          argumentType: biginteger!
-      dataConnectorOperatorMapping:
-        - dataConnectorName: pg
-          dataConnectorScalarType: bigint
-          operatorMapping: {}
-  logicalOperators:
-    enable: true
-  isNull:
-    enable: true
-  graphql:
-    typeName: bigint_bool_exp
-
----
-kind: BooleanExpressionType
-version: v1
-definition:
   name: jsonb_bool_exp
   operand:
     scalar:
@@ -902,4 +834,72 @@ definition:
     enable: true
   graphql:
     selectTypeName: jsonb_agg_exp
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: decimal_bool_exp
+  operand:
+    scalar:
+      type: bigdecimal
+      comparisonOperators:
+        - name: _eq
+          argumentType: bigdecimal!
+        - name: _gt
+          argumentType: bigdecimal!
+        - name: _gte
+          argumentType: bigdecimal!
+        - name: _in
+          argumentType: "[bigdecimal!]!"
+        - name: _lt
+          argumentType: bigdecimal!
+        - name: _lte
+          argumentType: bigdecimal!
+        - name: _neq
+          argumentType: bigdecimal!
+      dataConnectorOperatorMapping:
+        - dataConnectorName: pg
+          dataConnectorScalarType: decimal
+          operatorMapping: {}
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: decimal_bool_exp
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: bigint_bool_exp
+  operand:
+    scalar:
+      type: biginteger
+      comparisonOperators:
+        - name: _eq
+          argumentType: biginteger!
+        - name: _gt
+          argumentType: biginteger!
+        - name: _gte
+          argumentType: biginteger!
+        - name: _in
+          argumentType: "[biginteger!]!"
+        - name: _lt
+          argumentType: biginteger!
+        - name: _lte
+          argumentType: biginteger!
+        - name: _neq
+          argumentType: biginteger!
+      dataConnectorOperatorMapping:
+        - dataConnectorName: pg
+          dataConnectorScalarType: bigint
+          operatorMapping: {}
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: bigint_bool_exp
 

@@ -138,7 +138,7 @@ definition:
     - name: limit_count
       type: biginteger
     - name: query_vector
-      type: string
+      type: "[Float]"
     - name: version_filter
       type: string
   source:
