@@ -1,0 +1,21 @@
+services:
+  bot-server:
+    image: dev-server
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+      args:
+        - SERVER_PORT=${SERVER_PORT}
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    volumes:
+      - ./server:/app/server
+    env_file:
+      - .env
+    working_dir: /app/server
+    command: ["bun", "--watch", "src/index.ts"]
+    develop:
+      watch:
+        - action: sync
+          path: ./server
+          target: /app/server
