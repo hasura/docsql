@@ -9,4 +9,3 @@ const app = new Elysia()
   .listen(PORT);
 
 console.log(`Server running on http://localhost:${process.env.SERVER_PORT}`);
-// Test comment
