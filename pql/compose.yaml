@@ -38,6 +38,7 @@ services:
       DDN_URL: ${HASURA_DDN_URL:-http://engine:3000/v1/sql}
       OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT:-http://local.hasura.dev:4317}
       PROMPTQL_SECRET_KEY: ${PROMPTQL_SECRET_KEY}
+      ANTHROPIC_KEY: ${ANTHROPIC_KEY}
     extra_hosts:
       - local.hasura.dev:host-gateway
     image: us-east4-docker.pkg.dev/promptql-execution-service/promptql-public/promptql-playground-local

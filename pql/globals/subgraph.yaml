@@ -6,3 +6,6 @@ definition:
     rootPath: .
   includePaths:
     - metadata
+  envMapping:
+    "ANTHROPIC_KEY":
+      fromEnv: ANTHROPIC_KEY
