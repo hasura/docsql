@@ -21,13 +21,13 @@ Install the following tools:
 
 ### Setup
 
-1. **Create environment file:**
+1. **Create environment files:**
 
    ```sh
-   touch .env
+   touch .env && cd pql && touch .env
    ```
 
-   Fill it with the key-values from the **Product ACT** vault in 1Password (ask a team member for access if needed).
+   Fill them with the key-values from the **Product ACT** vault in 1Password (ask a team member for access if needed).
 
 2. **Run the development script:**
    ```sh
@@ -85,12 +85,7 @@ If you prefer not to use the automated script:
 
 1. **PromptQL changes**: Edit files in the `pql/` directory
 2. **Server changes**: Edit files in the `server/` directory
-3. **Both support hot reloading** when using the development setup
-
-### Testing Your Changes
-
-- **PromptQL**: Use the playground link from your PR build comments
-- **Server**: Test API endpoints directly or through your frontend integration
+3. **Server supports hot reloading** when using the development setup
 
 ### Submitting Changes
 
@@ -125,20 +120,6 @@ If you prefer not to use the automated script:
 ├── .dev.sh               # Development environment script
 └── compose.yaml          # Main docker-compose file
 ```
-
-## Coding Standards
-
-### PromptQL
-
-- Follow DDN CLI conventions for metadata organization
-- Use descriptive names for connectors and data sources
-- Document any custom functions or complex queries
-
-### Server (TypeScript/Bun)
-
-- Use TypeScript for type safety
-- Follow existing code patterns and structure
-- Add tests for new functionality
 
 ## Getting Help
 

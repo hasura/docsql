@@ -37,17 +37,17 @@ Get the project running with just the essentials:
 1. **Clone and navigate to the project:**
 
    ```sh
-   git clone <repository-url>
+   git clone https://github.com/hasura/pql-docs-bot.git
    cd pql-docs-bot
    ```
 
-2. **Create environment file:**
+2. **Create environment files:**
 
    ```sh
-   touch .env
+   touch .env && cd pql && touch .env
    ```
 
-   Fill it with the key-values from the **Product ACT** vault in 1Password (ask a team member for access if needed).
+   Fill them with the key-values from the **Product ACT** vault in 1Password (ask a team member for access if needed).
 
 3. **Start the server:**
 
