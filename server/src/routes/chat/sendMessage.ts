@@ -5,71 +5,91 @@ const client = createPromptQLClientV2({
   apiKey: process.env.PQL_API_KEY || "",
 });
 
-export const sendMessage = async ({ body, params }: Context) => {
+export const sendMessage = async ({ body, params, set }: Context) => {
   const { conversationId } = params;
   const { message, history } = body as {
     message: string;
     history?: Array<{ role: "user" | "assistant"; content: string }>;
   };
 
-  try {
-    let responseContent = "";
+  set.headers["Content-Type"] = "text/event-stream";
+  set.headers["Cache-Control"] = "no-cache";
+  set.headers["Connection"] = "keep-alive";
 
-    // Build interactions from history + current message
-    const interactions = [];
+  // Build interactions from history + current message
+  const interactions: Array<{
+    user_message: { text: string };
+    assistant_actions?: Array<{ message: string }>;
+  }> = [];
 
-    // Add history as pairs (user message + assistant response)
-    if (history) {
-      for (let i = 0; i < history.length; i += 2) {
-        const userMsg = history[i];
-        const assistantMsg = history[i + 1];
+  if (history) {
+    for (let i = 0; i < history.length; i += 2) {
+      const userMsg = history[i];
+      const assistantMsg = history[i + 1];
 
-        if (userMsg?.role === "user") {
-          interactions.push({
-            user_message: { text: userMsg.content },
-            ...(assistantMsg?.role === "assistant" && {
-              assistant_actions: [{ message: assistantMsg.content }],
-            }),
-          });
-        }
+      if (userMsg?.role === "user") {
+        interactions.push({
+          user_message: { text: userMsg.content },
+          ...(assistantMsg?.role === "assistant" && {
+            assistant_actions: [{ message: assistantMsg.content }],
+          }),
+        });
       }
     }
-
-    // Add current message
-    interactions.push({
-      user_message: { text: message },
-    });
-
-    await client.queryStream(
-      {
-        artifacts: [],
-        interactions,
-      },
-      async (chunk) => {
-        if (chunk && typeof chunk === "object" && "type" in chunk) {
-          if (chunk.type === "assistant_action_chunk" && chunk.message) {
-            responseContent += chunk.message;
-          }
-        } else if (typeof chunk === "string") {
-          responseContent += chunk;
-        }
-      }
-    );
-
-    return {
-      success: true,
-      conversationId,
-      message: {
-        role: "assistant",
-        content: responseContent,
-        timestamp: new Date(),
-      },
-    };
-  } catch (error) {
-    console.error("PromptQL API error:", error);
-    return {
-      success: false,
-      error: "Failed to process message",
-    };
   }
+
+  interactions.push({
+    user_message: { text: message },
+  });
+
+  const stream = new ReadableStream({
+    start(controller) {
+      let responseContent = "";
+
+      client
+        .queryStream(
+          {
+            artifacts: [],
+            interactions,
+          },
+          async (chunk) => {
+            console.log(`Ding! Chunk type: ${chunk?.type}`);
+
+            if (chunk?.type === "assistant_action_chunk") {
+              let chunkContent = "";
+
+              // Capture different types of content
+              if (chunk.message) {
+                chunkContent = chunk.message;
+              } else if (chunk.plan) {
+                chunkContent = chunk.plan;
+              } else if (chunk.code) {
+                chunkContent = chunk.code;
+              }
+
+              if (chunkContent) {
+                responseContent += chunkContent;
+
+                const data = JSON.stringify({
+                  success: true,
+                  conversationId,
+                  message: {
+                    role: "assistant",
+                    content: responseContent,
+                    timestamp: new Date(),
+                  },
+                });
+
+                controller.enqueue(`data: ${data}\n\n`);
+              }
+            }
+          }
+        )
+        .then(() => {
+          controller.close();
+        });
+    },
+  });
+
+  return new Response(stream);
 };
