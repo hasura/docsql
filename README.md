@@ -23,74 +23,52 @@ which can be consumed by various frontends (e.g., a front-end chat component).
 └── ngrok.yml
 ```
 
-## Development
+## Quick Start
 
-The `.dev.sh` file provides a configuration for starting up all necessary services using a
-[tmux](https://github.com/tmux/tmux/wiki) session; it's configured for [Neovim](https://neovim.io/) and
-[ngrok](https://ngrok.com/) as well.
+Get the project running with just the essentials:
 
-These services are **not required** for starting the development environment or contributing to the project. However,
-they make life easier! Below, choose your own adventure to get started 👇
-
-### Use the `.dev.sh` script
-
-#### Step 1. Install Prerequisites
-
-Before advancing, ensure you've installed the following:
-
-- [tmux](https://github.com/tmux/tmux/wiki)
-- [DDN CLI](https://promptql.io/docs/reference/cli/installation/)
-- [Bun](https://bun.sh/docs/installation)
-- [Docker](https://docs.docker.com/get-docker/)
-- [Neovim](https://github.com/neovim/neovim/wiki/Installing-Neovim)
-- [ngrok](https://ngrok.com/download)
-
-Create a `.env` in the root of the project:
-
-```sh
-touch .env
-```
-
-Then, fill it with the key-values found [here](#).
-
-Finally, from the root of the repository, run the development script:
-
-```sh
-chmod +x ./.dev.sh && ./.dev.sh
-```
-
-Your terminal will be taken over by four panes:
-
-- **Neovim**: for development.
-- **Docker**: Logs for the `pql-bot` service.
-- **Docker**: Logs for all PromptQL-related services (i.e., the distributed query engine, playground, and any
-  connectors).
-- **ngrok**: Logs for the server proxy.
-
-### Start services manually
-
-You'll need:
+### Prerequisites
 
 - [Docker](https://docs.docker.com/get-docker/)
 - [DDN CLI](https://promptql.io/docs/reference/cli/installation/)
 
-From the root of the project, run the compose file for the server in detached mode:
+### Setup
 
-```sh
-docker compose up -d
-```
+1. **Clone and navigate to the project:**
 
-Then, bring up the PromptQL-related services:
+   ```sh
+   git clone <repository-url>
+   cd pql-docs-bot
+   ```
 
-```sh
-cd pql && ddn run docker-start
-```
+2. **Create environment file:**
 
-You can utilize ngrok as a proxy as you see fit.
+   ```sh
+   touch .env
+   ```
+
+   Fill it with the key-values from the **Product ACT** vault in 1Password (ask a team member for access if needed).
+
+3. **Start the server:**
+
+   ```sh
+   docker compose up -d
+   ```
+
+4. **Start PromptQL services:**
+   ```sh
+   cd pql && ddn run docker-start
+   ```
+
+That's it! Your PromptQL docs bot is now running locally.
 
 ## Contributing
 
-Coming soon!
+Want to contribute or set up a full development environment? Check out [CONTRIBUTING.md](CONTRIBUTING.md) for:
+
+- Enhanced development setup with tmux, Neovim, and ngrok
+- Development workflows and coding standards
+- How to contribute back to the project
 
 ## CI/CD
 
