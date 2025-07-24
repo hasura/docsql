@@ -1,6 +1,6 @@
 version: "2"
 tunnels:
-  reclamed-server:
+  bot-server:
     proto: http
     addr: 4000
     domain: hasura-docs-testing.ngrok.app

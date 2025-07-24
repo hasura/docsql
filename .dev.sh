@@ -12,13 +12,13 @@ if [ $? != 0 ]; then
   tmux send-keys -t $SESSION_NAME:0.0 "cd $CURRENT_DIR && nvim ." C-m
   
   tmux split-window -t $SESSION_NAME:0.0 -v -l 40%
-  tmux send-keys -t $SESSION_NAME:0.1 "cd $CURRENT_DIR && docker compose up" C-m
+  tmux send-keys -t $SESSION_NAME:0.1 "cd $CURRENT_DIR/server && docker compose up" C-m
   
   tmux split-window -t $SESSION_NAME:0.1 -h -l 50%
   tmux send-keys -t $SESSION_NAME:0.2 "cd $CURRENT_DIR/pql && ddn run docker-start" C-m
 
   tmux split-window -t $SESSION_NAME:0.2 -h -l 50%
-  tmux send-keys -t $SESSION_NAME:0.3 "cd $CURRENT_DIR && export $(grep -v '^#' .env | xargs) && ngrok start --config ngrok.yml --all" C-m
+  tmux send-keys -t $SESSION_NAME:0.3 "cd $CURRENT_DIR/server && export \$(grep -v '^#' .env | xargs) && ngrok start --config ngrok.yml --all" C-m
 
   
   tmux select-pane -t $SESSION_NAME:0.0
