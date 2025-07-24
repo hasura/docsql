@@ -15,6 +15,9 @@ export const sendMessage = async ({ body, params, set }: Context) => {
   set.headers["Content-Type"] = "text/event-stream";
   set.headers["Cache-Control"] = "no-cache";
   set.headers["Connection"] = "keep-alive";
+  set.headers["Access-Control-Allow-Origin"] = "*";
+  set.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS";
+  set.headers["Access-Control-Allow-Headers"] = "Content-Type";
 
   // Build interactions from history + current message
   const interactions: Array<{
@@ -44,7 +47,10 @@ export const sendMessage = async ({ body, params, set }: Context) => {
 
   const stream = new ReadableStream({
     start(controller) {
-      let responseContent = "";
+      let planContent = "";
+      let codeContent = "";
+      let messageContent = "";
+      let currentStep: string | null = null;
 
       client
         .queryStream(
@@ -53,31 +59,36 @@ export const sendMessage = async ({ body, params, set }: Context) => {
             interactions,
           },
           async (chunk) => {
-            console.log(`Ding! Chunk type: ${chunk?.type}`);
-
             if (chunk?.type === "assistant_action_chunk") {
-              let chunkContent = "";
+              let hasUpdate = false;
 
-              // Capture different types of content
-              if (chunk.message) {
-                chunkContent = chunk.message;
-              } else if (chunk.plan) {
-                chunkContent = chunk.plan;
-              } else if (chunk.code) {
-                chunkContent = chunk.code;
+              if (chunk.plan) {
+                planContent += chunk.plan;
+                currentStep = "plan";
+                hasUpdate = true;
               }
 
-              if (chunkContent) {
-                responseContent += chunkContent;
+              if (chunk.code) {
+                codeContent += chunk.code;
+                currentStep = "code";
+                hasUpdate = true;
+              }
 
+              if (chunk.message) {
+                messageContent += chunk.message;
+                currentStep = "message";
+                hasUpdate = true;
+              }
+
+              if (hasUpdate) {
                 const data = JSON.stringify({
                   success: true,
                   conversationId,
-                  message: {
-                    role: "assistant",
-                    content: responseContent,
-                    timestamp: new Date(),
-                  },
+                  step: currentStep,
+                  plan: planContent,
+                  code: codeContent,
+                  message: messageContent,
+                  timestamp: new Date(),
                 });
 
                 controller.enqueue(`data: ${data}\n\n`);
