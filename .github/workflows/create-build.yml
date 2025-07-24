@@ -3,6 +3,8 @@ name: Create PromptQL Build
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+    paths:
+      - "pql/**"
 
 jobs:
   build:
