@@ -66,7 +66,7 @@
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
   width: 100%;
   max-width: 480px;
-  max-height: 80vh;
+  height: 80vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -156,6 +156,7 @@
 
 .modalContent {
   flex: 1;
+  min-height: 0;
   overflow: hidden;
 }
 
