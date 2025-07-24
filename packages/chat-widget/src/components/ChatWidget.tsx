@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { ChatContainer } from "./ChatContainer";
 import { ChatWidgetProps } from "../types";
 import styles from "./ChatWidget.module.css";
@@ -10,9 +10,39 @@ export function ChatWidget({
   placeholder = "Ask a question...",
   title = "Documentation Chat",
 }: ChatWidgetProps) {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <div className={`${styles.widget} ${styles[theme]} ${className || ""}`} data-theme={theme}>
-      <ChatContainer serverUrl={serverUrl} placeholder={placeholder} title={title} />
-    </div>
+    <>
+      {/* Floating Button */}
+      <button
+        className={`${styles.floatingButton} ${styles[theme]}`}
+        onClick={() => setIsOpen(true)}
+        aria-label="Open chat">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" />
+        </svg>
+      </button>
+
+      {/* Modal */}
+      {isOpen && (
+        <div className={styles.modalOverlay} onClick={() => setIsOpen(false)}>
+          <div
+            className={`${styles.modal} ${styles[theme]} ${className || ""}`}
+            onClick={(e) => e.stopPropagation()}
+            data-theme={theme}>
+            <div className={styles.modalHeader}>
+              <h3>{title}</h3>
+              <button className={styles.closeButton} onClick={() => setIsOpen(false)} aria-label="Close chat">
+                ×
+              </button>
+            </div>
+            <div className={styles.modalContent}>
+              <ChatContainer serverUrl={serverUrl} placeholder={placeholder} title={title} />
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

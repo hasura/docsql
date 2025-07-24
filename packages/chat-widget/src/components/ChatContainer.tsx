@@ -47,7 +47,6 @@ export function ChatContainer({ serverUrl, placeholder, title }: ChatContainerPr
 
   return (
     <div className={styles.container}>
-      <ChatHeader title={title} onNewChat={clearConversation} />
       <ChatMessages messages={conversation.messages} />
       <ChatInput placeholder={placeholder} onSendMessage={handleSendMessage} disabled={isLoading} />
     </div>
