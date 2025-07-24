@@ -85,7 +85,19 @@ If you prefer not to use the automated script:
 
 1. **PromptQL changes**: Edit files in the `pql/` directory
 2. **Server changes**: Edit files in the `server/` directory
-3. **Server supports hot reloading** when using the development setup
+3. **Chat widget changes**: Edit files in the `packages/chat-widget/` directory
+4. **Server supports hot reloading** when using the development setup
+
+### Testing the Chat Widget
+
+To test chat widget changes locally:
+
+```sh
+cd packages/chat-widget && bun run test
+```
+
+This starts a test application that demonstrates the widget functionality. Make sure the server is running first, then
+open `http://localhost:3001` in your browser.
 
 ### Submitting Changes
 
@@ -119,6 +131,10 @@ If you prefer not to use the automated script:
 │   ├── ngrok.yml         # ngrok tunneling configuration
 │   ├── .env              # Server environment variables
 │   └── Dockerfile        # Server container definition
+├── packages/chat-widget/  # Reusable React chat component
+│   ├── src/              # Widget source code
+│   ├── test-app/         # Test application for development
+│   └── package.json      # Package configuration
 ├── .github/workflows/     # CI/CD automation
 ├── .dev.sh               # Development environment script
 └── compose.yaml          # Main docker-compose file
