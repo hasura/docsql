@@ -17,10 +17,45 @@ which can be consumed by various frontends (e.g., a front-end chat component).
 .
 ├── pql
 ├── server
+├── packages/chat-widget
 ├── .dev.sh
 ├── README.md
 ├── compose.yaml
 └── ngrok.yml
+```
+
+## Architecture
+
+This repository contains:
+
+- **PromptQL Backend** (`pql/`) - PromptQL configuration and metadata for the docs bot
+- **API Server** (`server/`) - Elysia/Bun server providing chat endpoints
+- **Chat Widget** (`packages/chat-widget/`) - Reusable React component for embedding chat functionality
+
+### Chat Widget Package
+
+The `@pql/chat-widget` is a standalone React component that can be embedded in any documentation site or application. It
+provides:
+
+- Floating chat button with modal interface
+- Streaming message support
+- Light/dark/auto theme modes
+- TypeScript support
+- Minimal dependencies
+
+**Installation:**
+
+```sh
+npm install @pql/chat-widget
+```
+
+**Usage:**
+
+```tsx
+import { ChatWidget } from "@pql/chat-widget";
+import "@pql/chat-widget/styles";
+
+<ChatWidget serverUrl="http://localhost:3000" theme="auto" title="Documentation Chat" />;
 ```
 
 ## Quick Start
@@ -62,12 +97,24 @@ Get the project running with just the essentials:
 
 That's it! Your PromptQL docs bot is now running locally.
 
+### Testing the Chat Widget
+
+To test chat widget changes locally:
+
+```sh
+cd packages/chat-widget && bun run test
+```
+
+This starts a test application that demonstrates the widget functionality. Make sure the server is running first, then
+open `http://localhost:3001` in your browser.
+
 ## Contributing
 
 Want to contribute or set up a full development environment? Check out [CONTRIBUTING.md](CONTRIBUTING.md) for:
 
 - Enhanced development setup with tmux, Neovim, and ngrok
 - Development workflows and coding standards
+- Chat widget development using the included test app
 - How to contribute back to the project
 
 ## CI/CD
