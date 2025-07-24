@@ -29,7 +29,7 @@ export function useStreamingChat({
 
         onMessage({
           role: "assistant",
-          content: `I can help you with "${content}". Let me search the documentation.`,
+          content: "...",
           streaming: true,
         });
 

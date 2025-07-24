@@ -15,7 +15,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
     <div className={`${styles.message} ${styles[message.role]}`}>
       <div className={styles.avatar}>{isUser ? "U" : "A"}</div>
       <div className={styles.content}>
-        <div className={styles.text}>
+        <div className={styles.text} data-loading={message.content === "..." ? "true" : undefined}>
           {isUser ? (
             <>
               {message.content}

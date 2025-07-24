@@ -59,6 +59,21 @@
   color: var(--pql-text);
 }
 
+.text[data-loading="true"] {
+  font-size: 18px;
+  animation: loadingPulse 1.4s infinite ease-in-out;
+}
+
+@keyframes loadingPulse {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
 .timestamp {
   font-size: 11px;
   color: var(--pql-text-muted);
