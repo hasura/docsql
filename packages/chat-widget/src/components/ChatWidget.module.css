@@ -1,0 +1,46 @@
+.widget {
+  --pql-primary: #2563eb;
+  --pql-primary-hover: #1d4ed8;
+  --pql-bg: #ffffff;
+  --pql-surface: #f8fafc;
+  --pql-border: #e2e8f0;
+  --pql-text: #1e293b;
+  --pql-text-muted: #64748b;
+  --pql-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  
+  width: 100%;
+  max-width: 600px;
+  height: 500px;
+  border: 1px solid var(--pql-border);
+  border-radius: 12px;
+  background: var(--pql-bg);
+  box-shadow: var(--pql-shadow);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--pql-text);
+}
+
+.widget.dark {
+  --pql-primary: #3b82f6;
+  --pql-primary-hover: #2563eb;
+  --pql-bg: #0f172a;
+  --pql-surface: #1e293b;
+  --pql-border: #334155;
+  --pql-text: #f1f5f9;
+  --pql-text-muted: #94a3b8;
+  --pql-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3);
+}
+
+.widget.auto {
+  @media (prefers-color-scheme: dark) {
+    --pql-primary: #3b82f6;
+    --pql-primary-hover: #2563eb;
+    --pql-bg: #0f172a;
+    --pql-surface: #1e293b;
+    --pql-border: #334155;
+    --pql-text: #f1f5f9;
+    --pql-text-muted: #94a3b8;
+    --pql-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3);
+  }
+}

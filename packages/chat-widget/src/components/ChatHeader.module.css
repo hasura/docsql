@@ -1,0 +1,41 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--pql-border);
+  background: var(--pql-surface);
+  border-radius: 12px 12px 0 0;
+}
+
+.title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--pql-text);
+}
+
+.newButton {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px solid var(--pql-border);
+  border-radius: 6px;
+  color: var(--pql-text-muted);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.newButton:hover {
+  background: var(--pql-primary);
+  border-color: var(--pql-primary);
+  color: white;
+}
+
+.newButton:active {
+  transform: translateY(1px);
+}
