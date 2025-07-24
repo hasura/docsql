@@ -1,0 +1,183 @@
+.message {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 0 16px;
+}
+
+.user {
+  flex-direction: row-reverse;
+}
+
+.assistant {
+  flex-direction: row;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.user .avatar {
+  background: var(--pql-primary);
+  color: white;
+}
+
+.assistant .avatar {
+  background: var(--pql-surface);
+  color: var(--pql-text);
+}
+
+.content {
+  max-width: 70%;
+  min-width: 0;
+}
+
+.text {
+  background: var(--pql-surface);
+  border-radius: 12px;
+  padding: 12px 16px;
+  position: relative;
+  word-wrap: break-word;
+  color: var(--pql-text);
+}
+
+.user .text {
+  background: var(--pql-primary);
+  color: white;
+}
+
+.assistant .text {
+  background: var(--pql-surface);
+  color: var(--pql-text);
+}
+
+.text[data-loading="true"] {
+  font-size: 18px;
+  animation: loadingPulse 1.4s infinite ease-in-out;
+}
+
+@keyframes loadingPulse {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.timestamp {
+  font-size: 11px;
+  color: var(--pql-text-muted);
+  margin-top: 4px;
+  text-align: right;
+}
+
+.user .timestamp {
+  text-align: left;
+}
+
+.cursor {
+  animation: blink 1s infinite;
+  margin-left: 2px;
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Markdown styles */
+.paragraph {
+  margin: 0 0 8px 0;
+}
+
+.paragraph:last-child {
+  margin-bottom: 0;
+}
+
+.list,
+.orderedList {
+  margin: 8px 0;
+  padding-left: 20px;
+}
+
+.listItem {
+  margin: 4px 0;
+}
+
+.bold {
+  font-weight: 600;
+}
+
+.codeBlock {
+  background: var(--pql-border);
+  border-radius: 6px;
+  padding: 12px;
+  margin: 8px 0;
+  overflow-x: auto;
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--pql-text);
+}
+
+.user .codeBlock {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.inlineCode {
+  background: var(--pql-border);
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+  font-size: 13px;
+  color: var(--pql-text);
+}
+
+.user .inlineCode {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+/* Link styles */
+.text a {
+  color: var(--pql-primary);
+  text-decoration: underline;
+}
+
+.text a:visited {
+  color: var(--pql-primary);
+  opacity: 0.8;
+}
+
+.text a:hover {
+  opacity: 0.7;
+}
+
+.user .text a {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.user .text a:visited {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.user .text a:hover {
+  color: white;
+}
