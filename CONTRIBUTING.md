@@ -24,7 +24,7 @@ Install the following tools:
 1. **Create environment files:**
 
    ```sh
-   touch .env && cd pql && touch .env
+   cd server && touch .env && cd ../pql && touch .env
    ```
 
    Fill them with the key-values from the **Product ACT** vault in 1Password (ask a team member for access if needed).
@@ -65,7 +65,7 @@ If you prefer not to use the automated script:
 1. **Start the server:**
 
    ```sh
-   docker compose up -d
+   cd server && docker compose up -d
    ```
 
 2. **Start PromptQL services:**
@@ -76,7 +76,7 @@ If you prefer not to use the automated script:
 
 3. **Optional - Set up ngrok proxy:**
    ```sh
-   export $(grep -v '^#' .env | xargs) && ngrok start --config ngrok.yml --all
+   cd server && export $(grep -v '^#' .env | xargs) && ngrok start --config ngrok.yml --all
    ```
 
 ## Development Workflows
@@ -115,6 +115,9 @@ If you prefer not to use the automated script:
 │   └── compose.yaml       # PromptQL services
 ├── server/                # Elysia/Bun server
 │   ├── src/              # Server source code
+│   ├── compose.yaml      # Server container definition
+│   ├── ngrok.yml         # ngrok tunneling configuration
+│   ├── .env              # Server environment variables
 │   └── Dockerfile        # Server container definition
 ├── .github/workflows/     # CI/CD automation
 ├── .dev.sh               # Development environment script
