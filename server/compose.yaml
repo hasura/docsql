@@ -2,14 +2,14 @@ services:
   bot-server:
     image: dev-server
     build:
-      context: ./server
+      context: .
       dockerfile: Dockerfile
       args:
         - SERVER_PORT=${SERVER_PORT}
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"
     volumes:
-      - ./server:/app/server
+      - .:/app/server
     env_file:
       - .env
     working_dir: /app/server
@@ -17,5 +17,5 @@ services:
     develop:
       watch:
         - action: sync
-          path: ./server
+          path: .
           target: /app/server
