@@ -94,4 +94,26 @@ Coming soon!
 
 ## CI/CD
 
-Coming soon! For real.
+This repository includes automated PromptQL build and deployment workflows:
+
+### Build on Pull Request
+
+When you open a PR with changes to the `pql/` directory:
+
+- **Automatic build creation** using the DDN CLI
+- **PR comment** with build version and PromptQL playground link
+- **Comment updates** as you push new commits to the PR
+
+### Deploy on Merge
+
+When a PR merges to `main` with `pql/` changes:
+
+- **Automatic build application** to production
+- **Deployment confirmation** comment on the merged PR
+
+### Setup
+
+The workflows use 1Password for secure secret management. All secrets are stored in the **Product ACT** vault with the
+service account token configured as `OP_SERVICE_ACCOUNT_TOKEN` in GitHub repository secrets.
+
+See `.github/workflows/` for the complete workflow definitions.
