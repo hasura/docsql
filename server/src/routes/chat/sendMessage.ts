@@ -12,6 +12,18 @@ export const sendMessage = async ({ body, params, set }: Context) => {
     history?: Array<{ role: "user" | "assistant"; content: string }>;
   };
 
+  const requestId = crypto.randomUUID();
+  const startTime = Date.now();
+
+  console.log({
+    event: "chat_request_start",
+    requestId,
+    conversationId,
+    messageLength: message.length,
+    historyLength: history?.length || 0,
+    timestamp: new Date().toISOString(),
+  });
+
   set.headers["Content-Type"] = "text/event-stream";
   set.headers["Cache-Control"] = "no-cache";
   set.headers["Connection"] = "keep-alive";
@@ -51,6 +63,7 @@ export const sendMessage = async ({ body, params, set }: Context) => {
       let codeContent = "";
       let messageContent = "";
       let currentStep: string | null = null;
+      let chunkCount = 0;
 
       client
         .queryStream(
@@ -59,6 +72,8 @@ export const sendMessage = async ({ body, params, set }: Context) => {
             interactions,
           },
           async (chunk) => {
+            chunkCount++;
+
             if (chunk?.type === "assistant_action_chunk") {
               let hasUpdate = false;
 
@@ -81,13 +96,18 @@ export const sendMessage = async ({ body, params, set }: Context) => {
               }
 
               if (hasUpdate) {
+                // Clean the entire accumulated message content
+                const cleanMessage = messageContent
+                  .replace(/<artifact[^>]*\/>/g, "")
+                  .replace(/<artifact[^>]*>.*?<\/artifact>/gs, "");
+
                 const data = JSON.stringify({
                   success: true,
                   conversationId,
                   step: currentStep,
                   plan: planContent,
                   code: codeContent,
-                  message: messageContent,
+                  message: cleanMessage,
                   timestamp: new Date(),
                 });
 
@@ -97,7 +117,27 @@ export const sendMessage = async ({ body, params, set }: Context) => {
           }
         )
         .then(() => {
+          console.log({
+            event: "chat_request_complete",
+            requestId,
+            conversationId,
+            userMessage: message,
+            completeResponse: messageContent,
+            totalChunks: chunkCount,
+            finalMessageLength: messageContent.length,
+            duration: Date.now() - startTime,
+          });
           controller.close();
+        })
+        .catch((error) => {
+          console.error({
+            event: "chat_request_error",
+            requestId,
+            conversationId,
+            error: error.message,
+            stack: error.stack,
+          });
+          controller.error(error);
         });
     },
   });
