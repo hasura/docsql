@@ -53,7 +53,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
           )}
         </div>
         <div className={styles.timestamp}>
-          {message.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+          {new Date(message.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
         </div>
       </div>
     </div>

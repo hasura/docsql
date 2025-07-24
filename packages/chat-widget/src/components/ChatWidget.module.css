@@ -1,4 +1,5 @@
-.widget {
+/* Base theme variables */
+:root {
   --pql-primary: #2563eb;
   --pql-primary-hover: #1d4ed8;
   --pql-bg: #ffffff;
@@ -7,42 +8,6 @@
   --pql-text: #1e293b;
   --pql-text-muted: #64748b;
   --pql-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-
-  width: 100%;
-  max-width: 600px;
-  height: 500px;
-  border: 1px solid var(--pql-border);
-  border-radius: 12px;
-  background: var(--pql-bg);
-  box-shadow: var(--pql-shadow);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 14px;
-  line-height: 1.5;
-  color: var(--pql-text);
-}
-
-.widget.dark {
-  --pql-primary: #3b82f6;
-  --pql-primary-hover: #2563eb;
-  --pql-bg: #0f172a;
-  --pql-surface: #1e293b;
-  --pql-border: #334155;
-  --pql-text: #f1f5f9;
-  --pql-text-muted: #94a3b8;
-  --pql-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3);
-}
-
-.widget.auto {
-  @media (prefers-color-scheme: dark) {
-    --pql-primary: #3b82f6;
-    --pql-primary-hover: #2563eb;
-    --pql-bg: #0f172a;
-    --pql-surface: #1e293b;
-    --pql-border: #334155;
-    --pql-text: #f1f5f9;
-    --pql-text-muted: #94a3b8;
-    --pql-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3);
-  }
 }
 
 .floatingButton {
@@ -62,6 +27,18 @@
   justify-content: center;
   transition: all 0.2s ease;
   z-index: 1000;
+}
+
+.floatingButton.dark {
+  --pql-primary: #3b82f6;
+  --pql-primary-hover: #2563eb;
+}
+
+.floatingButton.auto {
+  @media (prefers-color-scheme: dark) {
+    --pql-primary: #3b82f6;
+    --pql-primary-hover: #2563eb;
+  }
 }
 
 .floatingButton:hover {
@@ -84,7 +61,7 @@
 }
 
 .modal {
-  background: var(--pql-background);
+  background: var(--pql-bg);
   border-radius: 12px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
   width: 100%;
@@ -93,6 +70,34 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--pql-text);
+}
+
+.modal.dark {
+  --pql-primary: #3b82f6;
+  --pql-primary-hover: #2563eb;
+  --pql-bg: #0f172a;
+  --pql-surface: #1e293b;
+  --pql-border: #334155;
+  --pql-text: #f1f5f9;
+  --pql-text-muted: #94a3b8;
+  --pql-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3);
+}
+
+.modal.auto {
+  @media (prefers-color-scheme: dark) {
+    --pql-primary: #3b82f6;
+    --pql-primary-hover: #2563eb;
+    --pql-bg: #0f172a;
+    --pql-surface: #1e293b;
+    --pql-border: #334155;
+    --pql-text: #f1f5f9;
+    --pql-text-muted: #94a3b8;
+    --pql-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3);
+  }
 }
 
 .modalHeader {
@@ -104,11 +109,31 @@
   background: var(--pql-surface);
 }
 
-.modalHeader h3 {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--pql-text);
+.headerButtons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.newButton {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px solid var(--pql-border);
+  border-radius: 6px;
+  color: var(--pql-text-muted);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.newButton:hover {
+  background: var(--pql-primary);
+  border-color: var(--pql-primary);
+  color: white;
 }
 
 .closeButton {

@@ -20,19 +20,6 @@ export function useStreamingChat({
       setIsLoading(true);
 
       try {
-        // Add user message immediately
-        onMessage({
-          role: "user",
-          content,
-          streaming: false,
-        });
-
-        onMessage({
-          role: "assistant",
-          content: "...",
-          streaming: true,
-        });
-
         const response = await fetch(`${serverUrl}/chat/conversations/${conversationId}/messages`, {
           method: "POST",
           headers: {

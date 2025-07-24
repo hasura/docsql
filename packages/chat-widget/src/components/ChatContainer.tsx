@@ -1,5 +1,4 @@
 import React from "react";
-import { ChatHeader } from "./ChatHeader";
 import { ChatMessages } from "./ChatMessages";
 import { ChatInput } from "./ChatInput";
 import { useConversation } from "../hooks/useConversation";
@@ -10,17 +9,39 @@ interface ChatContainerProps {
   serverUrl: string;
   placeholder: string;
   title: string;
+  conversation: Conversation;
+  isLoading: boolean;
+  setIsLoading: (loading: boolean) => void;
+  addMessage: (message: Omit<Message, "id" | "timestamp">) => void;
+  updateLastMessage: (content: string, streaming?: boolean) => void;
+  clearConversation: () => void;
 }
 
-export function ChatContainer({ serverUrl, placeholder, title }: ChatContainerProps) {
-  const { conversation, isLoading, setIsLoading, addMessage, updateLastMessage, clearConversation } = useConversation();
-
+export function ChatContainer({
+  serverUrl,
+  placeholder,
+  title,
+  conversation,
+  isLoading,
+  setIsLoading,
+  addMessage,
+  updateLastMessage,
+  clearConversation,
+}: ChatContainerProps) {
   const handleMessage = (message: any) => {
+    console.log("handleMessage called with:", message);
     if (message.role === "user") {
+      console.log("Adding user message");
       addMessage(message);
-    } else {
-      // For assistant messages, always use updateLastMessage
-      updateLastMessage(message.content, message.streaming);
+    } else if (message.role === "assistant") {
+      console.log("Handling assistant message, streaming:", message.streaming);
+      // Only update if we're streaming, otherwise add new message
+      if (message.streaming) {
+        updateLastMessage(message.content, message.streaming);
+      } else {
+        // Final message - ensure it's marked as not streaming
+        updateLastMessage(message.content, false);
+      }
     }
   };
 
@@ -37,7 +58,23 @@ export function ChatContainer({ serverUrl, placeholder, title }: ChatContainerPr
     setIsLoading,
   });
 
-  const handleSendMessage = (content: string) => {
+  const handleSendMessage = async (content: string) => {
+    // Add user message immediately
+    addMessage({
+      role: "user",
+      content,
+      streaming: false,
+    });
+
+    // Use setTimeout to ensure the first message is processed before adding the second
+    setTimeout(() => {
+      addMessage({
+        role: "assistant",
+        content: "",
+        streaming: true,
+      });
+    }, 0);
+
     const history = conversation.messages.map((msg) => ({
       role: msg.role,
       content: msg.content,

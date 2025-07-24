@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { ChatContainer } from "./ChatContainer";
 import { ChatWidgetProps } from "../types";
+import { useConversation } from "../hooks/useConversation";
 import styles from "./ChatWidget.module.css";
 
 export function ChatWidget({
@@ -11,6 +12,8 @@ export function ChatWidget({
   title = "Documentation Chat",
 }: ChatWidgetProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const conversationState = useConversation();
+  const { conversation, isLoading, setIsLoading, addMessage, updateLastMessage, clearConversation } = conversationState;
 
   return (
     <>
@@ -33,12 +36,33 @@ export function ChatWidget({
             data-theme={theme}>
             <div className={styles.modalHeader}>
               <h3>{title}</h3>
-              <button className={styles.closeButton} onClick={() => setIsOpen(false)} aria-label="Close chat">
-                ×
-              </button>
+              <div className={styles.headerButtons}>
+                <button
+                  className={styles.newButton}
+                  onClick={conversationState.clearConversation}
+                  aria-label="New conversation">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                  </svg>
+                  New
+                </button>
+                <button className={styles.closeButton} onClick={() => setIsOpen(false)} aria-label="Close chat">
+                  ×
+                </button>
+              </div>
             </div>
             <div className={styles.modalContent}>
-              <ChatContainer serverUrl={serverUrl} placeholder={placeholder} title={title} />
+              <ChatContainer
+                serverUrl={serverUrl}
+                placeholder={placeholder}
+                title={title}
+                conversation={conversation}
+                isLoading={isLoading}
+                setIsLoading={setIsLoading}
+                addMessage={addMessage}
+                updateLastMessage={updateLastMessage}
+                clearConversation={clearConversation}
+              />
             </div>
           </div>
         </div>

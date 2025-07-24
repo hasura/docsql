@@ -1,65 +1,90 @@
-import { useState, useCallback } from "react";
+import React, { useReducer, useCallback } from "react";
 import { Conversation, Message } from "../types";
+import { useLocalStorage } from "./useLocalStorage";
 
-export function useConversation() {
-  const [conversation, setConversation] = useState<Conversation>(() => ({
-    id: crypto.randomUUID(),
-    messages: [],
-    createdAt: new Date(),
-  }));
+type ConversationAction =
+  | { type: "ADD_MESSAGE"; message: Omit<Message, "id" | "timestamp"> }
+  | { type: "UPDATE_LAST_MESSAGE"; content: string; streaming?: boolean }
+  | { type: "CLEAR_CONVERSATION" };
 
-  const [isLoading, setIsLoading] = useState(false);
-
-  const addMessage = useCallback((message: Omit<Message, "id" | "timestamp">) => {
-    const newMessage: Message = {
-      ...message,
-      id: crypto.randomUUID(),
-      timestamp: new Date(),
-    };
-
-    setConversation((prev) => ({
-      ...prev,
-      messages: [...prev.messages, newMessage],
-    }));
-  }, []);
-
-  const updateLastMessage = useCallback((content: string, streaming = true) => {
-    setConversation((prev) => {
-      const messages = [...prev.messages];
+function conversationReducer(state: Conversation, action: ConversationAction): Conversation {
+  switch (action.type) {
+    case "ADD_MESSAGE": {
+      const newMessage: Message = {
+        ...action.message,
+        id: crypto.randomUUID(),
+        timestamp: new Date().toISOString(),
+      };
+      return {
+        ...state,
+        messages: [...state.messages, newMessage],
+      };
+    }
+    case "UPDATE_LAST_MESSAGE": {
+      const messages = [...state.messages];
       const lastMessage = messages[messages.length - 1];
 
       if (lastMessage && lastMessage.role === "assistant") {
         messages[messages.length - 1] = {
           ...lastMessage,
-          content,
-          streaming,
+          content: action.content,
+          streaming: action.streaming,
         };
       } else {
-        messages.push({
+        const newAssistantMessage: Message = {
           id: crypto.randomUUID(),
           role: "assistant",
-          content,
-          timestamp: new Date(),
-          streaming,
-        });
+          content: action.content,
+          timestamp: new Date().toISOString(),
+          streaming: action.streaming,
+        };
+        messages.push(newAssistantMessage);
       }
 
-      return { ...prev, messages };
-    });
+      return { ...state, messages };
+    }
+    case "CLEAR_CONVERSATION":
+      return {
+        id: crypto.randomUUID(),
+        messages: [],
+        createdAt: new Date().toISOString(),
+      };
+    default:
+      return state;
+  }
+}
+
+export function useConversation() {
+  const [storedConversation, setStoredConversation] = useLocalStorage<Conversation>("pql-chat-conversation", {
+    id: crypto.randomUUID(),
+    messages: [],
+    createdAt: new Date().toISOString(),
+  });
+
+  const [conversation, dispatch] = useReducer(conversationReducer, storedConversation);
+
+  // Sync with localStorage whenever conversation changes
+  React.useEffect(() => {
+    console.log("Syncing conversation to localStorage:", conversation);
+    setStoredConversation(conversation);
+  }, [conversation, setStoredConversation]);
+
+  const addMessage = useCallback((message: Omit<Message, "id" | "timestamp">) => {
+    dispatch({ type: "ADD_MESSAGE", message });
+  }, []);
+
+  const updateLastMessage = useCallback((content: string, streaming = true) => {
+    dispatch({ type: "UPDATE_LAST_MESSAGE", content, streaming });
   }, []);
 
   const clearConversation = useCallback(() => {
-    setConversation({
-      id: crypto.randomUUID(),
-      messages: [],
-      createdAt: new Date(),
-    });
+    dispatch({ type: "CLEAR_CONVERSATION" });
   }, []);
 
   return {
     conversation,
-    isLoading,
-    setIsLoading,
+    isLoading: false,
+    setIsLoading: () => {},
     addMessage,
     updateLastMessage,
     clearConversation,

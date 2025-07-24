@@ -2,14 +2,14 @@ export interface Message {
   id: string;
   role: "user" | "assistant";
   content: string;
-  timestamp: Date;
+  timestamp: string;
   streaming?: boolean;
 }
 
 export interface Conversation {
   id: string;
   messages: Message[];
-  createdAt: Date;
+  createdAt: string;
 }
 
 export interface ChatWidgetProps {
