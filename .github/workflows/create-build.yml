@@ -1,3 +1,5 @@
+name: Create PromptQL Build
+
 on:
   pull_request:
     types: [opened, synchronize, reopened]
@@ -60,7 +62,7 @@ jobs:
           script: |
             const buildOutput = JSON.parse(`${{ steps.build.outputs.build_output }}`);
 
-            const comment = `## 🚀 Hasura DDN Build Complete
+            const comment = `## 🚀 PromptQL Build Complete
 
             **Build Version:** \`${buildOutput.build_version || 'N/A'}\`
             **Project:** \`${buildOutput.project_name || 'pql-docs'}\`
@@ -77,7 +79,7 @@ jobs:
             });
 
             const existingComment = comments.data.find(comment => 
-              comment.body.includes('🚀 Hasura DDN Build Complete')
+              comment.body.includes('🚀 PromptQL Build Complete')
             );
 
             if (existingComment) {

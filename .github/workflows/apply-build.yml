@@ -1,0 +1,90 @@
+name: Apply PromptQL Build
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+jobs:
+  apply:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Load secrets from 1Password
+        uses: 1password/load-secrets-action@v1
+        with:
+          export-env: true
+        env:
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          HASURA_DDN_PAT: "op://Product ACT/pql-docs-bot/hasura-ddn-pat"
+
+      - name: Install DDN CLI
+        run: |
+          curl -L https://graphql-engine-cdn.hasura.io/ddn/cli/v4/get.sh | bash
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Authenticate with PromptQL
+        run: |
+          cd pql
+          ddn auth login --pat "$HASURA_DDN_PAT"
+
+      - name: Get build version from PR comment
+        id: get_build
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Get all comments from the merged PR
+            const comments = await github.rest.issues.listComments({
+              issue_number: context.payload.pull_request.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            });
+
+            // Find the build comment
+            const buildComment = comments.data.find(comment => 
+              comment.body.includes('🚀 PromptQL Build Complete')
+            );
+
+            if (!buildComment) {
+              core.setFailed('No build comment found in PR');
+              return;
+            }
+
+            // Extract build version from comment
+            const buildVersionMatch = buildComment.body.match(/\*\*Build Version:\*\* `([^`]+)`/);
+            if (!buildVersionMatch) {
+              core.setFailed('Could not extract build version from comment');
+              return;
+            }
+
+            const buildVersion = buildVersionMatch[1];
+            console.log(`Found build version: ${buildVersion}`);
+            core.setOutput('build_version', buildVersion);
+
+      - name: Apply build
+        run: |
+          cd pql
+          echo "Applying build version: ${{ steps.get_build.outputs.build_version }}"
+          ddn supergraph build apply ${{ steps.get_build.outputs.build_version }}
+
+      - name: Comment on merged PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const comment = `## ✅ PromptQL Build Applied
+
+            **Build Version:** \`${{ steps.get_build.outputs.build_version }}\`
+            **Status:** Successfully applied to production
+            **Applied at:** ${new Date().toISOString()}
+            `;
+
+            await github.rest.issues.createComment({
+              issue_number: context.payload.pull_request.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
