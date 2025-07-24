@@ -1,3 +1,5 @@
+name: Create PromptQL Build
+
 on:
   pull_request:
     types: [opened, synchronize, reopened]
@@ -32,30 +34,41 @@ jobs:
       - name: Authenticate with Hasura DDN
         run: |
           cd pql
-          echo "$HASURA_DDN_PAT" | ddn auth login --pat
+          ddn auth login --pat "$HASURA_DDN_PAT"
+
+      - name: Create temp .env.cloud file
+        run: |
+          cd pql
+          cat > .env.cloud << EOF
+          HASURA_DDN_PAT=$HASURA_DDN_PAT
+          ANTHROPIC_KEY=$ANTHROPIC_KEY
+          APP_PG_JDBC_URL=$APP_PG_JDBC_URL
+          APP_PG_JDBC_SCHEMAS=$APP_PG_JDBC_SCHEMAS
+          EOF
 
       - name: Create DDN build
         id: build
         run: |
           cd pql
-          BUILD_OUTPUT=$(ddn supergraph build create --output json)
+          BUILD_OUTPUT=$(ddn supergraph build create --out json -d "PR #${{ github.event.number }}: ${{ github.event.pull_request.title }}")
           echo "build_output<<EOF" >> $GITHUB_OUTPUT
           echo "$BUILD_OUTPUT" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Comment on PR
+        if: always()
         uses: actions/github-script@v7
         with:
           script: |
             const buildOutput = JSON.parse(`${{ steps.build.outputs.build_output }}`);
 
-            const comment = `## 🚀 Hasura DDN Build Complete
+            const comment = `## 🚀 PromptQL Build Complete
 
-            **Build ID:** \`${buildOutput.build_id || 'N/A'}\`
-            **Status:** ${buildOutput.status === 'success' ? '✅ Success' : '❌ Failed'}
-            **Supergraph:** \`${buildOutput.supergraph || 'pql-docs'}\`
+            **Build Version:** \`${buildOutput.build_version || 'N/A'}\`
+            **Project:** \`${buildOutput.project_name || 'pql-docs'}\`
+            **PromptQL Playground:** ${buildOutput.promptql_url ? `[Open Playground](${buildOutput.promptql_url})` : 'N/A'}
 
-            ${buildOutput.build_url ? `[View Build Details](${buildOutput.build_url})` : ''}
+            ${buildOutput.description ? `\n**Description:** ${buildOutput.description}` : ''}
             `;
 
             // Find existing comment
@@ -66,7 +79,7 @@ jobs:
             });
 
             const existingComment = comments.data.find(comment => 
-              comment.body.includes('🚀 Hasura DDN Build Complete')
+              comment.body.includes('🚀 PromptQL Build Complete')
             );
 
             if (existingComment) {

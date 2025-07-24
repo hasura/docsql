@@ -25,8 +25,9 @@ which can be consumed by various frontends (e.g., a front-end chat component).
 
 ## Development
 
-The `.dev.sh` file provides a configuration for starting up all necessary services using a [tmux](https://github.com/tmux/tmux/wiki) session; it's configured
-for [Neovim](https://neovim.io/) and [ngrok](https://ngrok.com/) as well.
+The `.dev.sh` file provides a configuration for starting up all necessary services using a
+[tmux](https://github.com/tmux/tmux/wiki) session; it's configured for [Neovim](https://neovim.io/) and
+[ngrok](https://ngrok.com/) as well.
 
 These services are **not required** for starting the development environment or contributing to the project. However,
 they make life easier! Below, choose your own adventure to get started 👇
@@ -62,7 +63,8 @@ Your terminal will be taken over by four panes:
 
 - **Neovim**: for development.
 - **Docker**: Logs for the `pql-bot` service.
-- **Docker**: Logs for all PromptQL-related services (i.e., the distributed query engine, playground, and any connectors).
+- **Docker**: Logs for all PromptQL-related services (i.e., the distributed query engine, playground, and any
+  connectors).
 - **ngrok**: Logs for the server proxy.
 
 ### Start services manually
@@ -92,4 +94,4 @@ Coming soon!
 
 ## CI/CD
 
-Coming soon!
+Coming soon! For real.
