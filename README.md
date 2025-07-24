@@ -52,7 +52,7 @@ Get the project running with just the essentials:
 3. **Start the server:**
 
    ```sh
-   docker compose up -d
+   cd server && docker compose up -d
    ```
 
 4. **Start PromptQL services:**
