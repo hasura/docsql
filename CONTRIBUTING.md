@@ -24,7 +24,8 @@ Install the following tools:
 1. **Create environment files:**
 
    ```sh
-   cd server && touch .env && cd ../pql && touch .env
+   cp server/.env.template server/.env
+   cp pql/.env.template pql/.env
    ```
 
    Fill them with the key-values from the **Product ACT** vault in 1Password (ask a team member for access if needed).
