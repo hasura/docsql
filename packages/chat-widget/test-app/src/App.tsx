@@ -1,9 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ChatWidget } from "@pql/chat-widget";
 import "./App.css";
 
 function App() {
   const [theme, setTheme] = useState<"light" | "dark" | "auto">("auto");
+
+  useEffect(() => {
+    const root = document.documentElement;
+
+    if (theme === "dark") {
+      root.setAttribute("data-theme", "dark");
+    } else if (theme === "light") {
+      root.setAttribute("data-theme", "light");
+    } else {
+      root.removeAttribute("data-theme");
+    }
+  }, [theme]);
 
   return (
     <div className="app">

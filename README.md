@@ -19,12 +19,14 @@ This repository demonstrates a complete PromptQL-powered chat bot for documentat
 [DDN CLI](https://promptql.io/docs/reference/cli/installation/)
 
 ```sh
-# 1. Clone and setup
+# 1. Clone and setup environment files
 git clone https://github.com/hasura/pql-docs-bot.git
 cd pql-docs-bot
-touch .env && cd pql && touch .env
+cp server/.env.template server/.env
+cp pql/.env.template pql/.env
 
-# 2. Add environment variables from 1Password (Product ACT vault)
+# 2. Add environment variable values from 1Password (Product ACT vault)
+# Edit server/.env and pql/.env with the actual values
 
 # 3. Start services
 cd server && docker compose up -d
