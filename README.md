@@ -2,6 +2,9 @@
 
 > A PromptQL-specific implementation of a docs bot.
 
+<img width="1227" height="917" alt="image" src="https://github.com/user-attachments/assets/6aef4823-c145-4e51-9caf-21f556241491" />
+
+
 ## What's Inside
 
 This repository demonstrates a complete PromptQL-powered chat bot for documentation sites:
