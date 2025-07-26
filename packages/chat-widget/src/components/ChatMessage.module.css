@@ -125,7 +125,7 @@
 }
 
 .codeBlock {
-  background: var(--pql-border);
+  background: #282c34;
   border-radius: 6px;
   padding: 12px;
   margin: 8px 0;
@@ -133,12 +133,22 @@
   font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
   font-size: 13px;
   line-height: 1.4;
-  color: var(--pql-text);
 }
 
 .user .codeBlock {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Ensure assistant messages use full Prism theme */
+.assistant .codeBlock {
+  /* Let Prism theme handle everything */
+}
+
+/* Don't override any colors for assistant messages - let Prism handle it */
+.codeBlock *,
+.codeBlock pre,
+.codeBlock code {
+  /* Remove all color overrides for assistant messages */
 }
 
 .inlineCode {

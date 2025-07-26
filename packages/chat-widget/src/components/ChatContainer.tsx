@@ -15,6 +15,7 @@ interface ChatContainerProps {
   addMessage: (message: Omit<Message, "id" | "timestamp">) => void;
   updateLastMessage: (content: string, streaming?: boolean) => void;
   clearConversation: () => void;
+  theme?: "light" | "dark" | "auto";
 }
 
 export function ChatContainer({
@@ -27,6 +28,7 @@ export function ChatContainer({
   addMessage,
   updateLastMessage,
   clearConversation,
+  theme,
 }: ChatContainerProps) {
   const handleMessage = (message: any) => {
     console.log("handleMessage called with:", message);
@@ -84,7 +86,7 @@ export function ChatContainer({
 
   return (
     <div className={styles.container}>
-      <ChatMessages messages={conversation.messages} />
+      <ChatMessages messages={conversation.messages} isLoading={isLoading} theme={theme} />
       <ChatInput placeholder={placeholder} onSendMessage={handleSendMessage} disabled={isLoading} />
     </div>
   );

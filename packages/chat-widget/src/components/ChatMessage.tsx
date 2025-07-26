@@ -1,15 +1,32 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { oneDark, oneLight } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { Message } from "../types";
 import styles from "./ChatMessage.module.css";
 
 interface ChatMessageProps {
   message: Message;
+  theme?: "light" | "dark" | "auto";
 }
 
-export function ChatMessage({ message }: ChatMessageProps) {
+export function ChatMessage({ message, theme = "auto" }: ChatMessageProps) {
   const isUser = message.role === "user";
+
+  // Add this debug log
+  console.log("ChatMessage theme:", theme);
+
+  // Determine syntax highlighter theme
+  const getHighlighterTheme = () => {
+    if (theme === "dark") return oneDark;
+    if (theme === "light") return oneLight;
+    // Auto theme - check system preference
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? oneDark : oneLight;
+  };
+
+  // Add this debug log too
+  console.log("Selected highlighter theme:", getHighlighterTheme() === oneDark ? "oneDark" : "oneLight");
 
   return (
     <div className={`${styles.message} ${styles[message.role]}`}>
@@ -28,12 +45,24 @@ export function ChatMessage({ message }: ChatMessageProps) {
                 components={{
                   code: ({ node, inline, className, children, ...props }) => {
                     const match = /language-(\w+)/.exec(className || "");
+                    const language = match ? match[1] : "";
+
                     return !inline ? (
-                      <pre className={styles.codeBlock}>
-                        <code className={className} {...props}>
-                          {children}
-                        </code>
-                      </pre>
+                      <SyntaxHighlighter
+                        style={getHighlighterTheme()}
+                        language={language || "text"}
+                        PreTag="div"
+                        className={styles.codeBlock}
+                        customStyle={{
+                          margin: "8px 0",
+                          borderRadius: "6px",
+                          fontSize: "13px",
+                          lineHeight: "1.4",
+                          // Remove any background override here
+                        }}
+                        {...props}>
+                        {String(children).replace(/\n$/, "")}
+                      </SyntaxHighlighter>
                     ) : (
                       <code className={styles.inlineCode} {...props}>
                         {children}

@@ -62,6 +62,7 @@ export function ChatWidget({
                 addMessage={addMessage}
                 updateLastMessage={updateLastMessage}
                 clearConversation={clearConversation}
+                theme={theme}
               />
             </div>
           </div>
