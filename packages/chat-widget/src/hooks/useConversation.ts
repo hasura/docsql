@@ -65,7 +65,6 @@ export function useConversation() {
 
   // Sync with localStorage whenever conversation changes
   React.useEffect(() => {
-    console.log("Syncing conversation to localStorage:", conversation);
     setStoredConversation(conversation);
   }, [conversation, setStoredConversation]);
 

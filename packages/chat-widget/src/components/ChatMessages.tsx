@@ -5,9 +5,11 @@ import styles from "./ChatMessages.module.css";
 
 interface ChatMessagesProps {
   messages: Message[];
+  isLoading: boolean;
+  theme?: "light" | "dark" | "auto";
 }
 
-export function ChatMessages({ messages }: ChatMessagesProps) {
+export function ChatMessages({ messages, isLoading, theme }: ChatMessagesProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -28,7 +30,7 @@ export function ChatMessages({ messages }: ChatMessagesProps) {
     <div className={styles.container}>
       <div className={styles.messages}>
         {messages.map((message) => (
-          <ChatMessage key={message.id} message={message} />
+          <ChatMessage key={message.id} message={message} theme={theme} />
         ))}
         <div ref={messagesEndRef} />
       </div>
