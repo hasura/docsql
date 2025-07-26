@@ -786,15 +786,6 @@
                         "value": "other"
                     },
                     "nullable": true,
-                    "position": 3,
-                    "description": null
-                },
-                "version_filter": {
-                    "type": {
-                        "type": "scalar_type",
-                        "value": "varchar"
-                    },
-                    "nullable": true,
                     "position": 2,
                     "description": null
                 },
@@ -804,7 +795,7 @@
                         "value": "bigint"
                     },
                     "nullable": true,
-                    "position": 4,
+                    "position": 3,
                     "description": null
                 }
             },
