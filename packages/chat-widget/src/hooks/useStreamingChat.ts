@@ -55,6 +55,12 @@ export function useStreamingChat({
                 const data = JSON.parse(line.slice(6));
                 console.log("Received streaming data:", data);
 
+                // Handle error responses
+                if (data.success === false) {
+                  onError(data.error || "An error occurred");
+                  return;
+                }
+
                 // Only show the final message, ignore plan/code
                 if (data.message) {
                   assistantContent = data.message;
