@@ -4,7 +4,6 @@
 
 <img width="1227" height="917" alt="image" src="https://github.com/user-attachments/assets/6aef4823-c145-4e51-9caf-21f556241491" />
 
-
 ## What's Inside
 
 This repository demonstrates a complete PromptQL-powered chat bot for documentation sites:
@@ -43,4 +42,18 @@ For enhanced development setup with tmux, hot reloading, and ngrok tunneling:
 chmod +x ./.dev.sh && ./.dev.sh
 ```
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed development workflows.
+## CI/CD
+
+This project includes automated testing and quality checks:
+
+- **Pre-commit hooks**: Automatically run server tests when server files are modified
+- **GitHub Actions**: Run tests and Docker integration on pull requests
+- **Husky**: Manages git hooks for consistent development workflow
+
+To set up pre-commit hooks locally:
+
+```sh
+bun install  # Installs husky
+```
+
+Tests will automatically run when committing changes to the `server/` directory.

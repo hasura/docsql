@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+
+# Check if any staged files are in the server directory
+if git diff --cached --name-only | grep -q "^server/"; then
+  echo "Server files changed, running pre-commit hooks..."
+  cd server && bun test
+else
+  echo "No server files changed, skipping server pre-commit hooks"
+fi
