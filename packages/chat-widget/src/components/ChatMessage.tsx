@@ -47,7 +47,7 @@ export function ChatMessage({ message, theme = "auto" }: ChatMessageProps) {
                     const match = /language-(\w+)/.exec(className || "");
                     const language = match ? match[1] : "";
 
-                    return !inline ? (
+                    return !inline && className ? (
                       <SyntaxHighlighter
                         style={getHighlighterTheme()}
                         language={language || "text"}
@@ -58,7 +58,6 @@ export function ChatMessage({ message, theme = "auto" }: ChatMessageProps) {
                           borderRadius: "6px",
                           fontSize: "13px",
                           lineHeight: "1.4",
-                          // Remove any background override here
                         }}
                         {...props}>
                         {String(children).replace(/\n$/, "")}

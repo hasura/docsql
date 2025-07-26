@@ -64,81 +64,141 @@ export const sendMessage = async ({ body, params, set }: Context) => {
       let messageContent = "";
       let currentStep: string | null = null;
       let chunkCount = 0;
+      let isStreamClosed = false;
+      let abortController = new AbortController();
 
-      client
-        .queryStream(
-          {
-            artifacts: [],
-            interactions,
-          },
-          async (chunk) => {
-            chunkCount++;
+      const safeEnqueue = (data: string) => {
+        if (!isStreamClosed && !abortController.signal.aborted) {
+          try {
+            controller.enqueue(data);
+          } catch (error) {
+            console.error("Failed to enqueue data:", error);
+            isStreamClosed = true;
+            abortController.abort();
+          }
+        }
+      };
 
-            if (chunk?.type === "assistant_action_chunk") {
-              let hasUpdate = false;
+      const closeStream = () => {
+        if (!isStreamClosed) {
+          isStreamClosed = true;
+          abortController.abort();
+          try {
+            controller.close();
+          } catch (error) {
+            // Stream already closed or in error state
+            console.warn("Stream close warning:", error.message);
+          }
+        }
+      };
 
-              if (chunk.plan) {
-                planContent += chunk.plan;
-                currentStep = "plan";
-                hasUpdate = true;
+      const handleError = (error: Error) => {
+        if (abortController.signal.aborted) {
+          // Don't log errors if we've been cancelled
+          return;
+        }
+
+        console.error({
+          event: "chat_request_error",
+          requestId,
+          conversationId,
+          error: error.message,
+          stack: error.stack,
+        });
+
+        const errorData = JSON.stringify({
+          success: false,
+          error: error.message,
+          conversationId,
+          timestamp: new Date(),
+        });
+
+        safeEnqueue(`data: ${errorData}\n\n`);
+        closeStream();
+      };
+
+      // Store the promise so we can handle cancellation
+      const queryPromise = client.queryStream(
+        {
+          artifacts: [],
+          interactions,
+        },
+        async (chunk) => {
+          if (isStreamClosed || abortController.signal.aborted) return;
+
+          chunkCount++;
+
+          if (chunk?.type === "assistant_action_chunk") {
+            let hasUpdate = false;
+
+            if (chunk.plan) {
+              planContent += chunk.plan;
+              currentStep = "plan";
+              hasUpdate = true;
+            }
+
+            if (chunk.code) {
+              codeContent += chunk.code;
+              currentStep = "code";
+              hasUpdate = true;
+            }
+
+            if (chunk.message) {
+              // Adding this to deal with punctuation and concatenating chunks
+              if (messageContent && /[.!?]$/.test(messageContent.trim()) && !/^\s/.test(chunk.message)) {
+                messageContent += " ";
               }
+              messageContent += chunk.message;
+              currentStep = "message";
+              hasUpdate = true;
+            }
 
-              if (chunk.code) {
-                codeContent += chunk.code;
-                currentStep = "code";
-                hasUpdate = true;
-              }
+            if (hasUpdate) {
+              const cleanMessage = messageContent
+                .replace(/<artifact[^>]*\/>/g, "")
+                .replace(/<artifact[^>]*>.*?<\/artifact>/gs, "");
 
-              if (chunk.message) {
-                messageContent += chunk.message;
-                currentStep = "message";
-                hasUpdate = true;
-              }
+              const data = JSON.stringify({
+                success: true,
+                conversationId,
+                step: currentStep,
+                plan: planContent,
+                code: codeContent,
+                message: cleanMessage,
+                timestamp: new Date(),
+              });
 
-              if (hasUpdate) {
-                // Clean the entire accumulated message content
-                const cleanMessage = messageContent
-                  .replace(/<artifact[^>]*\/>/g, "")
-                  .replace(/<artifact[^>]*>.*?<\/artifact>/gs, "");
-
-                const data = JSON.stringify({
-                  success: true,
-                  conversationId,
-                  step: currentStep,
-                  plan: planContent,
-                  code: codeContent,
-                  message: cleanMessage,
-                  timestamp: new Date(),
-                });
-
-                controller.enqueue(`data: ${data}\n\n`);
-              }
+              safeEnqueue(`data: ${data}\n\n`);
             }
           }
-        )
+        }
+      );
+
+      queryPromise
         .then(() => {
-          console.log({
-            event: "chat_request_complete",
-            requestId,
-            conversationId,
-            userMessage: message,
-            completeResponse: messageContent,
-            totalChunks: chunkCount,
-            finalMessageLength: messageContent.length,
-            duration: Date.now() - startTime,
-          });
-          controller.close();
+          if (!abortController.signal.aborted) {
+            console.log({
+              event: "chat_request_complete",
+              requestId,
+              conversationId,
+              userMessage: message,
+              completeResponse: messageContent,
+              totalChunks: chunkCount,
+              finalMessageLength: messageContent.length,
+              duration: Date.now() - startTime,
+            });
+          }
+          closeStream();
         })
-        .catch((error) => {
-          console.error({
-            event: "chat_request_error",
-            requestId,
-            conversationId,
-            error: error.message,
-            stack: error.stack,
-          });
-          controller.error(error);
-        });
+        .catch(handleError);
+    },
+
+    cancel() {
+      console.log({
+        event: "chat_request_cancelled",
+        requestId,
+        conversationId,
+      });
     },
   });
 
