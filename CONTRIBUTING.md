@@ -82,23 +82,42 @@ If you prefer not to use the automated script:
 
 ## Development Workflows
 
+### Pre-commit Hooks
+
+This project uses Husky for automated pre-commit testing:
+
+- **Automatic setup**: Run `bun install` to install and configure hooks
+- **Smart testing**: Tests only run when server files are modified
+- **Fast feedback**: Prevents broken code from being committed
+
+When you commit changes to the `server/` directory, tests will run automatically:
+
+```sh
+$ git commit -m "Update server endpoint"
+Server files changed, running pre-commit hooks...
+✓ All tests passed
+```
+
 ### Making Changes
 
 1. **PromptQL changes**: Edit files in the `pql/` directory
-2. **Server changes**: Edit files in the `server/` directory
+2. **Server changes**: Edit files in the `server/` directory - tests run automatically on commit
 3. **Chat widget changes**: Edit files in the `packages/chat-widget/` directory
 4. **Server supports hot reloading** when using the development setup
 
-### Testing the Chat Widget
+### Testing
 
-To test chat widget changes locally:
+**Server tests**:
+
+```sh
+cd server && bun test
+```
+
+**Chat widget tests**:
 
 ```sh
 cd packages/chat-widget && bun run test
 ```
-
-This starts a test application that demonstrates the widget functionality. Make sure the server is running first, then
-open `http://localhost:3001` in your browser.
 
 ### Submitting Changes
 
@@ -108,15 +127,15 @@ open `http://localhost:3001` in your browser.
    git checkout -b feature/your-feature-name
    ```
 
-2. **Make your changes** and commit them with descriptive messages
+2. **Make your changes** - pre-commit hooks will ensure quality
 
-3. **Push and create a PR:**
+3. **Push and create PR** - GitHub Actions will run full test suite
 
-   ```sh
-   git push origin feature/your-feature-name
-   ```
+## CI/CD Pipeline
 
-4. **Watch for automated build comments** on your PR with playground links for testing
+- **Pre-commit**: Local testing for server changes
+- **GitHub Actions**: Full test suite and Docker integration on PRs
+- **Automated checks**: Prevents broken code from reaching main branch
 
 ## Project Structure
 
