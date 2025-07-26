@@ -94,21 +94,40 @@ export const sendMessage = async ({ body, params, set }: Context) => {
 
       const handleError = (error: Error) => {
         if (abortController.signal.aborted) {
-          // Don't log errors if we've been cancelled
           return;
+        }
+
+        // Categorize error types
+        let errorType = "unknown";
+        let userMessage = "An unexpected error occurred. Please try again.";
+
+        if (error.message.includes("fetch") || error.message.includes("ECONNREFUSED")) {
+          errorType = "connection_failed";
+          userMessage = "Unable to connect to the AI service. Please check your connection and try again.";
+        } else if (error.message.includes("timeout")) {
+          errorType = "timeout";
+          userMessage = "Request timed out. Please try again with a shorter message.";
+        } else if (error.message.includes("401") || error.message.includes("403")) {
+          errorType = "authentication";
+          userMessage = "Authentication failed. Please contact support.";
+        } else if (error.message.includes("429")) {
+          errorType = "rate_limit";
+          userMessage = "Too many requests. Please wait a moment and try again.";
         }
 
         console.error({
           event: "chat_request_error",
           requestId,
           conversationId,
+          errorType,
           error: error.message,
           stack: error.stack,
         });
 
         const errorData = JSON.stringify({
           success: false,
-          error: error.message,
+          error: userMessage,
+          errorType,
           conversationId,
           timestamp: new Date(),
         });
