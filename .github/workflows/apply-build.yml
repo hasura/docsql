@@ -90,3 +90,41 @@ jobs:
               repo: context.repo.repo,
               body: comment
             });
+
+      - name: Update Slack thread
+        uses: actions/github-script@v7
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        with:
+          script: |
+            // Find the thread timestamp
+            const comments = await github.rest.issues.listComments({
+              issue_number: context.payload.pull_request.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            });
+
+            const threadComment = comments.data.find(comment => 
+              comment.body.includes('<!-- slack-thread-ts:')
+            );
+
+            if (threadComment) {
+              const match = threadComment.body.match(/<!-- slack-thread-ts:([^-]+) -->/);
+              const threadTs = match ? match[1] : null;
+
+              if (threadTs) {
+                // Add checkmark reaction to original message
+                await fetch('https://slack.com/api/reactions.add', {
+                  method: 'POST',
+                  headers: {
+                    'Authorization': `Bearer ${process.env.SLACK_BOT_TOKEN}`,
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    channel: process.env.SLACK_CHANNEL_ID || 'C1234567890',
+                    timestamp: threadTs,
+                    name: 'white_check_mark',
+                  }),
+                });
+              }
+            }
