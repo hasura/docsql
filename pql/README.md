@@ -19,6 +19,7 @@ The bot is configured as "DocsBot" with specific behavior patterns:
 - Minimum viable responses
 - No marketing language
 - Always provide user-facing messages before actions
+- Utilize existing artifacts — if available — for quicker retrieval and better performance
 
 ### Data Layer
 

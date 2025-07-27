@@ -95,6 +95,7 @@ jobs:
         uses: actions/github-script@v7
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
         with:
           script: |
             // Find the thread timestamp
@@ -109,22 +110,34 @@ jobs:
             );
 
             if (threadComment) {
-              const match = threadComment.body.match(/<!-- slack-thread-ts:([^-]+) -->/);
+              const match = threadComment.body.match(/<!-- slack-thread-ts:([^-\s]+) -->/);
               const threadTs = match ? match[1] : null;
 
               if (threadTs) {
+                console.log('Adding checkmark to thread:', threadTs);
                 // Add checkmark reaction to original message
-                await fetch('https://slack.com/api/reactions.add', {
+                const response = await fetch('https://slack.com/api/reactions.add', {
                   method: 'POST',
                   headers: {
                     'Authorization': `Bearer ${process.env.SLACK_BOT_TOKEN}`,
                     'Content-Type': 'application/json',
                   },
                   body: JSON.stringify({
-                    channel: process.env.SLACK_CHANNEL_ID || 'C1234567890',
+                    channel: process.env.SLACK_CHANNEL_ID,
                     timestamp: threadTs,
                     name: 'white_check_mark',
                   }),
                 });
+
+                const data = await response.json();
+                console.log('Slack reaction response:', JSON.stringify(data, null, 2));
+
+                if (!data.ok) {
+                  console.error('Failed to add reaction:', data.error);
+                }
+              } else {
+                console.error('Could not extract thread timestamp from comment');
               }
+            } else {
+              console.error('No thread comment found');
             }
