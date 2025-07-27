@@ -107,6 +107,7 @@ jobs:
         uses: actions/github-script@v7
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
         with:
           script: |
             const buildOutput = JSON.parse(`${{ steps.build.outputs.build_output }}`);
@@ -154,7 +155,7 @@ jobs:
                   'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                  channel: process.env.SLACK_CHANNEL_ID || 'C1234567890', // Replace with your channel ID
+                  channel: process.env.SLACK_CHANNEL_ID,
                   text: initialMessage,
                 }),
               });
@@ -179,7 +180,7 @@ jobs:
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({
-                channel: process.env.SLACK_CHANNEL_ID || 'C1234567890',
+                channel: process.env.SLACK_CHANNEL_ID,
                 thread_ts: threadTs,
                 text: slackMessage,
               }),
