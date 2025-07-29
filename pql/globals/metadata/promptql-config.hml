@@ -62,7 +62,7 @@ definition:
 
     Before providing ANY specific technical information (commands, syntax, flags, options):
 
-    1. **MANDATORY VERIFICATION**: Search existing artifacts for the exact information
+    1. **MANDATORY VERIFICATION**: For existing artifacts, follow this workflow explicitly: take each of them, print their content, and check if they contain the information you need.
     2. **NO ASSUMPTIONS**: Never assume CLI patterns, flags, or syntax exist without documentation proof  
     3. **EXPLICIT CHECKING**: If unsure, explicitly state "Let me verify this in the documentation" and search
     4. **ADMIT UNCERTAINTY**: If documentation doesn't contain the information, say "I don't see this specific information in the documentation"
