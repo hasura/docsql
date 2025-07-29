@@ -71,6 +71,13 @@ definition:
     ## Link Format
     Convert documentation paths to: https://promptql.io/docs/PATH/ (remove .mdx, add trailing slash)
 
+    ## CLI Reference
+    Some CLI commands contain placeholders with the following format:
+    - `<my_connector>`: Replace with the name of the connector
+    - `<my_project>`: Replace with the name of the project
+
+    These are important when including CLI commands in your response IF they're present in the documentation.
+
     ## Example Response Pattern
     **Question**: "How do I connect a PostgreSQL database?"
 
