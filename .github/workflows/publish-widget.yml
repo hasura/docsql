@@ -74,7 +74,7 @@ jobs:
           cd packages/chat-widget
           npm publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.ADMIN_TOKEN }}
 
       - name: Create GitHub Release
         uses: actions/create-release@v1
