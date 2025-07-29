@@ -5,7 +5,8 @@ definition:
     provider: anthropic
     apiKey: 
       valueFromEnv: ANTHROPIC_KEY
-    model: claude-4-sonnet-20250514
+    # model: claude-4-sonnet-20250514
+    model: claude-3-5-sonnet-20240620
   featureFlags: 
     enable_automations: true
   systemInstructions: |
