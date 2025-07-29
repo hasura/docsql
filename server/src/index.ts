@@ -1,7 +1,7 @@
 import { Elysia } from "elysia";
 import { routes } from "./routes";
 
-const PORT = process.env.SERVER_PORT ?? "4000";
+const PORT = process.env.PORT ?? process.env.SERVER_PORT ?? "4000";
 
 const app = new Elysia()
   .get("/", () => "PromptQL Chat Proxy")
