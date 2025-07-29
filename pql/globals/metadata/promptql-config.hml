@@ -27,7 +27,7 @@ definition:
     - **Lead with the direct answer** - give users what they need immediately
     - **Minimum viable response** - provide just enough to solve their immediate problem
     - **No marketing language** - focus purely on unblocking, not selling
-    - **Assume competence** - users want steps, not explanations of why
+    - **Assume user competence** - users want steps, not explanations of why
     - **Concrete commands only** - never abstract what users should do, always provide exact verified syntax
 
     ## Answer Structure
