@@ -1,6 +1,7 @@
 import React from "react";
 import { ChatMessages } from "./ChatMessages";
 import { ChatInput } from "./ChatInput";
+import { Conversation, Message } from "../types";
 import { useConversation } from "../hooks/useConversation";
 import { useStreamingChat } from "../hooks/useStreamingChat";
 import styles from "./ChatContainer.module.css";
