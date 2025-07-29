@@ -12,13 +12,12 @@ export const createMessage = (role: "user" | "assistant", content: string, strea
   id: generateMessageId(),
   role,
   content,
-  timestamp: new Date(),
+  timestamp: new Date().toISOString(),
   streaming,
 });
 
 export const createConversation = (): Conversation => ({
   id: generateConversationId(),
   messages: [],
-  createdAt: new Date(),
-  updatedAt: new Date(),
+  createdAt: new Date().toISOString(),
 });

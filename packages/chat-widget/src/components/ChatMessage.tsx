@@ -43,29 +43,23 @@ export function ChatMessage({ message, theme = "auto" }: ChatMessageProps) {
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={{
-                  code: ({ node, inline, className, children, ...props }) => {
+                  code: ({ className, children, ...props }: any) => {
                     const match = /language-(\w+)/.exec(className || "");
                     const language = match ? match[1] : "";
 
-                    return !inline && className ? (
-                      <SyntaxHighlighter
-                        style={getHighlighterTheme()}
-                        language={language || "text"}
-                        PreTag="div"
-                        className={styles.codeBlock}
-                        customStyle={{
-                          margin: "8px 0",
-                          borderRadius: "6px",
-                          fontSize: "13px",
-                          lineHeight: "1.4",
-                        }}
-                        {...props}>
-                        {String(children).replace(/\n$/, "")}
-                      </SyntaxHighlighter>
-                    ) : (
+                    return !language ? (
                       <code className={styles.inlineCode} {...props}>
                         {children}
                       </code>
+                    ) : (
+                      <SyntaxHighlighter
+                        style={getHighlighterTheme() as any}
+                        language={language}
+                        PreTag="div"
+                        className={styles.codeBlock}
+                        {...props}>
+                        {String(children).replace(/\n$/, "")}
+                      </SyntaxHighlighter>
                     );
                   },
                   p: ({ children }) => <p className={styles.paragraph}>{children}</p>,
