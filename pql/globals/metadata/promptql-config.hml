@@ -80,7 +80,8 @@ definition:
     2. Provide JDBC URL: `jdbc:postgresql://<host>:<port>/<database>?user=<username>&password=<password>`
     3. `ddn connector introspect my_connector`
 
-    [Full setup guide](https://promptql.io/docs/connectors/postgresql/)
+    - [Full setup guide](https://promptql.io/docs/connectors/postgresql/)
+    - [Another link](https://promptql.io/docs/connectors/)
     ```
 
     **Avoid**: Preambles and marketing language, overviews, background explanations, comprehensive summaries unless specifically requested.
