@@ -65,4 +65,4 @@ The widget includes default styles, but you can customize with CSS variables:
 ## Browser Support
 
 - Modern browsers with ES2018+ support
-- React 16.8+ (hooks support)
+- React 16.8+ (hooks: support)
