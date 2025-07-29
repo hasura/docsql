@@ -2,3 +2,4 @@ node_modules/
 dist/
 test-app/node_modules/
 test-app/dist/
+.npmrc

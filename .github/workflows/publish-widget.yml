@@ -1,0 +1,86 @@
+name: Release Chat Widget
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "packages/chat-widget/**"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version bump type"
+        required: true
+        default: "patch"
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          registry-url: "https://npm.pkg.github.com"
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+
+      - name: Install dependencies
+        run: |
+          cd packages/chat-widget
+          bun install
+
+      - name: Build package
+        run: |
+          cd packages/chat-widget
+          bun run build
+
+      - name: Bump version and create tag
+        id: version
+        run: |
+          cd packages/chat-widget
+          VERSION_TYPE=${{ github.event.inputs.version || 'patch' }}
+          NEW_VERSION=$(npm version $VERSION_TYPE --no-git-tag-version)
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add package.json
+          git commit -m "chore: bump chat-widget to $NEW_VERSION"
+          git tag "chat-widget-$NEW_VERSION"
+          git push origin main --tags
+
+      - name: Publish to GitHub Packages
+        run: |
+          cd packages/chat-widget
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: chat-widget-${{ steps.version.outputs.new_version }}
+          release_name: Chat Widget ${{ steps.version.outputs.new_version }}
+          body: |
+            ## Changes
+            - Automated release of @hasura/chat-widget
+
+            ## Installation
+            ```bash
+            npm install @hasura/chat-widget@${{ steps.version.outputs.new_version }}
+            ```

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ChatWidget } from "@pql/chat-widget";
+import { ChatWidget } from "@hasura/chat-widget";
 import "./App.css";
 
 function App() {
@@ -36,7 +36,7 @@ function App() {
       <main className="main">
         <div className="widget-container">
           <ChatWidget
-            serverUrl="http://localhost:4000"
+            serverUrl="https://pql-docs-bot-710071984479.us-west2.run.app"
             theme={theme}
             title="PromptQL Docs Chat"
             placeholder="Ask about PromptQL..."
