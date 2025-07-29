@@ -5,14 +5,14 @@ Embeddable React component for adding PromptQL-powered chat to any documentation
 ## Installation
 
 ```sh
-npm install @pql/chat-widget
+npm install @hasura/chat-widget
 ```
 
 ## Usage
 
 ```tsx
-import { ChatWidget } from "@pql/chat-widget";
-import "@pql/chat-widget/styles";
+import { ChatWidget } from "@hasura/chat-widget";
+import "@hasura/chat-widget/styles";
 
 <ChatWidget
   serverUrl="http://localhost:4000"
