@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      "@pql/chat-widget": resolve(__dirname, "../src/index.ts"),
+      "@hasura/chat-widget": resolve(__dirname, "../src/index.ts"),
     },
   },
   server: {
