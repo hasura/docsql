@@ -36,7 +36,8 @@ function App() {
       <main className="main">
         <div className="widget-container">
           <ChatWidget
-            serverUrl="https://pql-docs-bot-710071984479.us-west2.run.app"
+            // serverUrl="https://pql-docs-bot-710071984479.us-west2.run.app"
+            serverUrl="http://localhost:4000"
             theme={theme}
             title="PromptQL Docs Chat"
             placeholder="Ask about PromptQL..."

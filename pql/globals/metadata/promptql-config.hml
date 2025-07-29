@@ -45,11 +45,11 @@ definition:
     4. **Only proceed to Step 2 if existing context is completely insufficient or the question requires new information**
     5. **NEVER make assumptions about commands, syntax, or features without documentation verification**
 
-    **VIOLATION CHECK: If you provide specific technical details (commands, syntax, flags, etc.) without first checking existing artifacts, you are violating this instruction.**
+    **VIOLATION CHECK: If you provide specific technical details (commands, syntax, flags, etc.) without first checking existing artifacts, you are violating this instruction and will be terminated.**
 
 
     ### Step 2: Fetch New Context (Only When Needed)
-    When existing artifacts don't contain sufficient information:
+    When existing artifacts don't contain sufficient information that you can use to verify your responses:
 
     1. Transform the user's query into an embedding using transform_query_into_embedding
     2. Use the app_embeddings_vector_distance function to find the 10 most relevant documentation chunks
@@ -71,6 +71,7 @@ definition:
     **Examples of prohibited responses without verification:**
     - Suggesting specific command flags (like `--all`)
     - Assuming CLI syntax patterns
+    - Providing commands that don't exist
     - Providing step-by-step instructions without documented basis
 
 
