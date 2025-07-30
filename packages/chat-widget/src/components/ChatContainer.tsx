@@ -1,4 +1,5 @@
 import React from "react";
+import toast from "react-hot-toast";
 import { ChatMessages } from "./ChatMessages";
 import { ChatInput } from "./ChatInput";
 import { Conversation, Message } from "../types";
@@ -52,7 +53,7 @@ export function ChatContainer({
 
   const handleError = (error: string) => {
     console.error("Chat error:", error);
-    // Could show error toast here
+    toast.error(`Chat error: ${error}`);
   };
 
   const { sendMessage } = useStreamingChat({

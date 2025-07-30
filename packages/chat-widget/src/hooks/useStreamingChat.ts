@@ -19,6 +19,12 @@ export function useStreamingChat({
     async (content: string, history: Array<{ role: string; content: string }>) => {
       setIsLoading(true);
 
+      // Set a timeout to reset loading state if no response
+      const timeoutId = setTimeout(() => {
+        setIsLoading(false);
+        onError("Request timed out");
+      }, 120000); // 2 minutes
+
       try {
         const response = await fetch(`${serverUrl}/chat/conversations/${conversationId}/messages`, {
           method: "POST",
@@ -30,6 +36,8 @@ export function useStreamingChat({
             history,
           }),
         });
+
+        clearTimeout(timeoutId);
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -84,7 +92,15 @@ export function useStreamingChat({
           streaming: false,
         });
       } catch (error) {
+        clearTimeout(timeoutId);
         onError(error instanceof Error ? error.message : "Unknown error");
+
+        // Add a final empty assistant message to clear the streaming state
+        onMessage({
+          role: "assistant",
+          content: "",
+          streaming: false,
+        });
       } finally {
         setIsLoading(false);
       }

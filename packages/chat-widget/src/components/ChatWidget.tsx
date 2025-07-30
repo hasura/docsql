@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Toaster } from "react-hot-toast";
 import { ChatContainer } from "./ChatContainer";
 import { ChatWidgetProps } from "../types";
 import { useConversation } from "../hooks/useConversation";
@@ -18,6 +19,7 @@ export function ChatWidget({
 
   return (
     <>
+      <Toaster position="top-right" />
       {/* Floating Button */}
       <button
         className={`${styles.floatingButton} ${styles[theme]}`}
