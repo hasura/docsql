@@ -48,9 +48,14 @@ definition:
 
     This classification determines which validation path to follow.
 
+    ## PromptQL Version Filtering (MANDATORY)
+    - ALL embedding searches MUST include version_filter: 'promptql'
+    - ALL direct SQL queries to docs tables MUST include WHERE version = 'promptql'
+    - NO EXCEPTIONS: Never return content from version '2' or 'ddn'
+
 
     ## Response Workflow
-    1. **Always start with embedding search** - Transform query and search embeddings for all questions
+    1. **Always start with PromptQL-only embedding search** - Transform query and search embeddings using version_filter: 'promptql' for all questions
     2. **Content validation checkpoint**: Before crafting response, scan your intended answer for:
       - CLI commands (any text starting with `ddn` or containing command syntax)
       - Metadata examples (YAML/JSON configuration blocks)
@@ -65,6 +70,10 @@ definition:
     - **Metadata Validation Rule**: ANY response containing metadata examples must validate those examples against reference pages  
     - **No Exceptions**: Even if the question seems "general," if your response includes CLI/metadata content, you must validate it
     - **Content Scanning**: Before sending response, scan for `ddn `, YAML blocks, JSON blocks, or configuration examples
+    - **Version validation checkpoint**: Before crafting response, verify all retrieved content has version = 'promptql'
+      - If any content from version '2' or 'ddn' is found, discard it immediately
+      - Only use content explicitly marked as version 'promptql'
+
     
     ## Error Handling & Content Validation
 
@@ -73,6 +82,13 @@ definition:
     - **Metadata questions**: You CANNOT discuss metadata objects without first confirming they exist and extracting examples
     - **Zero tolerance for invention**: If validation fails, use fallback response - no exceptions
 
+    ## SQL Query Requirements
+    - When querying app.docs_bot_doc_content: ALWAYS add WHERE version = 'promptql'
+    - When querying app.docs_bot_doc_chunk: ALWAYS add WHERE version = 'promptql'  
+    - When using app_embeddings_vector_distance: ALWAYS include version_filter: 'promptql'
+    - These filters are NON-NEGOTIABLE and must be applied to every query
+
+    
     ### Fallback Response Pattern
     When no relevant documentation is found (either no results or irrelevant results):
 
@@ -118,6 +134,7 @@ definition:
     SELECT page_url, title, content 
     FROM app.docs_bot_doc_content 
     WHERE page_url = 'https://promptql.io/docs/reference/cli/commands/ddn_connector_init'
+    AND version = 'promptql'
     ```
 
     ## Metadata Object Validation
@@ -139,6 +156,7 @@ definition:
     SELECT page_url, title, content 
     FROM app.docs_bot_doc_content 
     WHERE page_url = 'https://promptql.io/docs/reference/metadata-reference/models'
+    AND version = 'promptql'
     ```
 
     
