@@ -57,6 +57,9 @@ export const sendMessage = async ({ body, params, set }: Context) => {
     user_message: { text: message },
   });
 
+  let isStreamClosed = false;
+  let abortController = new AbortController();
+
   const stream = new ReadableStream({
     start(controller) {
       let planContent = "";
@@ -64,8 +67,6 @@ export const sendMessage = async ({ body, params, set }: Context) => {
       let messageContent = "";
       let currentStep: string | null = null;
       let chunkCount = 0;
-      let isStreamClosed = false;
-      let abortController = new AbortController();
 
       const safeEnqueue = (data: string) => {
         if (!isStreamClosed && !abortController.signal.aborted) {
@@ -86,8 +87,7 @@ export const sendMessage = async ({ body, params, set }: Context) => {
           try {
             controller.close();
           } catch (error) {
-            // Stream already closed or in error state
-            console.warn("Stream close warning:", error.message);
+            console.warn("Stream close warning:", error instanceof Error ? error.message : String(error));
           }
         }
       };
@@ -143,7 +143,10 @@ export const sendMessage = async ({ body, params, set }: Context) => {
           interactions,
         },
         async (chunk) => {
-          if (isStreamClosed || abortController.signal.aborted) return;
+          // Early exit if stream is closed or aborted
+          if (isStreamClosed || abortController.signal.aborted) {
+            return;
+          }
 
           chunkCount++;
 
@@ -163,7 +166,6 @@ export const sendMessage = async ({ body, params, set }: Context) => {
             }
 
             if (chunk.message) {
-              // Adding this to deal with punctuation and concatenating chunks
               if (messageContent && /[.!?]$/.test(messageContent.trim()) && !/^\s/.test(chunk.message)) {
                 messageContent += " ";
               }
@@ -172,7 +174,7 @@ export const sendMessage = async ({ body, params, set }: Context) => {
               hasUpdate = true;
             }
 
-            if (hasUpdate) {
+            if (hasUpdate && !isStreamClosed && !abortController.signal.aborted) {
               const cleanMessage = messageContent
                 .replace(/<artifact[^>]*\/>/g, "")
                 .replace(/<artifact[^>]*>.*?<\/artifact>/gs, "");
@@ -190,12 +192,13 @@ export const sendMessage = async ({ body, params, set }: Context) => {
               safeEnqueue(`data: ${data}\n\n`);
             }
           }
-        }
+        },
+        { signal: abortController.signal } // Pass abort signal to PromptQL
       );
 
       queryPromise
         .then(() => {
-          if (!abortController.signal.aborted) {
+          if (!abortController.signal.aborted && !isStreamClosed) {
             console.log({
               event: "chat_request_complete",
               requestId,
@@ -218,6 +221,9 @@ export const sendMessage = async ({ body, params, set }: Context) => {
         requestId,
         conversationId,
       });
+      // Ensure cleanup happens immediately on cancellation
+      isStreamClosed = true;
+      abortController.abort();
     },
   });
 
