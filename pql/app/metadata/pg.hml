@@ -1298,7 +1298,7 @@ definition:
               type:
                 type: nullable
                 underlying_type:
-                  name: boolean
+                  name: Float
                   type: named
             id:
               arguments: {}

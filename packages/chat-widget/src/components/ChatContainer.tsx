@@ -1,4 +1,5 @@
 import React from "react";
+import toast from "react-hot-toast";
 import { ChatMessages } from "./ChatMessages";
 import { ChatInput } from "./ChatInput";
 import { Conversation, Message } from "../types";
@@ -17,6 +18,7 @@ interface ChatContainerProps {
   updateLastMessage: (content: string, streaming?: boolean) => void;
   clearConversation: () => void;
   theme?: "light" | "dark" | "auto";
+  brandColor?: string;
 }
 
 export function ChatContainer({
@@ -30,6 +32,7 @@ export function ChatContainer({
   updateLastMessage,
   clearConversation,
   theme,
+  brandColor,
 }: ChatContainerProps) {
   const handleMessage = (message: any) => {
     console.log("handleMessage called with:", message);
@@ -50,7 +53,7 @@ export function ChatContainer({
 
   const handleError = (error: string) => {
     console.error("Chat error:", error);
-    // Could show error toast here
+    toast.error(`Chat error: ${error}`);
   };
 
   const { sendMessage } = useStreamingChat({
@@ -87,7 +90,7 @@ export function ChatContainer({
 
   return (
     <div className={styles.container}>
-      <ChatMessages messages={conversation.messages} isLoading={isLoading} theme={theme} />
+      <ChatMessages messages={conversation.messages} isLoading={isLoading} theme={theme} brandColor={brandColor} />
       <ChatInput placeholder={placeholder} onSendMessage={handleSendMessage} disabled={isLoading} />
     </div>
   );

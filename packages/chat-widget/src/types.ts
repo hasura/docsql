@@ -18,4 +18,5 @@ export interface ChatWidgetProps {
   className?: string;
   placeholder?: string;
   title?: string;
+  brandColor?: string;
 }
