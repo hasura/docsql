@@ -9,10 +9,12 @@ import styles from "./ChatMessage.module.css";
 interface ChatMessageProps {
   message: Message;
   theme?: "light" | "dark" | "auto";
+  brandColor?: string;
 }
 
-export function ChatMessage({ message, theme = "auto" }: ChatMessageProps) {
+export function ChatMessage({ message, theme = "auto", brandColor = "#2563eb" }: ChatMessageProps) {
   const isUser = message.role === "user";
+  const isStreaming = message.streaming && !isUser;
 
   // Add this debug log
   console.log("ChatMessage theme:", theme);
@@ -32,7 +34,11 @@ export function ChatMessage({ message, theme = "auto" }: ChatMessageProps) {
     <div className={`${styles.message} ${styles[message.role]}`}>
       <div className={styles.avatar}>{isUser ? "U" : "A"}</div>
       <div className={styles.content}>
-        <div className={styles.text} data-loading={message.content === "..." ? "true" : undefined}>
+        <div
+          className={styles.text}
+          data-loading={message.content === "..." ? "true" : undefined}
+          data-streaming={isStreaming ? "true" : undefined}
+          style={isStreaming ? ({ "--brand-color": brandColor } as React.CSSProperties) : undefined}>
           {isUser ? (
             <>
               {message.content}

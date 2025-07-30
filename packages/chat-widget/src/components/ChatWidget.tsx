@@ -10,6 +10,7 @@ export function ChatWidget({
   className,
   placeholder = "Ask a question...",
   title = "Documentation Chat",
+  brandColor = "#b6fc34",
 }: ChatWidgetProps) {
   const [isOpen, setIsOpen] = useState(false);
   const conversationState = useConversation();
@@ -33,7 +34,8 @@ export function ChatWidget({
           <div
             className={`${styles.modal} ${styles[theme]} ${className || ""}`}
             onClick={(e) => e.stopPropagation()}
-            data-theme={theme}>
+            data-theme={theme}
+            style={{ "--brand-color": brandColor } as React.CSSProperties}>
             <div className={styles.modalHeader}>
               <h3>{title}</h3>
               <div className={styles.headerButtons}>
@@ -56,13 +58,9 @@ export function ChatWidget({
                 serverUrl={serverUrl}
                 placeholder={placeholder}
                 title={title}
-                conversation={conversation}
-                isLoading={isLoading}
-                setIsLoading={setIsLoading}
-                addMessage={addMessage}
-                updateLastMessage={updateLastMessage}
-                clearConversation={clearConversation}
                 theme={theme}
+                brandColor={brandColor}
+                {...conversationState}
               />
             </div>
           </div>

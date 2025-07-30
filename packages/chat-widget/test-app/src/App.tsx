@@ -41,6 +41,7 @@ function App() {
             theme={theme}
             title="PromptQL Docs Chat"
             placeholder="Ask about PromptQL..."
+            brandColor="#b6fc34"
           />
         </div>
       </main>
