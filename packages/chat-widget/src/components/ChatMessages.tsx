@@ -7,9 +7,10 @@ interface ChatMessagesProps {
   messages: Message[];
   isLoading: boolean;
   theme?: "light" | "dark" | "auto";
+  brandColor?: string;
 }
 
-export function ChatMessages({ messages, isLoading, theme }: ChatMessagesProps) {
+export function ChatMessages({ messages, isLoading, theme, brandColor }: ChatMessagesProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -30,7 +31,7 @@ export function ChatMessages({ messages, isLoading, theme }: ChatMessagesProps) 
     <div className={styles.container}>
       <div className={styles.messages}>
         {messages.map((message) => (
-          <ChatMessage key={message.id} message={message} theme={theme} />
+          <ChatMessage key={message.id} message={message} theme={theme} brandColor={brandColor} />
         ))}
         <div ref={messagesEndRef} />
       </div>
