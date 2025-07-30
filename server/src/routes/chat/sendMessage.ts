@@ -15,187 +15,212 @@ export const sendMessage = async ({ body, params, set }: Context) => {
   const requestId = crypto.randomUUID();
   const startTime = Date.now();
 
-  console.log({
-    event: "chat_request_start",
-    requestId,
-    conversationId,
-    messageLength: message.length,
-    historyLength: history?.length || 0,
-    timestamp: new Date().toISOString(),
-  });
+  // Set up cleanup tracking
+  const cleanup = {
+    completed: false,
+    abortController: new AbortController(),
+    timeoutId: null as NodeJS.Timeout | null,
+  };
 
-  set.headers["Content-Type"] = "text/event-stream";
-  set.headers["Cache-Control"] = "no-cache";
-  set.headers["Connection"] = "keep-alive";
-  set.headers["Access-Control-Allow-Origin"] = "*";
-  set.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS";
-  set.headers["Access-Control-Allow-Headers"] = "Content-Type";
+  // Auto-timeout after 5 minutes
+  cleanup.timeoutId = setTimeout(() => {
+    if (!cleanup.completed) {
+      console.log({
+        event: "chat_request_timeout",
+        requestId,
+        conversationId,
+        duration: Date.now() - startTime,
+      });
+      cleanup.abortController.abort();
+    }
+  }, 5 * 60 * 1000);
 
-  // Build interactions from history + current message
-  const interactions: Array<{
-    user_message: { text: string };
-    assistant_actions?: Array<{ message: string }>;
-  }> = [];
-
-  if (history) {
-    for (let i = 0; i < history.length; i += 2) {
-      const userMsg = history[i];
-      const assistantMsg = history[i + 1];
-
-      if (userMsg?.role === "user") {
-        interactions.push({
-          user_message: { text: userMsg.content },
-          ...(assistantMsg?.role === "assistant" && {
-            assistant_actions: [{ message: assistantMsg.content }],
-          }),
-        });
+  const safeCleanup = () => {
+    if (!cleanup.completed) {
+      cleanup.completed = true;
+      cleanup.abortController.abort();
+      if (cleanup.timeoutId) {
+        clearTimeout(cleanup.timeoutId);
       }
     }
-  }
+  };
 
-  interactions.push({
-    user_message: { text: message },
+  // Handle client disconnect
+  const clientDisconnected = new Promise<void>((resolve) => {
+    const checkConnection = () => {
+      if (cleanup.abortController.signal.aborted) {
+        resolve();
+      } else {
+        setTimeout(checkConnection, 1000);
+      }
+    };
+    checkConnection();
   });
 
-  const stream = new ReadableStream({
-    start(controller) {
-      let planContent = "";
-      let codeContent = "";
-      let messageContent = "";
-      let currentStep: string | null = null;
-      let chunkCount = 0;
-      let isStreamClosed = false;
-      let abortController = new AbortController();
+  try {
+    console.log({
+      event: "chat_request_start",
+      requestId,
+      conversationId,
+      messageLength: message.length,
+      historyLength: history?.length || 0,
+      timestamp: new Date().toISOString(),
+    });
 
-      const safeEnqueue = (data: string) => {
-        if (!isStreamClosed && !abortController.signal.aborted) {
-          try {
-            controller.enqueue(data);
-          } catch (error) {
-            console.error("Failed to enqueue data:", error);
-            isStreamClosed = true;
-            abortController.abort();
-          }
+    set.headers["Content-Type"] = "text/event-stream";
+    set.headers["Cache-Control"] = "no-cache";
+    set.headers["Connection"] = "keep-alive";
+    set.headers["Access-Control-Allow-Origin"] = "*";
+    set.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS";
+    set.headers["Access-Control-Allow-Headers"] = "Content-Type";
+
+    // Store conversation state for reconnection
+    const conversationState = {
+      requestId,
+      conversationId,
+      messageContent: "",
+      isComplete: false,
+      timestamp: Date.now(),
+    };
+
+    // Validate conversationId exists
+    if (!conversationId) {
+      set.status = 400;
+      return { error: "conversationId is required" };
+    }
+
+    // Validate conversationId exists
+    if (!conversationId) {
+      set.status = 400;
+      return { error: "conversationId is required" };
+    }
+
+    // Update global conversation store
+    global.conversationStore = global.conversationStore || new Map();
+    global.conversationStore.set(conversationId, conversationState);
+
+    // Build interactions from history + current message
+    const interactions: Array<{
+      user_message: { text: string };
+      assistant_actions?: Array<{ message: string }>;
+    }> = [];
+
+    if (history) {
+      for (let i = 0; i < history.length; i += 2) {
+        const userMsg = history[i];
+        const assistantMsg = history[i + 1];
+
+        if (userMsg?.role === "user") {
+          interactions.push({
+            user_message: { text: userMsg.content },
+            ...(assistantMsg?.role === "assistant" && {
+              assistant_actions: [{ message: assistantMsg.content }],
+            }),
+          });
         }
-      };
+      }
+    }
 
-      const closeStream = () => {
-        if (!isStreamClosed) {
-          isStreamClosed = true;
-          abortController.abort();
-          try {
-            controller.close();
-          } catch (error) {
-            // Stream already closed or in error state
-            console.warn("Stream close warning:", error.message);
-          }
-        }
-      };
+    interactions.push({
+      user_message: { text: message },
+    });
 
-      const handleError = (error: Error) => {
-        if (abortController.signal.aborted) {
-          return;
-        }
+    let isStreamClosed = false;
+    let abortController = new AbortController();
 
-        // Categorize error types
-        let errorType = "unknown";
-        let userMessage = "An unexpected error occurred. Please try again.";
+    const stream = new ReadableStream({
+      start(controller) {
+        let planContent = "";
+        let codeContent = "";
+        let messageContent = "";
+        let currentStep: string | null = null;
+        let chunkCount = 0;
+        let clientDisconnected = false;
 
-        if (error.message.includes("fetch") || error.message.includes("ECONNREFUSED")) {
-          errorType = "connection_failed";
-          userMessage = "Unable to connect to the AI service. Please check your connection and try again.";
-        } else if (error.message.includes("timeout")) {
-          errorType = "timeout";
-          userMessage = "Request timed out. Please try again with a shorter message.";
-        } else if (error.message.includes("401") || error.message.includes("403")) {
-          errorType = "authentication";
-          userMessage = "Authentication failed. Please contact support.";
-        } else if (error.message.includes("429")) {
-          errorType = "rate_limit";
-          userMessage = "Too many requests. Please wait a moment and try again.";
-        }
-
-        console.error({
-          event: "chat_request_error",
-          requestId,
-          conversationId,
-          errorType,
-          error: error.message,
-          stack: error.stack,
-        });
-
-        const errorData = JSON.stringify({
-          success: false,
-          error: userMessage,
-          errorType,
-          conversationId,
-          timestamp: new Date(),
-        });
-
-        safeEnqueue(`data: ${errorData}\n\n`);
-        closeStream();
-      };
-
-      // Store the promise so we can handle cancellation
-      const queryPromise = client.queryStream(
-        {
-          artifacts: [],
-          interactions,
-        },
-        async (chunk) => {
-          if (isStreamClosed || abortController.signal.aborted) return;
-
-          chunkCount++;
-
-          if (chunk?.type === "assistant_action_chunk") {
-            let hasUpdate = false;
-
-            if (chunk.plan) {
-              planContent += chunk.plan;
-              currentStep = "plan";
-              hasUpdate = true;
-            }
-
-            if (chunk.code) {
-              codeContent += chunk.code;
-              currentStep = "code";
-              hasUpdate = true;
-            }
-
-            if (chunk.message) {
-              // Adding this to deal with punctuation and concatenating chunks
-              if (messageContent && /[.!?]$/.test(messageContent.trim()) && !/^\s/.test(chunk.message)) {
-                messageContent += " ";
+        const safeEnqueue = (data: string) => {
+          if (!isStreamClosed && !clientDisconnected) {
+            try {
+              controller.enqueue(data);
+            } catch (error) {
+              if (
+                error &&
+                typeof error === "object" &&
+                "code" in error &&
+                (error as any).code === "ERR_INVALID_STATE"
+              ) {
+                // Client disconnected - continue processing in background
+                console.log("Client disconnected, continuing processing in background");
+                clientDisconnected = true;
+              } else {
+                console.error("Failed to enqueue data:", error);
+                isStreamClosed = true;
+                abortController.abort();
               }
-              messageContent += chunk.message;
-              currentStep = "message";
-              hasUpdate = true;
-            }
-
-            if (hasUpdate) {
-              const cleanMessage = messageContent
-                .replace(/<artifact[^>]*\/>/g, "")
-                .replace(/<artifact[^>]*>.*?<\/artifact>/gs, "");
-
-              const data = JSON.stringify({
-                success: true,
-                conversationId,
-                step: currentStep,
-                plan: planContent,
-                code: codeContent,
-                message: cleanMessage,
-                timestamp: new Date(),
-              });
-
-              safeEnqueue(`data: ${data}\n\n`);
             }
           }
-        }
-      );
+        };
 
-      queryPromise
-        .then(() => {
-          if (!abortController.signal.aborted) {
+        const queryPromise = client.queryStream(
+          { artifacts: [], interactions },
+          async (chunk) => {
+            // Don't abort on client disconnect - let it finish
+            if (isStreamClosed && !clientDisconnected) {
+              return;
+            }
+
+            chunkCount++;
+
+            if (chunk?.type === "assistant_action_chunk") {
+              let hasUpdate = false;
+
+              if (chunk.plan) {
+                planContent += chunk.plan;
+                currentStep = "plan";
+                hasUpdate = true;
+              }
+
+              if (chunk.code) {
+                codeContent += chunk.code;
+                currentStep = "code";
+                hasUpdate = true;
+              }
+
+              if (chunk.message) {
+                if (messageContent && /[.!?]$/.test(messageContent.trim()) && !/^\s/.test(chunk.message)) {
+                  messageContent += " ";
+                }
+                messageContent += chunk.message;
+                currentStep = "message";
+                hasUpdate = true;
+              }
+
+              if (hasUpdate) {
+                const cleanMessage = messageContent
+                  .replace(/<artifact[^>]*\/>/g, "")
+                  .replace(/<artifact[^>]*>.*?<\/artifact>/gs, "");
+
+                const data = JSON.stringify({
+                  success: true,
+                  conversationId,
+                  step: currentStep,
+                  plan: planContent,
+                  code: codeContent,
+                  message: cleanMessage,
+                  timestamp: new Date(),
+                });
+
+                // Only try to send to client if still connected
+                if (!clientDisconnected) {
+                  safeEnqueue(`data: ${data}\n\n`);
+                }
+              }
+            }
+          }
+          // Don't pass abort signal - let PromptQL finish
+        );
+
+        queryPromise
+          .then(() => {
             console.log({
               event: "chat_request_complete",
               requestId,
@@ -205,21 +230,40 @@ export const sendMessage = async ({ body, params, set }: Context) => {
               totalChunks: chunkCount,
               finalMessageLength: messageContent.length,
               duration: Date.now() - startTime,
+              backgroundProcessing: clientDisconnected,
             });
-          }
-          closeStream();
-        })
-        .catch(handleError);
-    },
 
-    cancel() {
-      console.log({
-        event: "chat_request_cancelled",
-        requestId,
-        conversationId,
-      });
-    },
-  });
+            // TODO: Store final response in database/cache here
+            // await storeConversationMessage(conversationId, messageContent);
+          })
+          .catch((error) => {
+            console.error({
+              event: "chat_request_error",
+              requestId,
+              error: error.message,
+            });
+          })
+          .finally(() => {
+            try {
+              controller.close();
+            } catch {}
+          });
+      },
 
-  return new Response(stream);
+      cancel() {
+        console.log({
+          event: "chat_request_cancelled",
+          requestId,
+          conversationId,
+          reason: "client_disconnect",
+        });
+        // Don't call safeCleanup() - let PromptQL finish
+      },
+    });
+
+    return new Response(stream);
+  } catch (error) {
+    safeCleanup();
+    throw error;
+  }
 };
