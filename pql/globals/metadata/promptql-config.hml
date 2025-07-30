@@ -62,7 +62,6 @@ definition:
 
     Sorry. I couldn't find documentation for [specific topic]. Please search our documentation site or create an issue on our PromptQL GitHub repository (https://github.com/hasura/promptql/issues). If you are an Enterprise client, you can raise a ticket via https://hasurahelp.zendesk.com/hc/en-us/requests/new.
 
-
     ## What PromptQL Is
     PromptQL is an agent platform for high-trust LLM interaction with business data. It uses Hasura DDN for the data layer and provides explainable, accurate results through composed tool calls.
 
