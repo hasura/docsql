@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useCallback } from "react";
 import toast from "react-hot-toast";
 import { ChatMessages } from "./ChatMessages";
 import { ChatInput } from "./ChatInput";
 import { Conversation, Message } from "../types";
 import { useConversation } from "../hooks/useConversation";
 import { useStreamingChat } from "../hooks/useStreamingChat";
+import { useStateRecovery } from "../hooks/useStateRecovery";
+import { useConnectionMonitor } from "../hooks/useConnectionMonitor";
 import styles from "./ChatContainer.module.css";
 
 interface ChatContainerProps {
@@ -63,6 +65,25 @@ export function ChatContainer({
     onError: handleError,
     setIsLoading,
   });
+
+  const { recoverState } = useStateRecovery({
+    serverUrl,
+    conversationId: conversation.id,
+    onStateRecovered: (content) => {
+      updateLastMessage(content, false);
+    },
+  });
+
+  const handleReconnect = useCallback(async () => {
+    if (isLoading) {
+      const recovered = await recoverState();
+      if (recovered) {
+        setIsLoading(false);
+      }
+    }
+  }, [isLoading, recoverState, setIsLoading]);
+
+  useConnectionMonitor(handleReconnect);
 
   const handleSendMessage = async (content: string) => {
     // Add user message immediately
