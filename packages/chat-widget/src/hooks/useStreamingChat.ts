@@ -16,14 +16,11 @@ export function useStreamingChat({
   setIsLoading,
 }: UseStreamingChatProps) {
   const sendMessage = useCallback(
-    async (content: string, history: Array<{ role: string; content: string }>) => {
-      setIsLoading(true);
+    async (content: string, history: Array<{ role: string; content: string }>, retryCount = 0) => {
+      const maxRetries = 3;
+      const retryDelay = Math.min(1000 * Math.pow(2, retryCount), 10000); // Exponential backoff
 
-      // Set a timeout to reset loading state if no response
-      const timeoutId = setTimeout(() => {
-        setIsLoading(false);
-        onError("Request timed out");
-      }, 120000); // 2 minutes
+      setIsLoading(true);
 
       try {
         const response = await fetch(`${serverUrl}/chat/conversations/${conversationId}/messages`, {
@@ -37,8 +34,6 @@ export function useStreamingChat({
           }),
         });
 
-        clearTimeout(timeoutId);
-
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -49,6 +44,7 @@ export function useStreamingChat({
         }
 
         let assistantContent = "";
+        let lastSuccessfulChunk = "";
 
         while (true) {
           const { done, value } = await reader.read();
@@ -61,17 +57,15 @@ export function useStreamingChat({
             if (line.startsWith("data: ")) {
               try {
                 const data = JSON.parse(line.slice(6));
-                console.log("Received streaming data:", data);
 
-                // Handle error responses
                 if (data.success === false) {
                   onError(data.error || "An error occurred");
                   return;
                 }
 
-                // Only show the final message, ignore plan/code
                 if (data.message) {
                   assistantContent = data.message;
+                  lastSuccessfulChunk = data.message;
                   onMessage({
                     role: "assistant",
                     content: assistantContent,
@@ -92,17 +86,27 @@ export function useStreamingChat({
           streaming: false,
         });
       } catch (error) {
-        clearTimeout(timeoutId);
-        onError(error instanceof Error ? error.message : "Unknown error");
+        console.error(`Stream error (attempt ${retryCount + 1}):`, error);
 
-        // Add a final empty assistant message to clear the streaming state
+        if (retryCount < maxRetries) {
+          console.log(`Retrying in ${retryDelay}ms...`);
+          setTimeout(() => {
+            sendMessage(content, history, retryCount + 1);
+          }, retryDelay);
+          return;
+        }
+
+        onError(error instanceof Error ? error.message : "Connection failed after retries");
         onMessage({
           role: "assistant",
           content: "",
           streaming: false,
         });
       } finally {
-        setIsLoading(false);
+        if (retryCount === 0) {
+          // Only reset loading on final attempt
+          setIsLoading(false);
+        }
       }
     },
     [serverUrl, conversationId, onMessage, onError, setIsLoading]
