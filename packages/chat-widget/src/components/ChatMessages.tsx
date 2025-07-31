@@ -23,6 +23,7 @@ export function ChatMessages({ messages, isLoading, theme, brandColor }: ChatMes
         <div className={styles.messages}>
           <div className={styles.empty}>Start a conversation by typing a message below</div>
         </div>
+        <div className={styles.disclaimer}>DocsBot can make mistakes. Please verify important information.</div>
       </div>
     );
   }
@@ -35,6 +36,7 @@ export function ChatMessages({ messages, isLoading, theme, brandColor }: ChatMes
         ))}
         <div ref={messagesEndRef} />
       </div>
+      <div className={styles.disclaimer}>DocsBot can make mistakes. Please verify important information.</div>
     </div>
   );
 }
