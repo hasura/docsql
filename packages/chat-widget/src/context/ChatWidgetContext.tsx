@@ -116,6 +116,11 @@ export const ChatWidgetProvider: React.FC<ChatWidgetProviderProps> = ({ children
 
       try {
         console.log("Sending to:", `${config.apiEndpoint}/chat/conversations/${conversationId}/messages`);
+
+        // Create AbortController for timeout
+        const abortController = new AbortController();
+        const timeoutId = setTimeout(() => abortController.abort(), 120000); // 2 minutes
+
         const response = await fetch(`${config.apiEndpoint}/chat/conversations/${conversationId}/messages`, {
           method: "POST",
           headers: {
@@ -125,7 +130,10 @@ export const ChatWidgetProvider: React.FC<ChatWidgetProviderProps> = ({ children
             message: content,
             history,
           }),
+          signal: abortController.signal,
         });
+
+        clearTimeout(timeoutId);
 
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -138,12 +146,14 @@ export const ChatWidgetProvider: React.FC<ChatWidgetProviderProps> = ({ children
 
         const decoder = new TextDecoder();
         let buffer = "";
+        let lastUpdateTime = Date.now();
 
         try {
           while (true) {
             const { done, value } = await reader.read();
             if (done) break;
 
+            lastUpdateTime = Date.now();
             buffer += decoder.decode(value, { stream: true });
             const lines = buffer.split("\n");
             buffer = lines.pop() || "";
@@ -177,8 +187,13 @@ export const ChatWidgetProvider: React.FC<ChatWidgetProviderProps> = ({ children
             }
           }
         } catch (streamError) {
-          console.warn("Stream interrupted, but may have partial content:", streamError);
-          // Don't throw here - we might have received partial content
+          const timeSinceLastUpdate = Date.now() - lastUpdateTime;
+          console.warn(`Stream interrupted after ${timeSinceLastUpdate}ms since last update:`, streamError);
+
+          // Only treat as error if we got no content at all
+          if (!assistantMessage.content) {
+            throw streamError;
+          }
         }
 
         // Mark as complete (even if stream was interrupted)

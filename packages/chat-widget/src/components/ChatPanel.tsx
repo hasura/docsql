@@ -27,7 +27,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({ onClose }) => {
     }
 
     const baseStyles = {
-      width: "400px",
+      width: "1200px",
       height: "600px",
       borderRadius: "12px",
     };
