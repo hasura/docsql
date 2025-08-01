@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { MessageList } from "./MessageList";
 import { InputField } from "./InputField";
 import { useChatWidget } from "../context/ChatWidgetContext";
@@ -9,9 +9,20 @@ interface ChatPanelProps {
 
 export const ChatPanel: React.FC<ChatPanelProps> = ({ onClose }) => {
   const { theme, brandColor, position, startNewConversation, isLoading } = useChatWidget();
+  const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });
 
-  // Handle mobile responsiveness
-  const isMobile = window.innerWidth <= 768;
+  // Handle window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const isMobile = windowSize.width <= 768;
+  const isTablet = windowSize.width > 768 && windowSize.width <= 1024;
 
   const getPositionStyles = () => {
     if (isMobile) {
@@ -23,6 +34,18 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({ onClose }) => {
         width: "100%",
         height: "100%",
         borderRadius: "0",
+      };
+    }
+
+    if (isTablet) {
+      return {
+        width: "90vw",
+        height: "80vh",
+        maxWidth: "800px",
+        maxHeight: "600px",
+        borderRadius: "12px",
+        bottom: "20px",
+        right: "20px",
       };
     }
 
@@ -55,13 +78,14 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({ onClose }) => {
   };
 
   const headerStyle: React.CSSProperties = {
-    padding: "16px 20px",
+    padding: isMobile ? "12px 16px" : "16px 20px",
     borderBottom: theme === "dark" ? "1px solid #333" : "1px solid #e1e5e9",
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
     backgroundColor: theme === "dark" ? "#1a1a1a" : "#ffffff",
     borderRadius: isMobile ? "0" : "12px 12px 0 0",
+    minHeight: "56px", // Ensure touch-friendly height
   };
 
   const titleStyle: React.CSSProperties = {
@@ -92,10 +116,11 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({ onClose }) => {
   };
 
   const inputAreaStyle: React.CSSProperties = {
-    padding: "16px 20px",
+    padding: isMobile ? "12px 16px" : "16px 20px",
     borderTop: theme === "dark" ? "1px solid #333" : "1px solid #e1e5e9",
     backgroundColor: theme === "dark" ? "#1a1a1a" : "#ffffff",
     borderRadius: isMobile ? "0" : "0 0 12px 12px",
+    paddingBottom: isMobile ? "calc(12px + env(safe-area-inset-bottom))" : "16px", // Handle iOS safe area
   };
 
   return (

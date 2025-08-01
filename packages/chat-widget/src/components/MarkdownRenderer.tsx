@@ -22,20 +22,37 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) =
 
       if (!inline && language) {
         return (
-          <div style={{ position: "relative", marginBottom: "16px" }}>
-            <SyntaxHighlighter
-              style={codeStyle}
-              language={language}
-              PreTag="div"
-              customStyle={{
-                margin: 0,
+          <div
+            style={{
+              position: "relative",
+              marginBottom: "16px",
+              width: "100%",
+              minWidth: 0,
+              maxWidth: window.innerWidth <= 768 ? "280px" : "100%",
+            }}>
+            <div
+              style={{
+                width: "100%",
+                overflowX: "auto",
                 borderRadius: "8px",
-                fontSize: "13px",
-                lineHeight: "1.4",
-              }}
-              {...props}>
-              {String(children).replace(/\n$/, "")}
-            </SyntaxHighlighter>
+                WebkitOverflowScrolling: "touch",
+              }}>
+              <SyntaxHighlighter
+                style={codeStyle}
+                language={language}
+                PreTag="div"
+                customStyle={{
+                  margin: 0,
+                  fontSize: "13px",
+                  lineHeight: "1.4",
+                  whiteSpace: "pre",
+                  width: "max-content",
+                  minWidth: "100%",
+                }}
+                {...props}>
+                {String(children).replace(/\n$/, "")}
+              </SyntaxHighlighter>
+            </div>
             <CopyButton content={String(children)} />
           </div>
         );
@@ -51,6 +68,8 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) =
             borderRadius: "3px",
             fontSize: "0.9em",
             fontFamily: 'Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+            wordBreak: "break-all",
+            overflowWrap: "break-word",
           }}
           {...props}>
           {children}
