@@ -10,7 +10,6 @@ This repository demonstrates a complete PromptQL-powered chat bot for documentat
 
 - **PromptQL Backend** ([`pql/`](pql/README.md)) - AI agent configuration and data connectors
 - **API Server** ([`server/`](server/README.md)) - Elysia/Bun proxy server with streaming chat endpoints
-- **Chat Widget** ([`packages/chat-widget/`](packages/chat-widget/README.md)) - Embeddable React component for any site
 
 ## Quick Start
 
