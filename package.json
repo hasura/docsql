@@ -2,8 +2,7 @@
   "name": "pql-docs-bot",
   "private": true,
   "workspaces": [
-    "server",
-    "packages/*"
+    "server"
   ],
   "devDependencies": {
     "husky": "^9.1.7"

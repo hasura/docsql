@@ -102,8 +102,7 @@ Server files changed, running pre-commit hooks...
 
 1. **PromptQL changes**: Edit files in the `pql/` directory
 2. **Server changes**: Edit files in the `server/` directory - tests run automatically on commit
-3. **Chat widget changes**: Edit files in the `packages/chat-widget/` directory
-4. **Server supports hot reloading** when using the development setup
+3. **Server supports hot reloading** when using the development setup
 
 ### Testing
 
@@ -112,30 +111,6 @@ Server files changed, running pre-commit hooks...
 ```sh
 cd server && bun test
 ```
-
-**Chat widget tests**:
-
-```sh
-cd packages/chat-widget && bun run test
-```
-
-### Submitting Changes
-
-1. **Create a feature branch:**
-
-   ```sh
-   git checkout -b feature/your-feature-name
-   ```
-
-2. **Make your changes** - pre-commit hooks will ensure quality
-
-3. **Push and create PR** - GitHub Actions will run full test suite
-
-## CI/CD Pipeline
-
-- **Pre-commit**: Local testing for server changes
-- **GitHub Actions**: Full test suite and Docker integration on PRs
-- **Automated checks**: Prevents broken code from reaching main branch
 
 ## Project Structure
 
@@ -151,10 +126,6 @@ cd packages/chat-widget && bun run test
 │   ├── ngrok.yml         # ngrok tunneling configuration
 │   ├── .env              # Server environment variables
 │   └── Dockerfile        # Server container definition
-├── packages/chat-widget/  # Reusable React chat component
-│   ├── src/              # Widget source code
-│   ├── test-app/         # Test application for development
-│   └── package.json      # Package configuration
 ├── .github/workflows/     # CI/CD automation
 ├── .dev.sh               # Development environment script
 └── compose.yaml          # Main docker-compose file
