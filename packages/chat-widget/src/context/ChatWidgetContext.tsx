@@ -139,44 +139,49 @@ export const ChatWidgetProvider: React.FC<ChatWidgetProviderProps> = ({ children
         const decoder = new TextDecoder();
         let buffer = "";
 
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
 
-          buffer += decoder.decode(value, { stream: true });
-          const lines = buffer.split("\n");
-          buffer = lines.pop() || "";
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split("\n");
+            buffer = lines.pop() || "";
 
-          for (const line of lines) {
-            if (line.startsWith("data: ")) {
-              try {
-                const data = JSON.parse(line.slice(6));
-                if (data.success && data.message) {
-                  setMessages((prev) =>
-                    prev.map((msg) =>
-                      msg.id === assistantMessage.id
-                        ? {
-                            ...msg,
-                            content: data.message,
-                            chunks: {
-                              ...msg.chunks,
-                              message: data.message,
-                              plan: data.plan,
-                              code: data.code,
-                            },
-                          }
-                        : msg
-                    )
-                  );
+            for (const line of lines) {
+              if (line.startsWith("data: ")) {
+                try {
+                  const data = JSON.parse(line.slice(6));
+                  if (data.success && data.message) {
+                    setMessages((prev) =>
+                      prev.map((msg) =>
+                        msg.id === assistantMessage.id
+                          ? {
+                              ...msg,
+                              content: data.message,
+                              chunks: {
+                                ...msg.chunks,
+                                message: data.message,
+                                plan: data.plan,
+                                code: data.code,
+                              },
+                            }
+                          : msg
+                      )
+                    );
+                  }
+                } catch (e) {
+                  console.error("Failed to parse SSE data:", e);
                 }
-              } catch (e) {
-                console.error("Failed to parse SSE data:", e);
               }
             }
           }
+        } catch (streamError) {
+          console.warn("Stream interrupted, but may have partial content:", streamError);
+          // Don't throw here - we might have received partial content
         }
 
-        // Mark as complete
+        // Mark as complete (even if stream was interrupted)
         setMessages((prev) => prev.map((msg) => (msg.id === assistantMessage.id ? { ...msg, streaming: false } : msg)));
       } catch (error) {
         console.error("Failed to send message:", error);
