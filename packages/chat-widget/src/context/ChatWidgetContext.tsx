@@ -76,6 +76,20 @@ export const ChatWidgetProvider: React.FC<ChatWidgetProviderProps> = ({ children
         throw new Error("No conversation ID available");
       }
 
+      // Build history from existing messages (includes both user and assistant messages)
+      const history = messages
+        .filter((msg) => !msg.streaming) // Only include completed messages
+        .map((msg) => ({
+          role: msg.role,
+          content: msg.content,
+        }));
+
+      console.log(
+        "Current messages:",
+        messages.map((m) => ({ role: m.role, streaming: m.streaming, content: m.content.slice(0, 50) + "..." }))
+      );
+      console.log("Building history:", history);
+
       // Add user message immediately
       const userMessage: Message = {
         id: Date.now().toString(),
@@ -109,13 +123,61 @@ export const ChatWidgetProvider: React.FC<ChatWidgetProviderProps> = ({ children
           },
           body: JSON.stringify({
             message: content,
-            history: [],
+            history,
           }),
         });
 
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
+
+        const reader = response.body?.getReader();
+        if (!reader) {
+          throw new Error("No response body reader available");
+        }
+
+        const decoder = new TextDecoder();
+        let buffer = "";
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split("\n");
+          buffer = lines.pop() || "";
+
+          for (const line of lines) {
+            if (line.startsWith("data: ")) {
+              try {
+                const data = JSON.parse(line.slice(6));
+                if (data.success && data.message) {
+                  setMessages((prev) =>
+                    prev.map((msg) =>
+                      msg.id === assistantMessage.id
+                        ? {
+                            ...msg,
+                            content: data.message,
+                            chunks: {
+                              ...msg.chunks,
+                              message: data.message,
+                              plan: data.plan,
+                              code: data.code,
+                            },
+                          }
+                        : msg
+                    )
+                  );
+                }
+              } catch (e) {
+                console.error("Failed to parse SSE data:", e);
+              }
+            }
+          }
+        }
+
+        // Mark as complete
+        setMessages((prev) => prev.map((msg) => (msg.id === assistantMessage.id ? { ...msg, streaming: false } : msg)));
       } catch (error) {
         console.error("Failed to send message:", error);
 
@@ -133,7 +195,7 @@ export const ChatWidgetProvider: React.FC<ChatWidgetProviderProps> = ({ children
         );
       }
     },
-    [isConnected, config.apiEndpoint]
+    [isConnected, config.apiEndpoint, conversationId, messages]
   );
 
   const markAsRead = useCallback(() => {
