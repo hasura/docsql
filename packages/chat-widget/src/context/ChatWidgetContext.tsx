@@ -14,11 +14,13 @@ interface ChatWidgetContextType {
   messages: Message[];
   isConnected: boolean;
   hasUnread: boolean;
+  isLoading: boolean;
 
   // Actions
   sendMessage: (content: string) => Promise<void>;
   markAsRead: () => void;
   clearMessages: () => void;
+  startNewConversation: () => void;
 }
 
 const ChatWidgetContext = createContext<ChatWidgetContextType | undefined>(undefined);
@@ -33,17 +35,34 @@ export const ChatWidgetProvider: React.FC<ChatWidgetProviderProps> = ({ children
   const [isConnected, setIsConnected] = useState(false);
   const [hasUnread, setHasUnread] = useState(false);
   const [conversationId, setConversationId] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(true);
 
   // Initialize conversation ID
   useEffect(() => {
     const stored = localStorage.getItem("chat-widget-conversation-id");
+    const storedMessages = localStorage.getItem("chat-widget-messages");
+
     if (stored) {
       setConversationId(stored);
+      if (storedMessages) {
+        try {
+          const parsedMessages = JSON.parse(storedMessages);
+          const messagesWithDates = parsedMessages.map((msg: any) => ({
+            ...msg,
+            timestamp: new Date(msg.timestamp),
+          }));
+          setMessages(messagesWithDates);
+        } catch (e) {
+          console.error("Failed to parse stored messages:", e);
+        }
+      }
     } else {
       const newId = crypto.randomUUID();
       localStorage.setItem("chat-widget-conversation-id", newId);
       setConversationId(newId);
     }
+
+    setIsLoading(false);
   }, []);
 
   // Test connection on mount
@@ -225,8 +244,15 @@ export const ChatWidgetProvider: React.FC<ChatWidgetProviderProps> = ({ children
   const clearMessages = useCallback(() => {
     setMessages([]);
     setHasUnread(false);
+    localStorage.removeItem("chat-widget-messages");
+  }, []);
+
+  const startNewConversation = useCallback(() => {
+    setMessages([]);
+    setHasUnread(false);
     const newId = crypto.randomUUID();
     localStorage.setItem("chat-widget-conversation-id", newId);
+    localStorage.removeItem("chat-widget-messages");
     setConversationId(newId);
   }, []);
 
@@ -243,12 +269,21 @@ export const ChatWidgetProvider: React.FC<ChatWidgetProviderProps> = ({ children
     messages,
     isConnected,
     hasUnread,
+    isLoading,
 
     // Actions
     sendMessage,
     markAsRead,
     clearMessages,
+    startNewConversation,
   };
+
+  // Persist messages to localStorage
+  useEffect(() => {
+    if (!isLoading && messages.length > 0) {
+      localStorage.setItem("chat-widget-messages", JSON.stringify(messages));
+    }
+  }, [messages, isLoading]);
 
   return <ChatWidgetContext.Provider value={contextValue}>{children}</ChatWidgetContext.Provider>;
 };

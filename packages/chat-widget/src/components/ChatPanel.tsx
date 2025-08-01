@@ -8,7 +8,7 @@ interface ChatPanelProps {
 }
 
 export const ChatPanel: React.FC<ChatPanelProps> = ({ onClose }) => {
-  const { theme, brandColor, position } = useChatWidget();
+  const { theme, brandColor, position, startNewConversation, isLoading } = useChatWidget();
 
   // Handle mobile responsiveness
   const isMobile = window.innerWidth <= 768;
@@ -131,6 +131,22 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({ onClose }) => {
         {/* Header */}
         <div style={headerStyle}>
           <h3 style={titleStyle}>Chat Assistant</h3>
+          <button
+            onClick={startNewConversation}
+            disabled={isLoading}
+            style={{
+              background: "none",
+              border: "none",
+              color: theme === "dark" ? "#ffffff" : "#666666",
+              cursor: isLoading ? "not-allowed" : "pointer",
+              padding: "4px 8px",
+              borderRadius: "4px",
+              fontSize: "12px",
+              opacity: isLoading ? 0.5 : 1,
+            }}
+            title="Start new conversation">
+            New Chat
+          </button>
           <button
             style={closeButtonStyle}
             onClick={onClose}
