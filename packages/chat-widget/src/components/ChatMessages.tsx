@@ -20,7 +20,7 @@ export function ChatMessages({ messages, isLoading, theme, brandColor }: ChatMes
     if (!container) return;
 
     const { scrollTop, scrollHeight, clientHeight } = container;
-    const isNearBottom = scrollHeight - scrollTop - clientHeight < 10;
+    const isNearBottom = scrollHeight - scrollTop - clientHeight < 100;
     setShouldAutoScroll(isNearBottom);
   }, []);
 
