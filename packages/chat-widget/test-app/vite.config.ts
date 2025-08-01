@@ -6,10 +6,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      "@hasura/chat-widget": resolve(__dirname, "../src/index.ts"),
+      "../..": resolve(__dirname, "../src"),
     },
-  },
-  server: {
-    port: 3001,
   },
 });
