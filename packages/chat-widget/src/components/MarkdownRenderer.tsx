@@ -274,6 +274,8 @@ const CopyButton: React.FC<{ content: string }> = ({ content }) => {
     }
   };
 
+  const isMobile = window.innerWidth <= 768;
+
   const buttonStyle: React.CSSProperties = {
     position: "absolute",
     top: "8px",
@@ -286,6 +288,8 @@ const CopyButton: React.FC<{ content: string }> = ({ content }) => {
     cursor: "pointer",
     color: theme === "dark" ? "#ffffff" : "#1a1a1a",
     transition: "all 0.2s ease",
+    opacity: isMobile ? 0 : 1, // Hidden by default on mobile
+    pointerEvents: isMobile ? "none" : "auto",
   };
 
   return (
@@ -294,9 +298,17 @@ const CopyButton: React.FC<{ content: string }> = ({ content }) => {
       onClick={handleCopy}
       onMouseEnter={(e) => {
         e.currentTarget.style.backgroundColor = theme === "dark" ? "#444" : "#e1e7ed";
+        if (isMobile) {
+          e.currentTarget.style.opacity = "1";
+          e.currentTarget.style.pointerEvents = "auto";
+        }
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.backgroundColor = theme === "dark" ? "#333" : "#f6f8fa";
+        if (isMobile) {
+          e.currentTarget.style.opacity = "0";
+          e.currentTarget.style.pointerEvents = "none";
+        }
       }}
       aria-label="Copy code">
       {copied ? "✓ Copied" : "Copy"}

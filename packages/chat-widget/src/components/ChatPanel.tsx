@@ -155,37 +155,48 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({ onClose }) => {
       <div style={panelStyle}>
         {/* Header */}
         <div style={headerStyle}>
-          <h3 style={titleStyle}>Chat Assistant</h3>
-          <button
-            onClick={startNewConversation}
-            disabled={isLoading}
-            style={{
-              background: "none",
-              border: "none",
-              color: theme === "dark" ? "#ffffff" : "#666666",
-              cursor: isLoading ? "not-allowed" : "pointer",
-              padding: "4px 8px",
-              borderRadius: "4px",
-              fontSize: "12px",
-              opacity: isLoading ? 0.5 : 1,
-            }}
-            title="Start new conversation">
-            New Chat
-          </button>
-          <button
-            style={closeButtonStyle}
-            onClick={onClose}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = theme === "dark" ? "#333" : "#f0f0f0";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "transparent";
-            }}
-            aria-label="Close chat">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
-            </svg>
-          </button>
+          <h3 style={titleStyle}>DocsBot</h3>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <button
+              onClick={startNewConversation}
+              disabled={isLoading}
+              style={{
+                background: "none",
+                border: theme === "dark" ? "1px solid #333" : "1px solid #e1e5e9",
+                color: theme === "dark" ? "#ffffff" : "#666666",
+                cursor: isLoading ? "not-allowed" : "pointer",
+                padding: "6px 12px",
+                borderRadius: "6px",
+                fontSize: "12px",
+                opacity: isLoading ? 0.5 : 1,
+                transition: "all 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                if (!isLoading) {
+                  e.currentTarget.style.backgroundColor = theme === "dark" ? "#333" : "#f0f0f0";
+                }
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "transparent";
+              }}
+              title="Start new conversation">
+              New Chat
+            </button>
+            <button
+              style={closeButtonStyle}
+              onClick={onClose}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = theme === "dark" ? "#333" : "#f0f0f0";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "transparent";
+              }}
+              aria-label="Close chat">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+              </svg>
+            </button>
+          </div>
         </div>
 
         {/* Message Area */}
