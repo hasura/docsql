@@ -4,8 +4,22 @@ import { routes } from "./routes";
 const PORT = process.env.PORT ?? process.env.SERVER_PORT ?? "4000";
 
 const app = new Elysia()
+  .onRequest(({ set }) => {
+    set.headers["Access-Control-Allow-Origin"] = "*";
+    set.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS";
+    set.headers["Access-Control-Allow-Headers"] = "Content-Type";
+  })
   .get("/", () => "PromptQL Chat Proxy")
-  .get("/health", () => ({ status: "ok", timestamp: new Date().toISOString() }))
+  .get("/health", ({ set }) => {
+    set.headers["Access-Control-Allow-Origin"] = "*";
+    return { status: "ok", timestamp: new Date().toISOString() };
+  })
+  .options("/health", ({ set }) => {
+    set.headers["Access-Control-Allow-Origin"] = "*";
+    set.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS";
+    set.headers["Access-Control-Allow-Headers"] = "Content-Type";
+    return "";
+  })
   .use(routes);
 
 try {

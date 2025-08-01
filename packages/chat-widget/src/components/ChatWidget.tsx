@@ -1,73 +1,110 @@
-import React, { useState } from "react";
-import { Toaster } from "react-hot-toast";
-import { ChatContainer } from "./ChatContainer";
-import { ChatWidgetProps } from "../types";
-import { useConversation } from "../hooks/useConversation";
-import styles from "./ChatWidget.module.css";
+import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
+import { ChatBubble } from "./ChatBubble";
+import { ChatPanel } from "./ChatPanel";
+import { ChatWidgetProvider } from "../context/ChatWidgetContext";
+import { useDocusaurusTheme } from "../hooks/useDocusaurusTheme";
+import type { ChatWidgetConfig } from "../types";
 
-export function ChatWidget({
-  serverUrl,
-  theme = "auto",
-  className,
-  placeholder = "Ask a question...",
-  title = "Documentation Chat",
-  brandColor = "#b6fc34",
-}: ChatWidgetProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const conversationState = useConversation();
-  const { conversation, isLoading, setIsLoading, addMessage, updateLastMessage, clearConversation } = conversationState;
+export interface ChatWidgetProps extends ChatWidgetConfig {
+  theme?: "light" | "dark" | "auto";
+}
+
+export const ChatWidget: React.FC<ChatWidgetProps> = (props) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null);
+  const theme = useDocusaurusTheme(props.theme);
+
+  // Create portal container on mount
+  useEffect(() => {
+    const container = document.createElement("div");
+    container.id = "chat-widget-portal";
+    container.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+    `;
+    document.body.appendChild(container);
+    setPortalContainer(container);
+
+    return () => {
+      if (document.body.contains(container)) {
+        document.body.removeChild(container);
+      }
+    };
+  }, []);
+
+  // Handle escape key to close panel
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && isExpanded) {
+        setIsExpanded(false);
+      }
+    };
+
+    if (isExpanded) {
+      document.addEventListener("keydown", handleEscape);
+      return () => document.removeEventListener("keydown", handleEscape);
+    }
+  }, [isExpanded]);
+
+  // Prevent body scroll when panel is open
+  useEffect(() => {
+    if (isExpanded) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [isExpanded]);
+
+  if (!portalContainer) return null;
+
+  const config: ChatWidgetConfig = {
+    ...props,
+    theme,
+  };
 
   return (
-    <>
-      <Toaster position="top-right" />
-      {/* Floating Button */}
-      <button
-        className={`${styles.floatingButton} ${styles[theme]}`}
-        onClick={() => setIsOpen(true)}
-        aria-label="Open chat">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" />
-        </svg>
-      </button>
+    <ChatWidgetProvider config={config}>
+      {createPortal(
+        <>
+          {/* Backdrop for mobile */}
+          {isExpanded && (
+            <div
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                pointerEvents: "auto",
+                zIndex: 999,
+                opacity: window.innerWidth <= 768 ? 1 : 0,
+                transition: "opacity 0.3s ease",
+              }}
+              onClick={() => setIsExpanded(false)}
+            />
+          )}
 
-      {/* Modal */}
-      {isOpen && (
-        <div className={styles.modalOverlay} onClick={() => setIsOpen(false)}>
-          <div
-            className={`${styles.modal} ${styles[theme]} ${className || ""}`}
-            onClick={(e) => e.stopPropagation()}
-            data-theme={theme}
-            style={{ "--brand-color": brandColor } as React.CSSProperties}>
-            <div className={styles.modalHeader}>
-              <h3>{title}</h3>
-              <div className={styles.headerButtons}>
-                <button
-                  className={styles.newButton}
-                  onClick={conversationState.clearConversation}
-                  aria-label="New conversation">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
-                  </svg>
-                  New
-                </button>
-                <button className={styles.closeButton} onClick={() => setIsOpen(false)} aria-label="Close chat">
-                  ×
-                </button>
-              </div>
-            </div>
-            <div className={styles.modalContent}>
-              <ChatContainer
-                serverUrl={serverUrl}
-                placeholder={placeholder}
-                title={title}
-                theme={theme}
-                brandColor={brandColor}
-                {...conversationState}
-              />
-            </div>
-          </div>
-        </div>
+          {isExpanded ? (
+            <ChatPanel onClose={() => setIsExpanded(false)} />
+          ) : (
+            <ChatBubble
+              onClick={() => setIsExpanded(true)}
+              hasUnread={false} // Will be connected to context
+            />
+          )}
+        </>,
+        portalContainer
       )}
-    </>
+    </ChatWidgetProvider>
   );
-}
+};
