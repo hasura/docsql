@@ -9,5 +9,11 @@ export const chatRoutes = new Elysia({ prefix: "/chat" })
     set.headers["Access-Control-Allow-Headers"] = "Content-Type";
     return "";
   })
-  .get("/conversations/:conversationId/state", getConversationState)
-  .post("/conversations/:conversationId/messages", sendMessage);
+  .get("/conversations/:conversationId/state", (context) => {
+    context.set.headers["Access-Control-Allow-Origin"] = "*";
+    return getConversationState(context);
+  })
+  .post("/conversations/:conversationId/messages", ({ set, ...context }) => {
+    set.headers["Access-Control-Allow-Origin"] = "*";
+    return sendMessage({ set, ...context });
+  });

@@ -14,9 +14,27 @@ const client = createPromptQLClientV2({
   apiKey: process.env.PQL_API_KEY || "",
 });
 
-export const sendMessage = async ({ body, params, set }: Context) => {
+export const sendMessage = async ({ body, params, set, request }: Context) => {
+  console.log("Received body:", body);
+  console.log("Body type:", typeof body);
+
+  let parsedBody = body;
+  if (!parsedBody && request) {
+    try {
+      parsedBody = await request.json();
+    } catch (e) {
+      console.log("Failed to parse JSON:", e);
+    }
+  }
+
   const { conversationId } = params;
-  const { message, history } = body as {
+
+  if (!parsedBody) {
+    set.status = 400;
+    return { error: "Request body is required" };
+  }
+
+  const { message, history } = parsedBody as {
     message: string;
     history?: Array<{ role: "user" | "assistant"; content: string }>;
   };
