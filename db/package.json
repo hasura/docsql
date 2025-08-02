@@ -1,0 +1,21 @@
+{
+  "name": "docs-bot-db",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "db:migrate": "bun run migrate.ts",
+    "db:seed": "bun run seed.ts",
+    "db:generate-seed-migration": "bun run generate-seed-migration.ts",
+    "db:reset": "bun run db:migrate",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "openai": "^4.0.0",
+    "pg": "^8.11.0"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.10.0"
+  }
+}
