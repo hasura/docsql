@@ -131,6 +131,117 @@ definition:
                   type: named
                 type: array
           foreign_keys: {}
+        embeddings_vector_distance:
+          fields:
+            chunk_content:
+              arguments: {}
+              type:
+                name: varchar
+                type: named
+            distance:
+              arguments: {}
+              type:
+                type: nullable
+                underlying_type:
+                  name: boolean
+                  type: named
+            id:
+              arguments: {}
+              type:
+                name: jsonb
+                type: named
+            page_description:
+              arguments: {}
+              type:
+                type: nullable
+                underlying_type:
+                  name: varchar
+                  type: named
+            page_title:
+              arguments: {}
+              type:
+                type: nullable
+                underlying_type:
+                  name: varchar
+                  type: named
+            page_url:
+              arguments: {}
+              type:
+                name: varchar
+                type: named
+          foreign_keys: {}
+        insert_pql_docs.doc_chunk_result:
+          description: insert from pql_docs.doc_chunk result
+          fields:
+            affected_rows:
+              arguments: {}
+              description: Number of affected rows
+              type:
+                name: int
+                type: named
+            returning:
+              arguments: {}
+              description: Objects that were affected by insert
+              type:
+                element_type:
+                  name: pql_docs.doc_chunk
+                  type: named
+                type: array
+          foreign_keys: {}
+        insert_pql_docs.doc_content_result:
+          description: insert from pql_docs.doc_content result
+          fields:
+            affected_rows:
+              arguments: {}
+              description: Number of affected rows
+              type:
+                name: int
+                type: named
+            returning:
+              arguments: {}
+              description: Objects that were affected by insert
+              type:
+                element_type:
+                  name: pql_docs.doc_content
+                  type: named
+                type: array
+          foreign_keys: {}
+        int_set_input:
+          description: Wrapper for setting scalar int
+          fields:
+            value:
+              arguments: {}
+              description: New value for scalar int
+              type:
+                type: nullable
+                underlying_type:
+                  name: int
+                  type: named
+          foreign_keys: {}
+        integer_set_input:
+          description: Wrapper for setting scalar integer
+          fields:
+            value:
+              arguments: {}
+              description: New value for scalar integer
+              type:
+                type: nullable
+                underlying_type:
+                  name: integer
+                  type: named
+          foreign_keys: {}
+        jsonb_set_input:
+          description: Wrapper for setting scalar jsonb
+          fields:
+            value:
+              arguments: {}
+              description: New value for scalar jsonb
+              type:
+                type: nullable
+                underlying_type:
+                  name: jsonb
+                  type: named
+          foreign_keys: {}
         pql_docs.doc_chunk:
           description: 'Object type for pql_docs.doc_chunk. Description: null'
           fields:
@@ -592,117 +703,6 @@ definition:
                 type: nullable
                 underlying_type:
                   name: timestamp_with_time_zone_set_input
-                  type: named
-          foreign_keys: {}
-        embeddings_vector_distance:
-          fields:
-            chunk_content:
-              arguments: {}
-              type:
-                name: varchar
-                type: named
-            distance:
-              arguments: {}
-              type:
-                type: nullable
-                underlying_type:
-                  name: boolean
-                  type: named
-            id:
-              arguments: {}
-              type:
-                name: jsonb
-                type: named
-            page_description:
-              arguments: {}
-              type:
-                type: nullable
-                underlying_type:
-                  name: varchar
-                  type: named
-            page_title:
-              arguments: {}
-              type:
-                type: nullable
-                underlying_type:
-                  name: varchar
-                  type: named
-            page_url:
-              arguments: {}
-              type:
-                name: varchar
-                type: named
-          foreign_keys: {}
-        insert_pql_docs.doc_chunk_result:
-          description: insert from pql_docs.doc_chunk result
-          fields:
-            affected_rows:
-              arguments: {}
-              description: Number of affected rows
-              type:
-                name: int
-                type: named
-            returning:
-              arguments: {}
-              description: Objects that were affected by insert
-              type:
-                element_type:
-                  name: pql_docs.doc_chunk
-                  type: named
-                type: array
-          foreign_keys: {}
-        insert_pql_docs.doc_content_result:
-          description: insert from pql_docs.doc_content result
-          fields:
-            affected_rows:
-              arguments: {}
-              description: Number of affected rows
-              type:
-                name: int
-                type: named
-            returning:
-              arguments: {}
-              description: Objects that were affected by insert
-              type:
-                element_type:
-                  name: pql_docs.doc_content
-                  type: named
-                type: array
-          foreign_keys: {}
-        int_set_input:
-          description: Wrapper for setting scalar int
-          fields:
-            value:
-              arguments: {}
-              description: New value for scalar int
-              type:
-                type: nullable
-                underlying_type:
-                  name: int
-                  type: named
-          foreign_keys: {}
-        integer_set_input:
-          description: Wrapper for setting scalar integer
-          fields:
-            value:
-              arguments: {}
-              description: New value for scalar integer
-              type:
-                type: nullable
-                underlying_type:
-                  name: integer
-                  type: named
-          foreign_keys: {}
-        jsonb_set_input:
-          description: Wrapper for setting scalar jsonb
-          fields:
-            value:
-              arguments: {}
-              description: New value for scalar jsonb
-              type:
-                type: nullable
-                underlying_type:
-                  name: jsonb
                   type: named
           foreign_keys: {}
         string_set_input:

@@ -14,7 +14,7 @@ async function generateSeedMigration() {
 
   // Export as INSERT statements
   const result = await pool.query(`
-    SELECT 'INSERT INTO docs_bot.doc_content (id, page_url, title, description, keywords, content, is_checked, created_at, updated_at) VALUES (' ||
+    SELECT 'INSERT INTO pql-bot.doc_content (id, page_url, title, description, keywords, content, is_checked, created_at, updated_at) VALUES (' ||
            quote_literal(id::text) || ', ' ||
            quote_literal(page_url) || ', ' ||
            quote_literal(title) || ', ' ||
@@ -24,9 +24,9 @@ async function generateSeedMigration() {
            is_checked || ', ' ||
            quote_literal(created_at::text) || ', ' ||
            quote_literal(updated_at::text) || ');' as sql
-    FROM docs_bot.doc_content
+    FROM pql-bot.doc_content
     UNION ALL
-    SELECT 'INSERT INTO docs_bot.doc_chunk (id, doc_content_id_fk, chunk_content, page_title, page_url, chunk_line_start, chunk_line_end, embedding, created_at, updated_at) VALUES (' ||
+    SELECT 'INSERT INTO pql-bot.doc_chunk (id, doc_content_id_fk, chunk_content, page_title, page_url, chunk_line_start, chunk_line_end, embedding, created_at, updated_at) VALUES (' ||
            quote_literal(id::text) || ', ' ||
            quote_literal(doc_content_id_fk::text) || ', ' ||
            quote_literal(chunk_content) || ', ' ||
@@ -37,7 +37,7 @@ async function generateSeedMigration() {
            quote_literal(embedding::text) || ', ' ||
            quote_literal(created_at::text) || ', ' ||
            quote_literal(updated_at::text) || ');'
-    FROM docs_bot.doc_chunk
+    FROM pql-bot.doc_chunk
   `);
 
   const migration = result.rows.map((row) => row.sql).join("\n");
