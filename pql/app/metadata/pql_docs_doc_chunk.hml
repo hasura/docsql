@@ -170,8 +170,7 @@ definition:
           orderByExpression: string_order_by_exp
         - fieldName: updated_at
           orderByExpression: timestamptz_order_by_exp
-      orderableRelationships:
-        - relationshipName: content
+      orderableRelationships: []
   graphql:
     expressionTypeName: pql_docs_doc_chunk_order_by_exp
 
@@ -214,22 +213,4 @@ definition:
       select:
         filter: null
         allowSubscriptions: true
-
----
-kind: Relationship
-version: v1
-definition:
-  name: content
-  sourceType: pql_docs_doc_chunk
-  target:
-    model:
-      name: pql_docs_doc_content
-      relationshipType: Object
-  mapping:
-    - source:
-        fieldPath:
-          - fieldName: page_url
-      target:
-        modelField:
-          - fieldName: page_url
 

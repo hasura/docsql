@@ -38,7 +38,7 @@ async function processDocFile(filePath: string, docsRoot: string) {
   // Insert doc_content
   const contentResult = await pool.query(
     `
-    INSERT INTO docs_bot.doc_content (page_url, title, description, keywords, content, is_checked)
+    INSERT INTO pql-bot.doc_content (page_url, title, description, keywords, content, is_checked)
     VALUES ($1, $2, $3, $4, $5, true) RETURNING id
   `,
     [
@@ -61,7 +61,7 @@ async function processDocFile(filePath: string, docsRoot: string) {
 
     await pool.query(
       `
-      INSERT INTO docs_bot.doc_chunk (doc_content_id_fk, chunk_content, page_title, page_url, chunk_line_start, embedding)
+      INSERT INTO pql-bot.doc_chunk (doc_content_id_fk, chunk_content, page_title, page_url, chunk_line_start, embedding)
       VALUES ($1, $2, $3, $4, $5, $6)
     `,
       [docContentId, chunk, frontmatter.title, pageUrl, index * CHUNK_SIZE, `[${embedding.join(",")}]`]
