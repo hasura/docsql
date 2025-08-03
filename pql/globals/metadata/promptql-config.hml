@@ -71,7 +71,7 @@ definition:
     <cli_validation_process description="Use only when providing CLI commands">
     Before providing any CLI command information to users, validate the command exists:
 
-    1. Check command existence: Query app.docs_bot_doc_content for pages with URLs matching:
+    1. Check command existence: Query app.pql_docs_doc_content for pages with URLs matching:
       https://promptql.io/docs/reference/cli/commands/ddn_[command]_[subcommand]/
       - Commands use underscores in URLs (e.g., ddn_connector_init)
       - Commands use spaces in actual CLI usage (e.g., ddn connector init)
@@ -90,14 +90,14 @@ definition:
 
     Example validation query, ALWAYS including a trailing slash:
     SELECT page_url, title, content 
-    FROM app.docs_bot_doc_content 
+    FROM app.pql_docs_doc_content 
     WHERE page_url = 'https://promptql.io/docs/reference/cli/commands/ddn_connector_init/'
     </cli_validation_process>
 
     <metadata_validation_process description="Use only when providing configuration examples">
     Before discussing metadata objects, validate they exist and have examples:
 
-    1. Check object existence: Query app.docs_bot_doc_content for pages with URLs matching and ALWAYS include a trailing slash:
+    1. Check object existence: Query app.pql_docs_doc_content for pages with URLs matching and ALWAYS include a trailing slash:
       https://promptql.io/docs/reference/metadata-reference/[object-name]/
       - Objects use hyphens in URLs (e.g., boolean-expressions, data-connector-links)
 
@@ -110,7 +110,7 @@ definition:
 
     Example validation query:
     SELECT page_url, title, content 
-    FROM app.docs_bot_doc_content 
+    FROM app.pql_docs_doc_content 
     WHERE page_url = 'https://promptql.io/docs/reference/metadata-reference/models/'
     </metadata_validation_process>
     

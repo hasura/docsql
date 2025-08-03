@@ -16,15 +16,15 @@ definition:
     schema:
       collections:
         - arguments: {}
-          name: docs_bot.doc_chunk
-          type: docs_bot.doc_chunk
+          name: pql_docs.doc_chunk
+          type: pql_docs.doc_chunk
           uniqueness_constraints:
             primary_key:
               unique_columns:
                 - id
         - arguments: {}
-          name: docs_bot.doc_content
-          type: docs_bot.doc_content
+          name: pql_docs.doc_content
+          type: pql_docs.doc_content
           uniqueness_constraints:
             primary_key:
               unique_columns:
@@ -95,8 +95,8 @@ definition:
                   name: decimal
                   type: named
           foreign_keys: {}
-        delete_docs_bot.doc_chunk_result:
-          description: delete from docs_bot.doc_chunk result
+        delete_pql_docs.doc_chunk_result:
+          description: delete from pql_docs.doc_chunk result
           fields:
             affected_rows:
               arguments: {}
@@ -109,12 +109,12 @@ definition:
               description: Objects that were affected by delete
               type:
                 element_type:
-                  name: docs_bot.doc_chunk
+                  name: pql_docs.doc_chunk
                   type: named
                 type: array
           foreign_keys: {}
-        delete_docs_bot.doc_content_result:
-          description: delete from docs_bot.doc_content result
+        delete_pql_docs.doc_content_result:
+          description: delete from pql_docs.doc_content result
           fields:
             affected_rows:
               arguments: {}
@@ -127,12 +127,12 @@ definition:
               description: Objects that were affected by delete
               type:
                 element_type:
-                  name: docs_bot.doc_content
+                  name: pql_docs.doc_content
                   type: named
                 type: array
           foreign_keys: {}
-        docs_bot.doc_chunk:
-          description: 'Object type for docs_bot.doc_chunk. Description: null'
+        pql_docs.doc_chunk:
+          description: 'Object type for pql_docs.doc_chunk. Description: null'
           fields:
             chunk_content:
               arguments: {}
@@ -205,18 +205,18 @@ definition:
                 name: timestamp_with_time_zone
                 type: named
           foreign_keys: {}
-        docs_bot.doc_chunk_insert_input:
-          description: Input type for inserting into docs_bot.doc_chunk
+        pql_docs.doc_chunk_insert_input:
+          description: Input type for inserting into pql_docs.doc_chunk
           fields:
             chunk_content:
               arguments: {}
-              description: New value for docs_bot.doc_chunk.chunk_content
+              description: New value for pql_docs.doc_chunk.chunk_content
               type:
                 name: text
                 type: named
             chunk_line_end:
               arguments: {}
-              description: New value for docs_bot.doc_chunk.chunk_line_end
+              description: New value for pql_docs.doc_chunk.chunk_line_end
               type:
                 type: nullable
                 underlying_type:
@@ -224,25 +224,25 @@ definition:
                   type: named
             chunk_line_start:
               arguments: {}
-              description: New value for docs_bot.doc_chunk.chunk_line_start
+              description: New value for pql_docs.doc_chunk.chunk_line_start
               type:
                 name: integer
                 type: named
             created_at:
               arguments: {}
-              description: New value for docs_bot.doc_chunk.created_at
+              description: New value for pql_docs.doc_chunk.created_at
               type:
                 name: timestamp_with_time_zone
                 type: named
             doc_content_id_fk:
               arguments: {}
-              description: New value for docs_bot.doc_chunk.doc_content_id_fk
+              description: New value for pql_docs.doc_chunk.doc_content_id_fk
               type:
                 name: uuid
                 type: named
             embedding:
               arguments: {}
-              description: New value for docs_bot.doc_chunk.embedding
+              description: New value for pql_docs.doc_chunk.embedding
               type:
                 type: nullable
                 underlying_type:
@@ -250,13 +250,13 @@ definition:
                   type: named
             id:
               arguments: {}
-              description: New value for docs_bot.doc_chunk.id
+              description: New value for pql_docs.doc_chunk.id
               type:
                 name: uuid
                 type: named
             page_description:
               arguments: {}
-              description: New value for docs_bot.doc_chunk.page_description
+              description: New value for pql_docs.doc_chunk.page_description
               type:
                 type: nullable
                 underlying_type:
@@ -264,7 +264,7 @@ definition:
                   type: named
             page_keywords:
               arguments: {}
-              description: New value for docs_bot.doc_chunk.page_keywords
+              description: New value for pql_docs.doc_chunk.page_keywords
               type:
                 type: nullable
                 underlying_type:
@@ -272,7 +272,7 @@ definition:
                   type: named
             page_title:
               arguments: {}
-              description: New value for docs_bot.doc_chunk.page_title
+              description: New value for pql_docs.doc_chunk.page_title
               type:
                 type: nullable
                 underlying_type:
@@ -280,23 +280,23 @@ definition:
                   type: named
             page_url:
               arguments: {}
-              description: New value for docs_bot.doc_chunk.page_url
+              description: New value for pql_docs.doc_chunk.page_url
               type:
                 name: text
                 type: named
             updated_at:
               arguments: {}
-              description: New value for docs_bot.doc_chunk.updated_at
+              description: New value for pql_docs.doc_chunk.updated_at
               type:
                 name: timestamp_with_time_zone
                 type: named
           foreign_keys: {}
-        docs_bot.doc_chunk_set_input:
-          description: Input type for updating docs_bot.doc_chunk
+        pql_docs.doc_chunk_set_input:
+          description: Input type for updating pql_docs.doc_chunk
           fields:
             chunk_content:
               arguments: {}
-              description: New value wrapper for docs_bot.doc_chunk.chunk_content
+              description: New value wrapper for pql_docs.doc_chunk.chunk_content
               type:
                 type: nullable
                 underlying_type:
@@ -304,7 +304,7 @@ definition:
                   type: named
             chunk_line_end:
               arguments: {}
-              description: New value wrapper for docs_bot.doc_chunk.chunk_line_end
+              description: New value wrapper for pql_docs.doc_chunk.chunk_line_end
               type:
                 type: nullable
                 underlying_type:
@@ -312,7 +312,7 @@ definition:
                   type: named
             chunk_line_start:
               arguments: {}
-              description: New value wrapper for docs_bot.doc_chunk.chunk_line_start
+              description: New value wrapper for pql_docs.doc_chunk.chunk_line_start
               type:
                 type: nullable
                 underlying_type:
@@ -320,7 +320,7 @@ definition:
                   type: named
             created_at:
               arguments: {}
-              description: New value wrapper for docs_bot.doc_chunk.created_at
+              description: New value wrapper for pql_docs.doc_chunk.created_at
               type:
                 type: nullable
                 underlying_type:
@@ -328,7 +328,7 @@ definition:
                   type: named
             doc_content_id_fk:
               arguments: {}
-              description: New value wrapper for docs_bot.doc_chunk.doc_content_id_fk
+              description: New value wrapper for pql_docs.doc_chunk.doc_content_id_fk
               type:
                 type: nullable
                 underlying_type:
@@ -336,7 +336,7 @@ definition:
                   type: named
             embedding:
               arguments: {}
-              description: New value wrapper for docs_bot.doc_chunk.embedding
+              description: New value wrapper for pql_docs.doc_chunk.embedding
               type:
                 type: nullable
                 underlying_type:
@@ -344,7 +344,7 @@ definition:
                   type: named
             id:
               arguments: {}
-              description: New value wrapper for docs_bot.doc_chunk.id
+              description: New value wrapper for pql_docs.doc_chunk.id
               type:
                 type: nullable
                 underlying_type:
@@ -352,7 +352,7 @@ definition:
                   type: named
             page_description:
               arguments: {}
-              description: New value wrapper for docs_bot.doc_chunk.page_description
+              description: New value wrapper for pql_docs.doc_chunk.page_description
               type:
                 type: nullable
                 underlying_type:
@@ -360,7 +360,7 @@ definition:
                   type: named
             page_keywords:
               arguments: {}
-              description: New value wrapper for docs_bot.doc_chunk.page_keywords
+              description: New value wrapper for pql_docs.doc_chunk.page_keywords
               type:
                 type: nullable
                 underlying_type:
@@ -368,7 +368,7 @@ definition:
                   type: named
             page_title:
               arguments: {}
-              description: New value wrapper for docs_bot.doc_chunk.page_title
+              description: New value wrapper for pql_docs.doc_chunk.page_title
               type:
                 type: nullable
                 underlying_type:
@@ -376,7 +376,7 @@ definition:
                   type: named
             page_url:
               arguments: {}
-              description: New value wrapper for docs_bot.doc_chunk.page_url
+              description: New value wrapper for pql_docs.doc_chunk.page_url
               type:
                 type: nullable
                 underlying_type:
@@ -384,15 +384,15 @@ definition:
                   type: named
             updated_at:
               arguments: {}
-              description: New value wrapper for docs_bot.doc_chunk.updated_at
+              description: New value wrapper for pql_docs.doc_chunk.updated_at
               type:
                 type: nullable
                 underlying_type:
                   name: timestamp_with_time_zone_set_input
                   type: named
           foreign_keys: {}
-        docs_bot.doc_content:
-          description: 'Object type for docs_bot.doc_content. Description: null'
+        pql_docs.doc_content:
+          description: 'Object type for pql_docs.doc_content. Description: null'
           fields:
             content:
               arguments: {}
@@ -450,12 +450,12 @@ definition:
                 name: timestamp_with_time_zone
                 type: named
           foreign_keys: {}
-        docs_bot.doc_content_insert_input:
-          description: Input type for inserting into docs_bot.doc_content
+        pql_docs.doc_content_insert_input:
+          description: Input type for inserting into pql_docs.doc_content
           fields:
             content:
               arguments: {}
-              description: New value for docs_bot.doc_content.content
+              description: New value for pql_docs.doc_content.content
               type:
                 type: nullable
                 underlying_type:
@@ -463,13 +463,13 @@ definition:
                   type: named
             created_at:
               arguments: {}
-              description: New value for docs_bot.doc_content.created_at
+              description: New value for pql_docs.doc_content.created_at
               type:
                 name: timestamp_with_time_zone
                 type: named
             description:
               arguments: {}
-              description: New value for docs_bot.doc_content.description
+              description: New value for pql_docs.doc_content.description
               type:
                 type: nullable
                 underlying_type:
@@ -477,19 +477,19 @@ definition:
                   type: named
             id:
               arguments: {}
-              description: New value for docs_bot.doc_content.id
+              description: New value for pql_docs.doc_content.id
               type:
                 name: uuid
                 type: named
             is_checked:
               arguments: {}
-              description: New value for docs_bot.doc_content.is_checked
+              description: New value for pql_docs.doc_content.is_checked
               type:
                 name: boolean
                 type: named
             keywords:
               arguments: {}
-              description: New value for docs_bot.doc_content.keywords
+              description: New value for pql_docs.doc_content.keywords
               type:
                 type: nullable
                 underlying_type:
@@ -497,7 +497,7 @@ definition:
                   type: named
             page_url:
               arguments: {}
-              description: New value for docs_bot.doc_content.page_url
+              description: New value for pql_docs.doc_content.page_url
               type:
                 type: nullable
                 underlying_type:
@@ -505,7 +505,7 @@ definition:
                   type: named
             title:
               arguments: {}
-              description: New value for docs_bot.doc_content.title
+              description: New value for pql_docs.doc_content.title
               type:
                 type: nullable
                 underlying_type:
@@ -513,17 +513,17 @@ definition:
                   type: named
             updated_at:
               arguments: {}
-              description: New value for docs_bot.doc_content.updated_at
+              description: New value for pql_docs.doc_content.updated_at
               type:
                 name: timestamp_with_time_zone
                 type: named
           foreign_keys: {}
-        docs_bot.doc_content_set_input:
-          description: Input type for updating docs_bot.doc_content
+        pql_docs.doc_content_set_input:
+          description: Input type for updating pql_docs.doc_content
           fields:
             content:
               arguments: {}
-              description: New value wrapper for docs_bot.doc_content.content
+              description: New value wrapper for pql_docs.doc_content.content
               type:
                 type: nullable
                 underlying_type:
@@ -531,7 +531,7 @@ definition:
                   type: named
             created_at:
               arguments: {}
-              description: New value wrapper for docs_bot.doc_content.created_at
+              description: New value wrapper for pql_docs.doc_content.created_at
               type:
                 type: nullable
                 underlying_type:
@@ -539,7 +539,7 @@ definition:
                   type: named
             description:
               arguments: {}
-              description: New value wrapper for docs_bot.doc_content.description
+              description: New value wrapper for pql_docs.doc_content.description
               type:
                 type: nullable
                 underlying_type:
@@ -547,7 +547,7 @@ definition:
                   type: named
             id:
               arguments: {}
-              description: New value wrapper for docs_bot.doc_content.id
+              description: New value wrapper for pql_docs.doc_content.id
               type:
                 type: nullable
                 underlying_type:
@@ -555,7 +555,7 @@ definition:
                   type: named
             is_checked:
               arguments: {}
-              description: New value wrapper for docs_bot.doc_content.is_checked
+              description: New value wrapper for pql_docs.doc_content.is_checked
               type:
                 type: nullable
                 underlying_type:
@@ -563,7 +563,7 @@ definition:
                   type: named
             keywords:
               arguments: {}
-              description: New value wrapper for docs_bot.doc_content.keywords
+              description: New value wrapper for pql_docs.doc_content.keywords
               type:
                 type: nullable
                 underlying_type:
@@ -571,7 +571,7 @@ definition:
                   type: named
             page_url:
               arguments: {}
-              description: New value wrapper for docs_bot.doc_content.page_url
+              description: New value wrapper for pql_docs.doc_content.page_url
               type:
                 type: nullable
                 underlying_type:
@@ -579,7 +579,7 @@ definition:
                   type: named
             title:
               arguments: {}
-              description: New value wrapper for docs_bot.doc_content.title
+              description: New value wrapper for pql_docs.doc_content.title
               type:
                 type: nullable
                 underlying_type:
@@ -587,7 +587,7 @@ definition:
                   type: named
             updated_at:
               arguments: {}
-              description: New value wrapper for docs_bot.doc_content.updated_at
+              description: New value wrapper for pql_docs.doc_content.updated_at
               type:
                 type: nullable
                 underlying_type:
@@ -633,8 +633,8 @@ definition:
                 name: varchar
                 type: named
           foreign_keys: {}
-        insert_docs_bot.doc_chunk_result:
-          description: insert from docs_bot.doc_chunk result
+        insert_pql_docs.doc_chunk_result:
+          description: insert from pql_docs.doc_chunk result
           fields:
             affected_rows:
               arguments: {}
@@ -647,12 +647,12 @@ definition:
               description: Objects that were affected by insert
               type:
                 element_type:
-                  name: docs_bot.doc_chunk
+                  name: pql_docs.doc_chunk
                   type: named
                 type: array
           foreign_keys: {}
-        insert_docs_bot.doc_content_result:
-          description: insert from docs_bot.doc_content result
+        insert_pql_docs.doc_content_result:
+          description: insert from pql_docs.doc_content result
           fields:
             affected_rows:
               arguments: {}
@@ -665,7 +665,7 @@ definition:
               description: Objects that were affected by insert
               type:
                 element_type:
-                  name: docs_bot.doc_content
+                  name: pql_docs.doc_content
                   type: named
                 type: array
           foreign_keys: {}
@@ -741,8 +741,8 @@ definition:
                   name: timestamp_with_time_zone
                   type: named
           foreign_keys: {}
-        update_docs_bot.doc_chunk_result:
-          description: update from docs_bot.doc_chunk result
+        update_pql_docs.doc_chunk_result:
+          description: update from pql_docs.doc_chunk result
           fields:
             affected_rows:
               arguments: {}
@@ -755,12 +755,12 @@ definition:
               description: Objects that were affected by update
               type:
                 element_type:
-                  name: docs_bot.doc_chunk
+                  name: pql_docs.doc_chunk
                   type: named
                 type: array
           foreign_keys: {}
-        update_docs_bot.doc_content_result:
-          description: update from docs_bot.doc_content result
+        update_pql_docs.doc_content_result:
+          description: update from pql_docs.doc_content result
           fields:
             affected_rows:
               arguments: {}
@@ -773,7 +773,7 @@ definition:
               description: Objects that were affected by update
               type:
                 element_type:
-                  name: docs_bot.doc_content
+                  name: pql_docs.doc_content
                   type: named
                 type: array
           foreign_keys: {}
@@ -819,7 +819,7 @@ definition:
               description: Objects to insert
               type:
                 element_type:
-                  name: docs_bot.doc_chunk_insert_input
+                  name: pql_docs.doc_chunk_insert_input
                   type: named
                 type: array
             returning:
@@ -831,10 +831,10 @@ definition:
                     name: string
                     type: named
                   type: array
-          description: Insert into docs_bot.doc_chunk
-          name: insert_docs_bot.doc_chunk
+          description: Insert into pql_docs.doc_chunk
+          name: insert_pql_docs.doc_chunk
           result_type:
-            name: insert_docs_bot.doc_chunk_result
+            name: insert_pql_docs.doc_chunk_result
             type: named
         - arguments:
             returning:
@@ -849,17 +849,17 @@ definition:
             set:
               description: Values to set
               type:
-                name: docs_bot.doc_chunk_set_input
+                name: pql_docs.doc_chunk_set_input
                 type: named
             where:
               description: Filter for rows to update
               type:
-                object_type_name: docs_bot.doc_chunk
+                object_type_name: pql_docs.doc_chunk
                 type: predicate
-          description: Update docs_bot.doc_chunk
-          name: update_docs_bot.doc_chunk
+          description: Update pql_docs.doc_chunk
+          name: update_pql_docs.doc_chunk
           result_type:
-            name: update_docs_bot.doc_chunk_result
+            name: update_pql_docs.doc_chunk_result
             type: named
         - arguments:
             returning:
@@ -874,19 +874,19 @@ definition:
             where:
               description: Filter for rows to delete
               type:
-                object_type_name: docs_bot.doc_chunk
+                object_type_name: pql_docs.doc_chunk
                 type: predicate
-          description: Delete from docs_bot.doc_chunk
-          name: delete_docs_bot.doc_chunk
+          description: Delete from pql_docs.doc_chunk
+          name: delete_pql_docs.doc_chunk
           result_type:
-            name: delete_docs_bot.doc_chunk_result
+            name: delete_pql_docs.doc_chunk_result
             type: named
         - arguments:
             objects:
               description: Objects to insert
               type:
                 element_type:
-                  name: docs_bot.doc_content_insert_input
+                  name: pql_docs.doc_content_insert_input
                   type: named
                 type: array
             returning:
@@ -898,10 +898,10 @@ definition:
                     name: string
                     type: named
                   type: array
-          description: Insert into docs_bot.doc_content
-          name: insert_docs_bot.doc_content
+          description: Insert into pql_docs.doc_content
+          name: insert_pql_docs.doc_content
           result_type:
-            name: insert_docs_bot.doc_content_result
+            name: insert_pql_docs.doc_content_result
             type: named
         - arguments:
             returning:
@@ -916,17 +916,17 @@ definition:
             set:
               description: Values to set
               type:
-                name: docs_bot.doc_content_set_input
+                name: pql_docs.doc_content_set_input
                 type: named
             where:
               description: Filter for rows to update
               type:
-                object_type_name: docs_bot.doc_content
+                object_type_name: pql_docs.doc_content
                 type: predicate
-          description: Update docs_bot.doc_content
-          name: update_docs_bot.doc_content
+          description: Update pql_docs.doc_content
+          name: update_pql_docs.doc_content
           result_type:
-            name: update_docs_bot.doc_content_result
+            name: update_pql_docs.doc_content_result
             type: named
         - arguments:
             returning:
@@ -941,12 +941,12 @@ definition:
             where:
               description: Filter for rows to delete
               type:
-                object_type_name: docs_bot.doc_content
+                object_type_name: pql_docs.doc_content
                 type: predicate
-          description: Delete from docs_bot.doc_content
-          name: delete_docs_bot.doc_content
+          description: Delete from pql_docs.doc_content
+          name: delete_pql_docs.doc_content
           result_type:
-            name: delete_docs_bot.doc_content_result
+            name: delete_pql_docs.doc_content_result
             type: named
       scalar_types:
         array:

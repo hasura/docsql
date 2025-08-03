@@ -9,10 +9,9 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
-CREATE SCHEMA docs_bot;
-ALTER SCHEMA docs_bot OWNER TO docs;
+CREATE SCHEMA pql_docs;
 
-CREATE FUNCTION docs_bot.set_current_timestamp_updated_at() RETURNS trigger
+CREATE FUNCTION pql_docs.set_current_timestamp_updated_at() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -24,12 +23,10 @@ BEGIN
 END;
 $$;
 
-ALTER FUNCTION docs_bot.set_current_timestamp_updated_at() OWNER TO docs;
-
 SET default_tablespace = '';
 SET default_table_access_method = heap;
 
-CREATE TABLE docs_bot.doc_chunk (
+CREATE TABLE pql_docs.doc_chunk (
     id uuid DEFAULT gen_random_uuid() NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
@@ -44,9 +41,7 @@ CREATE TABLE docs_bot.doc_chunk (
     embedding public.vector(1536)
 );
 
-ALTER TABLE docs_bot.doc_chunk OWNER TO docs;
-
-CREATE TABLE docs_bot.doc_content (
+CREATE TABLE pql_docs.doc_content (
     id uuid DEFAULT gen_random_uuid() NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
@@ -58,17 +53,15 @@ CREATE TABLE docs_bot.doc_content (
     keywords text[]
 );
 
-ALTER TABLE docs_bot.doc_content OWNER TO docs;
-
-ALTER TABLE ONLY docs_bot.doc_chunk
+ALTER TABLE ONLY pql_docs.doc_chunk
     ADD CONSTRAINT doc_chunk_pkey PRIMARY KEY (id);
 
-ALTER TABLE ONLY docs_bot.doc_content
+ALTER TABLE ONLY pql_docs.doc_content
     ADD CONSTRAINT doc_content_pkey PRIMARY KEY (id);
 
-CREATE TRIGGER set_public_doc_chunk_updated_at BEFORE UPDATE ON docs_bot.doc_chunk FOR EACH ROW EXECUTE FUNCTION docs_bot.set_current_timestamp_updated_at();
+CREATE TRIGGER set_public_doc_chunk_updated_at BEFORE UPDATE ON pql_docs.doc_chunk FOR EACH ROW EXECUTE FUNCTION pql_docs.set_current_timestamp_updated_at();
 
-CREATE TRIGGER set_public_doc_content_updated_at BEFORE UPDATE ON docs_bot.doc_content FOR EACH ROW EXECUTE FUNCTION docs_bot.set_current_timestamp_updated_at();
+CREATE TRIGGER set_public_doc_content_updated_at BEFORE UPDATE ON pql_docs.doc_content FOR EACH ROW EXECUTE FUNCTION pql_docs.set_current_timestamp_updated_at();
 
-ALTER TABLE ONLY docs_bot.doc_chunk
-    ADD CONSTRAINT doc_chunk_doc_content_id_fk_fkey FOREIGN KEY (doc_content_id_fk) REFERENCES docs_bot.doc_content(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY pql_docs.doc_chunk
+    ADD CONSTRAINT doc_chunk_doc_content_id_fk_fkey FOREIGN KEY (doc_content_id_fk) REFERENCES pql_docs.doc_content(id) ON UPDATE CASCADE ON DELETE CASCADE;

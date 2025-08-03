@@ -1,313 +1,309 @@
 {
-    "version": "v2",
-    "connection_uri": {
-        "variable": "JDBC_URL"
-    },
-    "tables": [
+  "version": "v2",
+  "connection_uri": {
+    "variable": "JDBC_URL"
+  },
+  "tables": [
+    {
+      "name": "pql_docs.doc_chunk",
+      "description": null,
+      "category": "TABLE",
+      "columns": [
         {
-            "name": "docs_bot.doc_chunk",
-            "description": null,
-            "category": "TABLE",
-            "columns": [
-                {
-                    "name": "id",
-                    "nullable": false,
-                    "auto_increment": false,
-                    "is_primarykey": true,
-                    "data": {
-                        "database_type": "uuid"
-                    }
-                },
-                {
-                    "name": "created_at",
-                    "nullable": false,
-                    "auto_increment": false,
-                    "is_primarykey": false,
-                    "data": {
-                        "database_type": "timestamp_with_time_zone"
-                    }
-                },
-                {
-                    "name": "updated_at",
-                    "nullable": false,
-                    "auto_increment": false,
-                    "is_primarykey": false,
-                    "data": {
-                        "database_type": "timestamp_with_time_zone"
-                    }
-                },
-                {
-                    "name": "doc_content_id_fk",
-                    "nullable": false,
-                    "auto_increment": false,
-                    "is_primarykey": false,
-                    "data": {
-                        "database_type": "uuid"
-                    }
-                },
-                {
-                    "name": "chunk_content",
-                    "nullable": false,
-                    "auto_increment": false,
-                    "is_primarykey": false,
-                    "data": {
-                        "database_type": "text"
-                    }
-                },
-                {
-                    "name": "page_description",
-                    "nullable": true,
-                    "auto_increment": false,
-                    "is_primarykey": false,
-                    "data": {
-                        "database_type": "text"
-                    }
-                },
-                {
-                    "name": "page_keywords",
-                    "nullable": true,
-                    "auto_increment": false,
-                    "is_primarykey": false,
-                    "data": {
-                        "database_type": "array",
-                        "metadata": {
-                            "type": "array",
-                            "array_types": {
-                                "database_type": "text"
-                            }
-                        }
-                    }
-                },
-                {
-                    "name": "page_title",
-                    "nullable": true,
-                    "auto_increment": false,
-                    "is_primarykey": false,
-                    "data": {
-                        "database_type": "text"
-                    }
-                },
-                {
-                    "name": "page_url",
-                    "nullable": false,
-                    "auto_increment": false,
-                    "is_primarykey": false,
-                    "data": {
-                        "database_type": "text"
-                    }
-                },
-                {
-                    "name": "chunk_line_start",
-                    "nullable": false,
-                    "auto_increment": false,
-                    "is_primarykey": false,
-                    "data": {
-                        "database_type": "integer"
-                    }
-                },
-                {
-                    "name": "chunk_line_end",
-                    "nullable": true,
-                    "auto_increment": false,
-                    "is_primarykey": false,
-                    "data": {
-                        "database_type": "integer"
-                    }
-                },
-                {
-                    "name": "embedding",
-                    "nullable": true,
-                    "auto_increment": false,
-                    "is_primarykey": false,
-                    "data": {
-                        "database_type": "vector(1536)"
-                    }
-                }
-            ],
-            "primary_keys": [
-                "id"
-            ],
-            "foreign_keys": {}
+          "name": "id",
+          "nullable": false,
+          "auto_increment": false,
+          "is_primarykey": true,
+          "data": {
+            "database_type": "uuid"
+          }
         },
         {
-            "name": "docs_bot.doc_content",
-            "description": null,
-            "category": "TABLE",
-            "columns": [
-                {
-                    "name": "id",
-                    "nullable": false,
-                    "auto_increment": false,
-                    "is_primarykey": true,
-                    "data": {
-                        "database_type": "uuid"
-                    }
-                },
-                {
-                    "name": "created_at",
-                    "nullable": false,
-                    "auto_increment": false,
-                    "is_primarykey": false,
-                    "data": {
-                        "database_type": "timestamp_with_time_zone"
-                    }
-                },
-                {
-                    "name": "updated_at",
-                    "nullable": false,
-                    "auto_increment": false,
-                    "is_primarykey": false,
-                    "data": {
-                        "database_type": "timestamp_with_time_zone"
-                    }
-                },
-                {
-                    "name": "content",
-                    "nullable": true,
-                    "auto_increment": false,
-                    "is_primarykey": false,
-                    "data": {
-                        "database_type": "text"
-                    }
-                },
-                {
-                    "name": "is_checked",
-                    "nullable": false,
-                    "auto_increment": false,
-                    "is_primarykey": false,
-                    "data": {
-                        "database_type": "boolean"
-                    }
-                },
-                {
-                    "name": "page_url",
-                    "nullable": true,
-                    "auto_increment": false,
-                    "is_primarykey": false,
-                    "data": {
-                        "database_type": "text"
-                    }
-                },
-                {
-                    "name": "title",
-                    "nullable": true,
-                    "auto_increment": false,
-                    "is_primarykey": false,
-                    "data": {
-                        "database_type": "text"
-                    }
-                },
-                {
-                    "name": "description",
-                    "nullable": true,
-                    "auto_increment": false,
-                    "is_primarykey": false,
-                    "data": {
-                        "database_type": "text"
-                    }
-                },
-                {
-                    "name": "keywords",
-                    "nullable": true,
-                    "auto_increment": false,
-                    "is_primarykey": false,
-                    "data": {
-                        "database_type": "array",
-                        "metadata": {
-                            "type": "array",
-                            "array_types": {
-                                "database_type": "text"
-                            }
-                        }
-                    }
-                }
-            ],
-            "primary_keys": [
-                "id"
-            ],
-            "foreign_keys": {}
+          "name": "created_at",
+          "nullable": false,
+          "auto_increment": false,
+          "is_primarykey": false,
+          "data": {
+            "database_type": "timestamp_with_time_zone"
+          }
+        },
+        {
+          "name": "updated_at",
+          "nullable": false,
+          "auto_increment": false,
+          "is_primarykey": false,
+          "data": {
+            "database_type": "timestamp_with_time_zone"
+          }
+        },
+        {
+          "name": "doc_content_id_fk",
+          "nullable": false,
+          "auto_increment": false,
+          "is_primarykey": false,
+          "data": {
+            "database_type": "uuid"
+          }
+        },
+        {
+          "name": "chunk_content",
+          "nullable": false,
+          "auto_increment": false,
+          "is_primarykey": false,
+          "data": {
+            "database_type": "text"
+          }
+        },
+        {
+          "name": "page_description",
+          "nullable": true,
+          "auto_increment": false,
+          "is_primarykey": false,
+          "data": {
+            "database_type": "text"
+          }
+        },
+        {
+          "name": "page_keywords",
+          "nullable": true,
+          "auto_increment": false,
+          "is_primarykey": false,
+          "data": {
+            "database_type": "array",
+            "metadata": {
+              "type": "array",
+              "array_types": {
+                "database_type": "text"
+              }
+            }
+          }
+        },
+        {
+          "name": "page_title",
+          "nullable": true,
+          "auto_increment": false,
+          "is_primarykey": false,
+          "data": {
+            "database_type": "text"
+          }
+        },
+        {
+          "name": "page_url",
+          "nullable": false,
+          "auto_increment": false,
+          "is_primarykey": false,
+          "data": {
+            "database_type": "text"
+          }
+        },
+        {
+          "name": "chunk_line_start",
+          "nullable": false,
+          "auto_increment": false,
+          "is_primarykey": false,
+          "data": {
+            "database_type": "integer"
+          }
+        },
+        {
+          "name": "chunk_line_end",
+          "nullable": true,
+          "auto_increment": false,
+          "is_primarykey": false,
+          "data": {
+            "database_type": "integer"
+          }
+        },
+        {
+          "name": "embedding",
+          "nullable": true,
+          "auto_increment": false,
+          "is_primarykey": false,
+          "data": {
+            "database_type": "vector(1536)"
+          }
         }
-    ],
-    "native_queries": {
-        "embeddings_vector_distance": {
-            "sqlFile": "native_operations/queries/embeddings_vector_distance.sql",
-            "columns": {
-                "id": {
-                    "name": "id",
-                    "type": {
-                        "type": "scalar_type",
-                        "value": "other"
-                    },
-                    "nullable": false,
-                    "description": null
-                },
-                "chunk_content": {
-                    "name": "chunk_content",
-                    "type": {
-                        "type": "scalar_type",
-                        "value": "varchar"
-                    },
-                    "nullable": false,
-                    "description": null
-                },
-                "page_title": {
-                    "name": "page_title",
-                    "type": {
-                        "type": "scalar_type",
-                        "value": "varchar"
-                    },
-                    "nullable": true,
-                    "description": null
-                },
-                "page_url": {
-                    "name": "page_url",
-                    "type": {
-                        "type": "scalar_type",
-                        "value": "varchar"
-                    },
-                    "nullable": false,
-                    "description": null
-                },
-                "page_description": {
-                    "name": "page_description",
-                    "type": {
-                        "type": "scalar_type",
-                        "value": "varchar"
-                    },
-                    "nullable": true,
-                    "description": null
-                },
-                "distance": {
-                    "name": "distance",
-                    "type": {
-                        "type": "scalar_type",
-                        "value": "bit"
-                    },
-                    "nullable": true,
-                    "description": null
-                }
-            },
-            "arguments": {
-                "query_vector": {
-                    "type": {
-                        "type": "scalar_type",
-                        "value": "other"
-                    },
-                    "nullable": true,
-                    "position": 2,
-                    "description": null
-                },
-                "limit_count": {
-                    "type": {
-                        "type": "scalar_type",
-                        "value": "bigint"
-                    },
-                    "nullable": true,
-                    "position": 3,
-                    "description": null
-                }
-            },
-            "description": null
+      ],
+      "primary_keys": ["id"],
+      "foreign_keys": {}
+    },
+    {
+      "name": "pql_docs.doc_content",
+      "description": null,
+      "category": "TABLE",
+      "columns": [
+        {
+          "name": "id",
+          "nullable": false,
+          "auto_increment": false,
+          "is_primarykey": true,
+          "data": {
+            "database_type": "uuid"
+          }
+        },
+        {
+          "name": "created_at",
+          "nullable": false,
+          "auto_increment": false,
+          "is_primarykey": false,
+          "data": {
+            "database_type": "timestamp_with_time_zone"
+          }
+        },
+        {
+          "name": "updated_at",
+          "nullable": false,
+          "auto_increment": false,
+          "is_primarykey": false,
+          "data": {
+            "database_type": "timestamp_with_time_zone"
+          }
+        },
+        {
+          "name": "content",
+          "nullable": true,
+          "auto_increment": false,
+          "is_primarykey": false,
+          "data": {
+            "database_type": "text"
+          }
+        },
+        {
+          "name": "is_checked",
+          "nullable": false,
+          "auto_increment": false,
+          "is_primarykey": false,
+          "data": {
+            "database_type": "boolean"
+          }
+        },
+        {
+          "name": "page_url",
+          "nullable": true,
+          "auto_increment": false,
+          "is_primarykey": false,
+          "data": {
+            "database_type": "text"
+          }
+        },
+        {
+          "name": "title",
+          "nullable": true,
+          "auto_increment": false,
+          "is_primarykey": false,
+          "data": {
+            "database_type": "text"
+          }
+        },
+        {
+          "name": "description",
+          "nullable": true,
+          "auto_increment": false,
+          "is_primarykey": false,
+          "data": {
+            "database_type": "text"
+          }
+        },
+        {
+          "name": "keywords",
+          "nullable": true,
+          "auto_increment": false,
+          "is_primarykey": false,
+          "data": {
+            "database_type": "array",
+            "metadata": {
+              "type": "array",
+              "array_types": {
+                "database_type": "text"
+              }
+            }
+          }
         }
+      ],
+      "primary_keys": ["id"],
+      "foreign_keys": {}
     }
+  ],
+  "native_queries": {
+    "embeddings_vector_distance": {
+      "sqlFile": "native_operations/queries/embeddings_vector_distance.sql",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": {
+            "type": "scalar_type",
+            "value": "other"
+          },
+          "nullable": false,
+          "description": null
+        },
+        "chunk_content": {
+          "name": "chunk_content",
+          "type": {
+            "type": "scalar_type",
+            "value": "varchar"
+          },
+          "nullable": false,
+          "description": null
+        },
+        "page_title": {
+          "name": "page_title",
+          "type": {
+            "type": "scalar_type",
+            "value": "varchar"
+          },
+          "nullable": true,
+          "description": null
+        },
+        "page_url": {
+          "name": "page_url",
+          "type": {
+            "type": "scalar_type",
+            "value": "varchar"
+          },
+          "nullable": false,
+          "description": null
+        },
+        "page_description": {
+          "name": "page_description",
+          "type": {
+            "type": "scalar_type",
+            "value": "varchar"
+          },
+          "nullable": true,
+          "description": null
+        },
+        "distance": {
+          "name": "distance",
+          "type": {
+            "type": "scalar_type",
+            "value": "bit"
+          },
+          "nullable": true,
+          "description": null
+        }
+      },
+      "arguments": {
+        "query_vector": {
+          "type": {
+            "type": "scalar_type",
+            "value": "other"
+          },
+          "nullable": true,
+          "position": 2,
+          "description": null
+        },
+        "limit_count": {
+          "type": {
+            "type": "scalar_type",
+            "value": "bigint"
+          },
+          "nullable": true,
+          "position": 3,
+          "description": null
+        }
+      },
+      "description": null
+    }
+  }
 }
