@@ -33,16 +33,18 @@ cd db && bun install
 bun run db:up && sleep 5
 bun run db:migrate
 
-# 4. Generate seed data (requires OPENAI_API_KEY in db/.env)
+# 4. Generate seed data (requires OPENAI_API_KEY in db/.env) and only needs to be run if you want to update the data
 git clone https://github.com/hasura/promptql-docs.git
 bun run db:generate-seed-migration ../promptql-docs/docs
 
 # 5. Start services
-cd ../server && docker compose up -d
-cd ../pql && ddn run docker-start
+# The database should already be up and running from step 3
+cd ../server && docker compose up -d # This will start the server
+cd ../pql && ddn run docker-start # This will start the PromptQL services
 ```
 
-Your docs bot is now running at `http://localhost:4000`
+Your docs bot is now running at `http://localhost:4000`, connected to your locally-running PromptQL backend, which is
+connected to your local database.
 
 ## Development
 
@@ -73,7 +75,8 @@ This project includes automated testing and quality checks:
 To set up pre-commit hooks locally:
 
 ```sh
-bun install  # Installs husky
+# In project root
+bun install
 ```
 
 Tests will automatically run when committing changes to the `server/` directory.
