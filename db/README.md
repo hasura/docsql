@@ -69,7 +69,8 @@ bun run db:down && bun run db:up
 sleep 5 && bun run db:migrate
 
 # Connect and explore
-psql postgresql://docs:password@localhost:5432/docs_bot
+# JDBC: jdbc:postgresql://local.hasura.dev:5432/docs_bot?user=docs&password=password
+psql postgresql://docs:password@local.hasura.dev:5432/docs_bot
 ```
 
 ### Production Deployment

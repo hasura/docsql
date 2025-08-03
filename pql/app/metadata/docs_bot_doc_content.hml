@@ -2,8 +2,8 @@
 kind: ObjectType
 version: v1
 definition:
-  name: docs_bot_doc_content
-  description: "Object type for docs_bot.doc_content. Description: null"
+  name: pql_docs_doc_content
+  description: "Object type for pql_docs.doc_content. Description: null"
   fields:
     - name: content
       type: string
@@ -23,22 +23,18 @@ definition:
       type: string
     - name: updated_at
       type: timestamptz!
-    - name: version
-      type: string!
-      description: Version of Hasura that this documentation page belongs to. "2", "3"
-        or "promptql".
   graphql:
-    typeName: docs_bot_doc_content
-    inputTypeName: docs_bot_doc_content_input
+    typeName: pql_docs_doc_content
+    inputTypeName: pql_docs_doc_content_input
   dataConnectorTypeMapping:
     - dataConnectorName: pg
-      dataConnectorObjectType: docs_bot.doc_content
+      dataConnectorObjectType: pql_docs.doc_content
 
 ---
 kind: TypePermissions
 version: v1
 definition:
-  typeName: docs_bot_doc_content
+  typeName: pql_docs_doc_content
   permissions:
     - role: admin
       output:
@@ -52,16 +48,15 @@ definition:
           - page_url
           - title
           - updated_at
-          - version
 
 ---
 kind: BooleanExpressionType
 version: v1
 definition:
-  name: docs_bot_doc_content_bool_exp
+  name: pql_docs_doc_content_bool_exp
   operand:
     object:
-      type: docs_bot_doc_content
+      type: pql_docs_doc_content
       comparableFields:
         - fieldName: content
           booleanExpressionType: text_bool_exp
@@ -81,24 +76,22 @@ definition:
           booleanExpressionType: text_bool_exp
         - fieldName: updated_at
           booleanExpressionType: timestamp_with_time_zone_bool_exp
-        - fieldName: version
-          booleanExpressionType: text_bool_exp
       comparableRelationships: []
   logicalOperators:
     enable: true
   isNull:
     enable: true
   graphql:
-    typeName: docs_bot_doc_content_bool_exp
+    typeName: pql_docs_doc_content_bool_exp
 
 ---
 kind: AggregateExpression
 version: v1
 definition:
-  name: docs_bot_doc_content_agg_exp
+  name: pql_docs_doc_content_agg_exp
   operand:
     object:
-      aggregatedType: docs_bot_doc_content
+      aggregatedType: pql_docs_doc_content
       aggregatableFields:
         - fieldName: content
           aggregateExpression: text_agg_exp
@@ -118,21 +111,19 @@ definition:
           aggregateExpression: text_agg_exp
         - fieldName: updated_at
           aggregateExpression: timestamp_with_time_zone_agg_exp
-        - fieldName: version
-          aggregateExpression: text_agg_exp
   count:
     enable: true
   graphql:
-    selectTypeName: docs_bot_doc_content_agg_exp
+    selectTypeName: pql_docs_doc_content_agg_exp
 
 ---
 kind: OrderByExpression
 version: v1
 definition:
-  name: docs_bot_doc_content_order_by_exp
+  name: pql_docs_doc_content_order_by_exp
   operand:
     object:
-      orderedType: docs_bot_doc_content
+      orderedType: pql_docs_doc_content
       orderableFields:
         - fieldName: content
           orderByExpression: string_order_by_exp
@@ -152,47 +143,45 @@ definition:
           orderByExpression: string_order_by_exp
         - fieldName: updated_at
           orderByExpression: timestamptz_order_by_exp
-        - fieldName: version
-          orderByExpression: string_order_by_exp
       orderableRelationships:
         - relationshipName: embeddings
   graphql:
-    expressionTypeName: docs_bot_doc_content_order_by_exp
+    expressionTypeName: pql_docs_doc_content_order_by_exp
 
 ---
 kind: Model
 version: v2
 definition:
-  name: docs_bot_doc_content
-  objectType: docs_bot_doc_content
+  name: pql_docs_doc_content
+  objectType: pql_docs_doc_content
   source:
     dataConnectorName: pg
-    collection: docs_bot.doc_content
-  filterExpressionType: docs_bot_doc_content_bool_exp
-  aggregateExpression: docs_bot_doc_content_agg_exp
-  orderByExpression: docs_bot_doc_content_order_by_exp
+    collection: pql_docs.doc_content
+  filterExpressionType: pql_docs_doc_content_bool_exp
+  aggregateExpression: pql_docs_doc_content_agg_exp
+  orderByExpression: pql_docs_doc_content_order_by_exp
   graphql:
     selectMany:
-      queryRootField: docs_bot_doc_content
+      queryRootField: pql_docs_doc_content
       subscription:
-        rootField: docs_bot_doc_content
+        rootField: pql_docs_doc_content
     selectUniques:
-      - queryRootField: docs_bot_doc_content_by_id
+      - queryRootField: pql_docs_doc_content_by_id
         uniqueIdentifier:
           - id
         subscription:
-          rootField: docs_bot_doc_content_by_id
-    filterInputTypeName: docs_bot_doc_content_filter_input
+          rootField: pql_docs_doc_content_by_id
+    filterInputTypeName: pql_docs_doc_content_filter_input
     aggregate:
-      queryRootField: docs_bot_doc_content_aggregate
+      queryRootField: pql_docs_doc_content_aggregate
       subscription:
-        rootField: docs_bot_doc_content_aggregate
+        rootField: pql_docs_doc_content_aggregate
 
 ---
 kind: ModelPermissions
 version: v1
 definition:
-  modelName: docs_bot_doc_content
+  modelName: pql_docs_doc_content
   permissions:
     - role: admin
       select:
@@ -204,10 +193,10 @@ kind: Relationship
 version: v1
 definition:
   name: embeddings
-  sourceType: docs_bot_doc_content
+  sourceType: pql_docs_doc_content
   target:
     model:
-      name: docs_bot_doc_chunk
+      name: pql_docs_doc_chunk
       relationshipType: Object
   mapping:
     - source:
