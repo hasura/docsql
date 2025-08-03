@@ -29,9 +29,6 @@ definition:
       type: string!
     - name: updated_at
       type: timestamptz!
-    - name: version
-      type: string
-      description: Version of Hasura that this chunk belongs to. "2", "3" or "promptql".
   graphql:
     typeName: docs_bot_doc_chunk
     inputTypeName: docs_bot_doc_chunk_input
@@ -60,7 +57,6 @@ definition:
           - page_title
           - page_url
           - updated_at
-          - version
 
 ---
 kind: BooleanExpressionType
@@ -95,8 +91,6 @@ definition:
           booleanExpressionType: text_bool_exp
         - fieldName: updated_at
           booleanExpressionType: timestamp_with_time_zone_bool_exp
-        - fieldName: version
-          booleanExpressionType: text_bool_exp
       comparableRelationships: []
   logicalOperators:
     enable: true
@@ -138,8 +132,6 @@ definition:
           aggregateExpression: text_agg_exp
         - fieldName: updated_at
           aggregateExpression: timestamp_with_time_zone_agg_exp
-        - fieldName: version
-          aggregateExpression: text_agg_exp
   count:
     enable: true
   graphql:
@@ -178,8 +170,6 @@ definition:
           orderByExpression: string_order_by_exp
         - fieldName: updated_at
           orderByExpression: timestamptz_order_by_exp
-        - fieldName: version
-          orderByExpression: string_order_by_exp
       orderableRelationships:
         - relationshipName: content
   graphql:
