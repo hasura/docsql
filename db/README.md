@@ -33,13 +33,13 @@ bun run db:generate-seed-migration ../promptql-docs/docs
 
 ## Database Schema
 
-### `docs_bot.doc_content`
+### `pql-bot.doc_content`
 
 - Full documentation pages with metadata
 - Stores title, description, keywords, and raw content
 - Links to chunked embeddings via foreign key
 
-### `docs_bot.doc_chunk`
+### `pql-bot.doc_chunk`
 
 - 500-character content chunks with embeddings
 - 1536-dimensional vectors from OpenAI
@@ -69,8 +69,8 @@ bun run db:down && bun run db:up
 sleep 5 && bun run db:migrate
 
 # Connect and explore
-# JDBC: jdbc:postgresql://local.hasura.dev:5432/docs_bot?user=docs&password=password
-psql postgresql://docs:password@local.hasura.dev:5432/docs_bot
+# JDBC: jdbc:postgresql://local.hasura.dev:5432/pql-bot?user=docs&password=password
+psql postgresql://docs:password@local.hasura.dev:5432/pql-bot
 ```
 
 ### Production Deployment
