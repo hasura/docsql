@@ -16,8 +16,6 @@ definition:
       type: string
     - name: page_url
       type: string!
-    - name: version
-      type: string
   graphql:
     typeName: embeddings_vector_distance
     inputTypeName: embeddings_vector_distance_input
@@ -40,7 +38,6 @@ definition:
           - page_description
           - page_title
           - page_url
-          - version
 
 ---
 kind: Model
@@ -53,8 +50,6 @@ definition:
       type: biginteger
     - name: query_vector
       type: "[Float]"
-    - name: version_filter
-      type: string
   source:
     dataConnectorName: pg
     collection: embeddings_vector_distance
