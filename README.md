@@ -2,7 +2,7 @@
 
 > A PromptQL-specific implementation of a docs bot.
 
-<img width="1227" height="917" alt="image" src="https://github.com/user-attachments/assets/6aef4823-c145-4e51-9caf-21f556241491" />
+<img width="1999" height="1374" alt="image" src="https://github.com/user-attachments/assets/26fb3b43-5ffd-46ec-b828-495c791bb7d3" />
 
 ## What's Inside
 
