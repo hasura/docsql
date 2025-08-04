@@ -17,42 +17,67 @@ This repository demonstrates a complete PromptQL-powered chat bot for documentat
 **Prerequisites**: [Docker](https://docs.docker.com/get-docker/),
 [DDN CLI](https://promptql.io/docs/reference/cli/installation/), and [Bun](https://bun.sh/docs/installation)
 
+### 1. Clone and setup environment files
+
 ```sh
-# 1. Clone and setup environment files
 git clone https://github.com/hasura/pql-docs-bot.git
 cd pql-docs-bot
 cp server/.env.template server/.env
 cp pql/.env.template pql/.env
 cp db/.env.template db/.env
+```
 
-# 2. Add environment variable values from 1Password (Product ACT vault)
-# Edit server/.env, pql/.env, and db/.env with actual values
+### 2. Configure environment variables
 
-# 3. Set up database with embeddings
+Add environment variable values from 1Password (Product ACT vault). Edit `server/.env`, `pql/.env`, and `db/.env` with
+actual values.
+
+### 3. Set up database with embeddings
+
+```sh
 cd db && bun install
+```
+
+```sh
 bun run db:up && sleep 5
+```
+
+```sh
 bun run db:migrate
+```
 
-# 4. Generate seed data (requires OPENAI_API_KEY in db/.env) and only needs to be run if you want to update the data
+### 4. Generate seed data
+
+This step requires `OPENAI_API_KEY` in `db/.env` and _only_ needs to be run if you want to update the data:
+
+```sh
+# Clone promptql-docs repo at the same level as this repo
 git clone https://github.com/hasura/promptql-docs.git
-bun run db:generate-seed-migration ../promptql-docs/docs
+```
 
-# 5. Start services
-# The database should already be up and running from step 3
-cd ../server && docker compose up -d # This will start the server
-cd ../pql && ddn run docker-start # This will start the PromptQL services
+```sh
+# Which will generate a migration file with the embeddings using the docs from the promptql-docs repo
+bun run db:generate-seed-migration ../promptql-docs/docs
+```
+
+### 5. Start services
+
+The database should already be running from step 3.
+
+Start the API server:
+
+```sh
+cd ../server && docker compose up -d
+```
+
+Start the PromptQL services:
+
+```sh
+cd ../pql && ddn run docker-start
 ```
 
 Your docs bot is now running at `http://localhost:4000`, connected to your locally-running PromptQL backend, which is
 connected to your local database.
-
-## Development
-
-For enhanced development setup with tmux, hot reloading, and ngrok tunneling:
-
-```sh
-chmod +x ./.dev.sh && ./.dev.sh
-```
 
 ## Database Management
 
