@@ -67,6 +67,15 @@ export function createStreamHandler(conversationId: string, controller: Readable
         .replace(/<artifact[^>]*\/>/g, "")
         .replace(/<artifact[^>]*>.*?<\/artifact>/gs, "");
 
+      // Update global conversation store
+      if ((global as any).conversationStore) {
+        (global as any).conversationStore.set(conversationId, {
+          messageContent: cleanMessage,
+          isComplete: false,
+          timestamp: new Date(),
+        });
+      }
+
       const data = JSON.stringify({
         success: true,
         conversationId,

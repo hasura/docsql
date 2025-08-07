@@ -92,6 +92,29 @@ export const sendMessage = async ({ body, params, set, request }: Context) => {
 
         queryPromise
           .then(() => {
+            // Update global store with final state
+            if ((global as any).conversationStore) {
+              (global as any).conversationStore.set(conversationId, {
+                messageContent: state.messageContent
+                  .replace(/<artifact[^>]*\/>/g, "")
+                  .replace(/<artifact[^>]*>.*?<\/artifact>/gs, ""),
+                isComplete: true,
+                timestamp: new Date(),
+              });
+            }
+
+            // Send completion signal
+            const completionData = JSON.stringify({
+              success: true,
+              conversationId,
+              done: true,
+              timestamp: new Date(),
+            });
+
+            try {
+              controller.enqueue(`data: ${completionData}\n\n`);
+            } catch {}
+
             logRequestComplete(
               requestId,
               conversationId,
