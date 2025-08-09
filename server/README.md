@@ -1,6 +1,6 @@
 # Chat API Server
 
-Elysia/Bun server providing streaming chat endpoints for the PromptQL docs bot.
+Elysia/Bun server providing streaming chat endpoints for the DocsQL bot.
 
 ## Endpoints
 

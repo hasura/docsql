@@ -1,6 +1,6 @@
 # PromptQL Backend
 
-The PromptQL configuration and AI agent setup for the docs bot.
+The PromptQL configuration and AI agent setup for DocsQL.
 
 ## Architecture
 
@@ -13,7 +13,7 @@ The PromptQL configuration and AI agent setup for the docs bot.
 
 ### System Instructions
 
-The bot is configured as "DocsBot" with specific behavior patterns:
+The bot is configured as "DocsQL" with specific behavior patterns:
 
 - Lead with direct answers
 - Minimum viable responses

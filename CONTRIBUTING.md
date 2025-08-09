@@ -1,4 +1,4 @@
-# Contributing to pql-docs-bot
+# Contributing to DocsQL
 
 Thank you for your interest in contributing! This guide will help you set up a comprehensive development environment and
 understand our development workflows.
