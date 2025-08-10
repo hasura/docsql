@@ -1,107 +1,67 @@
-# pql-docs-bot
+# DocsQL
 
-> A PromptQL-specific implementation of a docs bot.
+> An AI-powered documentation assistant built with PromptQL
 
 <img width="1999" height="1374" alt="image" src="https://github.com/user-attachments/assets/26fb3b43-5ffd-46ec-b828-495c791bb7d3" />
 
-## What's Inside
+DocsQL is a smart documentation bot that helps developers find answers in technical documentation quickly and
+accurately. Built as a demonstration of PromptQL's capabilities, it showcases how to create reliable AI agents that can
+understand complex technical queries and provide precise, contextual responses.
 
-This repository demonstrates a complete PromptQL-powered chat bot for documentation sites:
+## Why DocsQL?
 
-- **PromptQL Backend** ([`pql/`](pql/README.md)) - AI agent configuration and data connectors
-- **API Server** ([`server/`](server/README.md)) - Elysia/Bun proxy server with streaming chat endpoints
-- **Database Layer** ([`db/`](db/README.md)) - PostgreSQL with pgvector for document embeddings
+Documentation is often vast and scattered. DocsQL solves this by:
 
-## Quick Start
+- **Semantic Search**: Understanding intent, not just keywords
+- **Contextual Responses**: Providing relevant code examples and explanations
+- **Source Attribution**: Always linking back to original documentation
+- **Real-time Updates**: Staying current with documentation changes
+- **Built-in Validation**: Ensuring accuracy through automated verification
 
-**Prerequisites**: [Docker](https://docs.docker.com/get-docker/),
-[DDN CLI](https://promptql.io/docs/reference/cli/installation/), and [Bun](https://bun.sh/docs/installation)
+## Architecture
 
-### 1. Clone and setup environment files
+This project demonstrates a complete AI-powered documentation system:
 
-```sh
-git clone https://github.com/hasura/pql-docs-bot.git
-cd pql-docs-bot
-cp server/.env.template server/.env
-cp pql/.env.template pql/.env
-cp db/.env.template db/.env
-```
+- **PromptQL Backend** ([`pql/`](pql/README.md)) - AI agent with validation protocols and system instructions
+- **Vector-enabled Database** ([`db/`](db/README.md)) - PostgreSQL with pgvector for semantic search
+- **API Server** ([`server/`](server/README.md)) - Streaming chat interface built with Elysia/Bun
 
-### 2. Configure environment variables
+## Key Features
 
-Add environment variable values from 1Password (Product ACT vault). Edit `server/.env`, `pql/.env`, and `db/.env` with
-actual values.
+**Smart Query Understanding**: DocsQL doesn't just match keywords; it understands what you're trying to accomplish and
+finds the most relevant documentation sections.
 
-### 3. Set up database with embeddings
+**Validation-First Responses**: Every technical answer is validated against the actual documentation before being
+provided, ensuring accuracy.
 
-```sh
-cd db && bun install
-```
+**Streaming Responses**: Real-time response streaming provides immediate feedback while the AI processes complex
+queries.
 
-```sh
-bun run db:up && sleep 5
-```
+**Source Transparency**: All responses include direct links to the source documentation, maintaining trust and enabling
+deeper exploration.
 
-```sh
-bun run db:migrate
-```
+## Building in Public
 
-### 4. Generate seed data
+This repository represents our approach to building AI agents that developers can trust. You can follow our development
+process, see how we handle edge cases, and understand the engineering decisions behind reliable AI-powered assistance.
 
-This step requires `OPENAI_API_KEY` in `db/.env` and _only_ needs to be run if you want to update the data:
+## For Developers
 
-```sh
-# Clone promptql-docs repo at the same level as this repo
-git clone https://github.com/hasura/promptql-docs.git
-```
+While DocsQL is primarily a demonstration project, the patterns and approaches used here are applicable to any
+documentation- or unstructured-data-heavy project. The codebase shows:
 
-```sh
-# Which will generate a migration file with the embeddings using the docs from the promptql-docs repo
-bun run db:generate-seed-migration ../promptql-docs/docs
-```
+- How to structure PromptQL agents for accuracy
+- Effective embedding strategies for technical content
+- Streaming API patterns for real-time AI responses
+- Testing approaches for AI-powered applications
 
-### 5. Start services
+## Learn More
 
-The database should already be running from step 3.
+- [PromptQL Documentation](https://promptql.io/docs/) - The platform powering DocsQL
+- [Architecture Deep Dive](pql/README.md) - How the AI agent is configured
+- [Database Design](db/README.md) - Vector search implementation details
 
-Start the API server:
+---
 
-```sh
-cd ../server && docker compose up -d
-```
-
-Start the PromptQL services:
-
-```sh
-cd ../pql && ddn run docker-start
-```
-
-Your docs bot is now running at `http://localhost:4000`, connected to your locally-running PromptQL backend, which is
-connected to your local database.
-
-## Database Management
-
-The database layer uses PostgreSQL with pgvector for semantic search:
-
-- **Migrations**: Schema and extension setup in `db/migrations/`
-- **Seeding**: Automated embedding generation from markdown docs
-- **Production**: Static SQL migrations with pre-computed embeddings
-
-See [`db/README.md`](db/README.md) for detailed database operations.
-
-## CI/CD
-
-This project includes automated testing and quality checks:
-
-- **Pre-commit hooks**: Automatically run server tests when server files are modified
-- **GitHub Actions**: Run tests and Docker integration on pull requests
-- **Husky**: Manages git hooks for consistent development workflow
-
-To set up pre-commit hooks locally:
-
-```sh
-# In project root
-bun install
-```
-
-Tests will automatically run when committing changes to the `server/` directory.
+_DocsQL is built by the team at [PromptQL](https://promptql.io) as a showcase of PromptQL's capabilities for building
+trustworthy AI agents._
