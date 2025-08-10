@@ -1,6 +1,6 @@
 # DocsQL
 
-> An AI-powered documentation assistant built with PromptQL
+> An AI-powered documentation assistant built with [PromptQL](https://promptql.io).
 
 <img width="1999" height="1374" alt="image" src="https://github.com/user-attachments/assets/26fb3b43-5ffd-46ec-b828-495c791bb7d3" />
 
