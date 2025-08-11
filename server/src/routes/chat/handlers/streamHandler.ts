@@ -54,7 +54,12 @@ export function createStreamHandler(conversationId: string, controller: Readable
     }
 
     if (chunk.message) {
-      if (state.messageContent && /[.!?]$/.test(state.messageContent.trim()) && !/^\s/.test(chunk.message)) {
+      if (
+        state.messageContent &&
+        /[.!?]$/.test(state.messageContent.trim()) &&
+        !/^\s/.test(chunk.message) &&
+        !/https?:\/\/[^\s]*$/.test(state.messageContent.trim())
+      ) {
         state.messageContent += " ";
       }
       state.messageContent += chunk.message;
