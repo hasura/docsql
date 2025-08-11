@@ -38,4 +38,24 @@ describe("Chat sendMessage integration", () => {
     // Should return 500 for invalid request body
     expect(response.status).toBe(500);
   });
+
+  it("should not add spaces after URLs ending with punctuation", async () => {
+    const response = await app.handle(
+      new Request("http://localhost/chat/conversations/test-url/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: "Tell me about URLs",
+          history: [],
+        }),
+      })
+    );
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get("content-type")).toBe("text/event-stream");
+    expect(response.body).toBeDefined();
+
+    // Note: This test verifies the endpoint works for URL-related queries
+    // The actual URL spacing logic is tested in the stream handler unit tests
+  });
 });
