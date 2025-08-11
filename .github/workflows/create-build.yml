@@ -24,6 +24,7 @@ jobs:
           ANTHROPIC_KEY: "op://Product ACT/pql-docs-bot/anthropic-api-key"
           APP_PG_JDBC_URL: "op://Product ACT/pql-docs-bot/postgres-jdbc-url"
           APP_PG_JDBC_SCHEMAS: "op://Product ACT/pql-docs-bot/postgres-jdbc-schemas"
+          APP_TS_OPENAI_API_KEY: "op://Product ACT/pql-docs-bot/openai-api-key"
 
       - name: Install DDN CLI
         run: |
@@ -46,6 +47,7 @@ jobs:
           ANTHROPIC_KEY=$ANTHROPIC_KEY
           APP_PG_JDBC_URL=$APP_PG_JDBC_URL
           APP_PG_JDBC_SCHEMAS=$APP_PG_JDBC_SCHEMAS
+          APP_TS_OPENAI_API_KEY=$APP_TS_OPENAI_API_KEY
           EOF
 
       - name: Create DDN build
