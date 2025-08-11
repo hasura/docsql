@@ -33,12 +33,12 @@ services:
       - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
   promptql-playground:
     environment:
+      ANTHROPIC_KEY: ${ANTHROPIC_KEY}
       CONFIG_PATH: /app/promptql_config.json
       CORS_ORIGINS: ${CORS_ORIGINS:-https://console.hasura.io,https://promptql.console.hasura.io}
       DDN_URL: ${HASURA_DDN_URL:-http://engine:3000/v1/sql}
       OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT:-http://local.hasura.dev:4317}
       PROMPTQL_SECRET_KEY: ${PROMPTQL_SECRET_KEY}
-      ANTHROPIC_KEY: ${ANTHROPIC_KEY}
     extra_hosts:
       - local.hasura.dev:host-gateway
     image: us-east4-docker.pkg.dev/promptql-execution-service/promptql-public/promptql-playground-local
