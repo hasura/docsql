@@ -48,6 +48,17 @@ definition:
           - page_url
           - title
           - updated_at
+    - role: public
+      output:
+        allowedFields:
+          - content
+          - created_at
+          - description
+          - id
+          - keywords
+          - page_url
+          - title
+          - updated_at
 
 ---
 kind: BooleanExpressionType
@@ -186,4 +197,7 @@ definition:
       select:
         filter: null
         allowSubscriptions: true
+    - role: public
+      select:
+        filter: null
 

@@ -25,7 +25,78 @@ definition:
           result_type:
             name: EmbeddingResult
             type: named
+        - arguments:
+            page:
+              type:
+                name: Doc_Page
+                type: named
+          name: insertNewPage
+          result_type:
+            name: DocOperationResult
+            type: named
+        - arguments:
+            page:
+              type:
+                name: Doc_Page
+                type: named
+          name: updateExistingPage
+          result_type:
+            name: DocOperationResult
+            type: named
+        - arguments:
+            page_url:
+              type:
+                name: String
+                type: named
+          name: deletePage
+          result_type:
+            name: DocOperationResult
+            type: named
       object_types:
+        Doc_Page:
+          fields:
+            content:
+              type:
+                name: String
+                type: named
+            description:
+              type:
+                type: nullable
+                underlying_type:
+                  name: String
+                  type: named
+            keywords:
+              type:
+                type: nullable
+                underlying_type:
+                  element_type:
+                    name: String
+                    type: named
+                  type: array
+            page_url:
+              type:
+                name: String
+                type: named
+            title:
+              type:
+                name: String
+                type: named
+        DocOperationResult:
+          fields:
+            docContentId:
+              type:
+                type: nullable
+                underlying_type:
+                  name: String
+                  type: named
+            message:
+              type:
+                name: String
+                type: named
+            success:
+              type:
+                name: Boolean
+                type: named
         EmbeddingResult:
           fields:
             values:
@@ -36,6 +107,13 @@ definition:
                 type: array
       procedures: []
       scalar_types:
+        Boolean:
+          aggregate_functions: {}
+          comparison_operators:
+            _eq:
+              type: equal
+          representation:
+            type: boolean
         Float:
           aggregate_functions: {}
           comparison_operators:

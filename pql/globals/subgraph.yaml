@@ -9,3 +9,5 @@ definition:
   envMapping:
     "ANTHROPIC_KEY":
       fromEnv: ANTHROPIC_KEY
+    "JWT_SECRET":
+      fromEnv: JWT_SECRET

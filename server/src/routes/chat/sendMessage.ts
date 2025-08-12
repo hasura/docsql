@@ -10,14 +10,24 @@ import {
   logRequestTimeout,
 } from "./handlers/requestLogger";
 
-const client = createPromptQLClientV2({
-  apiKey: process.env.PQL_API_KEY || "",
-});
+const generateToken = async () => {
+  const jwt = await import("jsonwebtoken");
+
+  const now = Math.floor(Date.now() / 1000);
+  const payload = {
+    iat: now,
+    exp: now + 365 * 24 * 60 * 60,
+    "claims.jwt.hasura.io": {
+      "x-hasura-default-role": "public",
+      "x-hasura-allowed-roles": ["public"],
+    },
+  };
+
+  const token = jwt.sign(payload, process.env.JWT_SECRET || "");
+  return token;
+};
 
 export const sendMessage = async ({ body, params, set, request }: Context) => {
-  console.log("Received body:", body);
-  console.log("Body type:", typeof body);
-
   let parsedBody = body;
   if (!parsedBody && request) {
     try {
@@ -83,6 +93,14 @@ export const sendMessage = async ({ body, params, set, request }: Context) => {
 
     initializeConversationState(requestId, conversationId);
     const interactions = buildInteractions(history, message);
+
+    const token = await generateToken();
+    const client = createPromptQLClientV2({
+      apiKey: process.env.PQL_API_KEY || "",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     const stream = new ReadableStream({
       start(controller) {

@@ -1,0 +1,30 @@
+---
+kind: Command
+version: v1
+definition:
+  name: delete_page
+  outputType: doc_operation_result!
+  arguments:
+    - name: page_url
+      type: String!
+  source:
+    dataConnectorName: ts
+    dataConnectorCommand:
+      function: deletePage
+    argumentMapping:
+      page_url: page_url
+  graphql:
+    rootFieldName: delete_page
+    rootFieldKind: Query
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: delete_page
+  permissions:
+    - role: admin
+      allowExecution: true
+    - role: public
+      allowExecution: false
+

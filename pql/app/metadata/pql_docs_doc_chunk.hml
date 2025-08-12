@@ -57,6 +57,21 @@ definition:
           - page_title
           - page_url
           - updated_at
+    - role: public
+      output:
+        allowedFields:
+          - chunk_content
+          - chunk_line_end
+          - chunk_line_start
+          - created_at
+          - doc_content_id_fk
+          - embedding
+          - id
+          - page_description
+          - page_keywords
+          - page_title
+          - page_url
+          - updated_at
 
 ---
 kind: BooleanExpressionType
@@ -213,4 +228,7 @@ definition:
       select:
         filter: null
         allowSubscriptions: true
+    - role: public
+      select:
+        filter: null
 
