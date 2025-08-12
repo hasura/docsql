@@ -23,6 +23,7 @@ version: v1
 definition:
   commandName: delete_page
   permissions:
-    - role: admin
-      allowExecution: true
-
+  - role: admin
+    allowExecution: true
+  - role: user
+    allowExecution: false
