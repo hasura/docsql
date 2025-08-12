@@ -23,19 +23,7 @@ const generateToken = async () => {
     },
   };
 
-  const adminPayload = {
-    iat: now,
-    exp: now + 365 * 24 * 60 * 60,
-    "claims.jwt.hasura.io": {
-      "x-hasura-default-role": "admin",
-      "x-hasura-allowed-roles": ["admin"],
-    },
-  };
-
   const token = jwt.sign(payload, process.env.JWT_SECRET || "");
-  const adminToken = jwt.sign(adminPayload, process.env.JWT_SECRET || "");
-  console.log("Generated public JWT:", token);
-  console.log("Generated admin JWT:", adminToken);
   return token;
 };
 
