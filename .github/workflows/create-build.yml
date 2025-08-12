@@ -26,6 +26,7 @@ jobs:
           APP_PG_JDBC_SCHEMAS: "op://Product ACT/pql-docs-bot/postgres-jdbc-schemas"
           APP_TS_OPENAI_API_KEY: "op://Product ACT/pql-docs-bot/openai-api-key"
           APP_TS_PG_DATABASE_URL: "op://Product ACT/pql-docs-bot/postgres-database-url"
+          JWT_SECRET: "op://Product ACT/pql-docs-bot/jwt-secret"
 
       - name: Install DDN CLI
         run: |
@@ -50,6 +51,7 @@ jobs:
           APP_PG_JDBC_SCHEMAS=$APP_PG_JDBC_SCHEMAS
           APP_TS_OPENAI_API_KEY=$APP_TS_OPENAI_API_KEY
           APP_TS_PG_DATABASE_URL=$APP_TS_PG_DATABASE_URL
+          JWT_SECRET=$JWT_SECRET
           EOF
 
       - name: Create DDN build
