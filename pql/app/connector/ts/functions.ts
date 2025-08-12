@@ -20,8 +20,8 @@ export type DocOperationResult = {
   message: string;
 };
 
-interface DocPage {
-  pageUrl: string;
+interface Doc_Page {
+  page_url: string;
   title: string;
   description?: string;
   keywords?: string[];
@@ -57,7 +57,7 @@ export async function transformQueryIntoEmbedding(text: string): Promise<Embeddi
 /**
  * @readonly
  */
-export async function insertNewPage(page: DocPage): Promise<DocOperationResult> {
+export async function insertNewPage(page: Doc_Page): Promise<DocOperationResult> {
   const client = await pool.connect();
   try {
     await client.query("BEGIN");
@@ -65,7 +65,7 @@ export async function insertNewPage(page: DocPage): Promise<DocOperationResult> 
     const contentResult = await client.query(
       `INSERT INTO pql_docs.doc_content (page_url, title, description, keywords, content, is_checked)
        VALUES ($1, $2, $3, $4, $5, true) RETURNING id`,
-      [page.pageUrl, page.title, page.description, page.keywords, page.content]
+      [page.page_url, page.title, page.description, page.keywords, page.content]
     );
 
     const docContentId = contentResult.rows[0].id;
@@ -75,7 +75,7 @@ export async function insertNewPage(page: DocPage): Promise<DocOperationResult> 
     return {
       success: true,
       docContentId,
-      message: `Successfully inserted page: ${page.pageUrl}`,
+      message: `Successfully inserted page: ${page.page_url}`,
     };
   } catch (error) {
     await client.query("ROLLBACK");
@@ -91,7 +91,7 @@ export async function insertNewPage(page: DocPage): Promise<DocOperationResult> 
 /**
  * @readonly
  */
-export async function updateExistingPage(page: DocPage): Promise<DocOperationResult> {
+export async function updateExistingPage(page: Doc_Page): Promise<DocOperationResult> {
   const client = await pool.connect();
   try {
     await client.query("BEGIN");
@@ -100,13 +100,13 @@ export async function updateExistingPage(page: DocPage): Promise<DocOperationRes
       `UPDATE pql_docs.doc_content 
        SET title = $2, description = $3, keywords = $4, content = $5, updated_at = NOW()
        WHERE page_url = $1 RETURNING id`,
-      [page.pageUrl, page.title, page.description, page.keywords, page.content]
+      [page.page_url, page.title, page.description, page.keywords, page.content]
     );
 
     if (contentResult.rows.length === 0) {
       return {
         success: false,
-        message: `Page not found: ${page.pageUrl}`,
+        message: `Page not found: ${page.page_url}`,
       };
     }
 
@@ -120,7 +120,7 @@ export async function updateExistingPage(page: DocPage): Promise<DocOperationRes
     return {
       success: true,
       docContentId,
-      message: `Successfully updated page: ${page.pageUrl}`,
+      message: `Successfully updated page: ${page.page_url}`,
     };
   } catch (error) {
     await client.query("ROLLBACK");
@@ -136,21 +136,21 @@ export async function updateExistingPage(page: DocPage): Promise<DocOperationRes
 /**
  * @readonly
  */
-export async function deletePage(pageUrl: string): Promise<DocOperationResult> {
+export async function deletePage(page_url: string): Promise<DocOperationResult> {
   const client = await pool.connect();
   try {
-    const result = await client.query("DELETE FROM pql_docs.doc_content WHERE page_url = $1", [pageUrl]);
+    const result = await client.query("DELETE FROM pql_docs.doc_content WHERE page_url = $1", [page_url]);
 
     if (result.rowCount === 0) {
       return {
         success: false,
-        message: `Page not found: ${pageUrl}`,
+        message: `Page not found: ${page_url}`,
       };
     }
 
     return {
       success: true,
-      message: `Successfully deleted page: ${pageUrl}`,
+      message: `Successfully deleted page: ${page_url}`,
     };
   } catch (error) {
     return {
@@ -162,7 +162,7 @@ export async function deletePage(pageUrl: string): Promise<DocOperationResult> {
   }
 }
 
-async function generateChunksAndEmbeddings(client: any, docContentId: string, page: DocPage): Promise<void> {
+async function generateChunksAndEmbeddings(client: any, docContentId: string, page: Doc_Page): Promise<void> {
   const chunks = chunkContent(page.content, 500);
 
   for (const chunk of chunks) {
@@ -177,7 +177,7 @@ async function generateChunksAndEmbeddings(client: any, docContentId: string, pa
         docContentId,
         chunk.content,
         page.title,
-        page.pageUrl,
+        page.page_url,
         page.description,
         chunk.lineStart,
         chunk.lineEnd,
