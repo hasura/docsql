@@ -12,6 +12,7 @@ services:
       OPENAI_API_KEY: $APP_TS_OPENAI_API_KEY
       OTEL_EXPORTER_OTLP_ENDPOINT: $APP_TS_OTEL_EXPORTER_OTLP_ENDPOINT
       OTEL_SERVICE_NAME: $APP_TS_OTEL_SERVICE_NAME
+      PG_DATABASE_URL: $APP_TS_PG_DATABASE_URL
     extra_hosts:
       - local.hasura.dev:host-gateway
     ports:

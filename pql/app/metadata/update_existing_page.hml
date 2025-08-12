@@ -1,0 +1,26 @@
+---
+kind: Command
+version: v1
+definition:
+  name: update_existing_page
+  outputType: doc_operation_result!
+  arguments:
+    - name: page
+      type: doc_page!
+  source:
+    dataConnectorName: ts
+    dataConnectorCommand:
+      function: updateExistingPage
+  graphql:
+    rootFieldName: update_existing_page
+    rootFieldKind: Query
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: update_existing_page
+  permissions:
+    - role: admin
+      allowExecution: true
+
