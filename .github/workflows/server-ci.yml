@@ -19,6 +19,7 @@ jobs:
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           PQL_API_KEY: "op://Product ACT/pql-docs-bot/pql-api-key"
+          JWT_SECRET: "op://Product ACT/pql-docs-bot/jwt-secret"
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v1
@@ -47,6 +48,7 @@ jobs:
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           PQL_API_KEY: "op://Product ACT/pql-docs-bot/pql-api-key"
+          JWT_SECRET: "op://Product ACT/pql-docs-bot/jwt-secret"
 
       - name: Build Docker image
         run: |
