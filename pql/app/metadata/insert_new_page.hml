@@ -19,7 +19,7 @@ definition:
     inputTypeName: doc_page_input
   dataConnectorTypeMapping:
     - dataConnectorName: ts
-      dataConnectorObjectType: DocPage
+      dataConnectorObjectType: Doc_Page
       fieldMapping:
         content:
           column:
@@ -32,7 +32,7 @@ definition:
             name: keywords
         page_url:
           column:
-            name: pageUrl
+            name: page_url
         title:
           column:
             name: title
@@ -102,7 +102,7 @@ definition:
   outputType: doc_operation_result!
   arguments:
     - name: page
-      type: doc_page!
+      type: doc_page_1!
   source:
     dataConnectorName: ts
     dataConnectorCommand:

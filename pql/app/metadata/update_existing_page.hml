@@ -6,7 +6,7 @@ definition:
   outputType: doc_operation_result!
   arguments:
     - name: page
-      type: doc_page!
+      type: doc_page_1!
   source:
     dataConnectorName: ts
     dataConnectorCommand:
@@ -25,3 +25,42 @@ definition:
       allowExecution: true
     - role: public
       allowExecution: false
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: doc_page_1
+  fields:
+    - name: content
+      type: String!
+    - name: description
+      type: String
+    - name: keywords
+      type: "[String!]"
+    - name: page_url
+      type: String!
+    - name: title
+      type: String!
+  graphql:
+    typeName: doc_page_1
+    inputTypeName: doc_page_1_input
+  dataConnectorTypeMapping:
+    - dataConnectorName: ts
+      dataConnectorObjectType: Doc_Page
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: doc_page_1
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - content
+          - description
+          - keywords
+          - page_url
+          - title
+

@@ -12,7 +12,7 @@ definition:
     dataConnectorCommand:
       function: deletePage
     argumentMapping:
-      page_url: pageUrl
+      page_url: page_url
   graphql:
     rootFieldName: delete_page
     rootFieldKind: Query
@@ -23,7 +23,8 @@ version: v1
 definition:
   commandName: delete_page
   permissions:
-  - role: admin
-    allowExecution: true
-  - role: public
-    allowExecution: false
+    - role: admin
+      allowExecution: true
+    - role: public
+      allowExecution: false
+

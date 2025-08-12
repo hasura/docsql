@@ -28,7 +28,7 @@ definition:
         - arguments:
             page:
               type:
-                name: DocPage
+                name: Doc_Page
                 type: named
           name: insertNewPage
           result_type:
@@ -37,14 +37,14 @@ definition:
         - arguments:
             page:
               type:
-                name: DocPage
+                name: Doc_Page
                 type: named
           name: updateExistingPage
           result_type:
             name: DocOperationResult
             type: named
         - arguments:
-            pageUrl:
+            page_url:
               type:
                 name: String
                 type: named
@@ -53,23 +53,7 @@ definition:
             name: DocOperationResult
             type: named
       object_types:
-        DocOperationResult:
-          fields:
-            docContentId:
-              type:
-                type: nullable
-                underlying_type:
-                  name: String
-                  type: named
-            message:
-              type:
-                name: String
-                type: named
-            success:
-              type:
-                name: Boolean
-                type: named
-        DocPage:
+        Doc_Page:
           fields:
             content:
               type:
@@ -89,13 +73,29 @@ definition:
                     name: String
                     type: named
                   type: array
-            pageUrl:
+            page_url:
               type:
                 name: String
                 type: named
             title:
               type:
                 name: String
+                type: named
+        DocOperationResult:
+          fields:
+            docContentId:
+              type:
+                type: nullable
+                underlying_type:
+                  name: String
+                  type: named
+            message:
+              type:
+                name: String
+                type: named
+            success:
+              type:
+                name: Boolean
                 type: named
         EmbeddingResult:
           fields:
