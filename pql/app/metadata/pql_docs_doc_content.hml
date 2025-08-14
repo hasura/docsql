@@ -55,6 +55,7 @@ definition:
           - created_at
           - description
           - id
+          - is_checked
           - keywords
           - page_url
           - title
