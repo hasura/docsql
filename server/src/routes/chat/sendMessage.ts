@@ -97,6 +97,7 @@ export const sendMessage = async ({ body, params, set, request }: Context) => {
     const token = await generateToken();
     const client = createPromptQLClientV2({
       apiKey: process.env.PQL_API_KEY || "",
+      baseUrl: "https://promptql.ddn.pro.hasura.io/api",
       ddn: {
         headers: {
           Authorization: `Bearer ${token}`,
