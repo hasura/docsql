@@ -4,7 +4,7 @@ definition:
   current: default
   contexts:
     default:
-      project: pql-docs
+      project: docs-bot
       supergraph: ../supergraph.yaml
       subgraph: ../app/subgraph.yaml
       localEnvFile: ../.env
