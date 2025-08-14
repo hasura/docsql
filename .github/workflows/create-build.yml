@@ -73,7 +73,7 @@ jobs:
             const comment = `## 🚀 PromptQL Build Complete
 
             **Build Version:** \`${buildOutput.build_version || 'N/A'}\`
-            **Project:** \`${buildOutput.project_name || 'pql-docs'}\`
+            **Project:** \`${buildOutput.project_name || 'docs-bot'}\`
             **PromptQL Playground:** ${buildOutput.promptql_url ? `[Open Playground](${buildOutput.promptql_url})` : 'N/A'}
 
             ${buildOutput.description ? `\n**Description:** ${buildOutput.description}` : ''}
