@@ -50,6 +50,8 @@ Required in `.env`:
 
 - `SERVER_PORT` - Server port (default: 4000)
 - `PQL_API_KEY` - PromptQL API key
+- `JWT_SECRET` - JWT secret for authentication
+- `SENTRY_DSN` - Sentry DSN for error tracking (optional)
 
 ## Integration
 
@@ -58,3 +60,4 @@ The server acts as a proxy between frontend clients and the PromptQL backend, ha
 - CORS for browser requests
 - Streaming response formatting
 - Error handling and logging
+- Error tracking with Sentry integration
