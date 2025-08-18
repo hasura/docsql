@@ -20,6 +20,7 @@ jobs:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           PQL_API_KEY: "op://Product ACT/pql-docs-bot/pql-api-key"
           JWT_SECRET: "op://Product ACT/pql-docs-bot/jwt-secret"
+          SENTRY_DSN: "op://Product ACT/pql-docs-bot/sentry-dsn"
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v1
@@ -49,6 +50,7 @@ jobs:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           PQL_API_KEY: "op://Product ACT/pql-docs-bot/pql-api-key"
           JWT_SECRET: "op://Product ACT/pql-docs-bot/jwt-secret"
+          SENTRY_DSN: "op://Product ACT/pql-docs-bot/sentry-dsn"
 
       - name: Build Docker image
         run: |
@@ -62,6 +64,8 @@ jobs:
             -p 4000:4000 \
             -e SERVER_PORT=4000 \
             -e PQL_API_KEY="${PQL_API_KEY}" \
+            -e JWT_SECRET="${JWT_SECRET}" \
+            -e SENTRY_DSN="${SENTRY_DSN}" \
             docs-bot-server:test
 
           sleep 10

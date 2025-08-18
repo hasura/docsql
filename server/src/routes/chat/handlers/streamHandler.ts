@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/bun";
 import type { Context } from "elysia";
 
 export interface StreamState {
@@ -29,6 +30,12 @@ export function createStreamHandler(conversationId: string, controller: Readable
           state.clientDisconnected = true;
         } else {
           console.error("Failed to enqueue data:", error);
+          Sentry.captureException(error, {
+            tags: {
+              component: "stream_handler",
+              action: "enqueue_data",
+            },
+          });
           throw error;
         }
       }

@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/bun";
 import type { Context } from "elysia";
 import { createPromptQLClientV2 } from "@hasura/promptql";
 import { createStreamHandler } from "./handlers/streamHandler";
@@ -148,6 +149,13 @@ export const sendMessage = async ({ body, params, set, request }: Context) => {
           })
           .catch((error) => {
             logRequestError(requestId, error);
+            Sentry.captureException(error, {
+              tags: {
+                requestId,
+                conversationId,
+                component: "chat_stream",
+              },
+            });
           })
           .finally(() => {
             try {
@@ -164,6 +172,13 @@ export const sendMessage = async ({ body, params, set, request }: Context) => {
     return new Response(stream);
   } catch (error) {
     safeCleanup();
+    Sentry.captureException(error, {
+      tags: {
+        requestId,
+        conversationId,
+        component: "chat_handler",
+      },
+    });
     throw error;
   }
 };
