@@ -1,0 +1,71 @@
+---
+kind: Command
+version: v1
+definition:
+  name: create_slack_key_value_display
+  outputType: "[slack_block!]!"
+  arguments:
+    - name: headers
+      type: json!
+    - name: data
+      type: String!
+      description: >-
+        - Object containing key-value pairs to display. Keys become bold labels,
+
+        values are displayed below each label. Examples:
+
+        - User profile: {name: "John Doe", email: "john@company.com", department: "Engineering"}
+
+        - System status: {uptime: "99.9%", memory: "4.2GB", cpu: "23%", disk: "67%"}
+
+        - Order details: {orderId: "ORD-12345", customer: "Acme Corp", amount: "$1,250.00"}
+
+
+        Notes:
+
+        - All values converted to strings for display
+
+        - Nested objects will be displayed as "[object Object]" - flatten first if needed
+
+        - Arrays will be displayed as comma-separated values
+
+        - Maximum 10 fields per section (splits into multiple sections if more)
+    - name: title
+      type: String
+      description: >-
+        - Optional header title for the key-value section (e.g., "User Details",
+
+        "System Information", "Order Summary"). If provided, appears as a prominent header
+
+        block above the key-value pairs
+  source:
+    dataConnectorName: logic
+    dataConnectorCommand:
+      function: createSlackKeyValueDisplay
+    argumentMapping:
+      headers: _headers
+      data: data
+      title: title
+  graphql:
+    rootFieldName: create_slack_key_value_display
+    rootFieldKind: Query
+  description: >-
+    Create a key-value pairs display from a JSON object for detailed information
+    presentation
+
+
+    Transforms an object into a clean, organized display of key-value pairs with bold labels.
+
+    Perfect for showing configuration details, user profiles, system information, or any
+
+    structured data where you want to highlight specific fields and their values.
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: create_slack_key_value_display
+  permissions:
+    - role: admin
+      allowExecution: true
+

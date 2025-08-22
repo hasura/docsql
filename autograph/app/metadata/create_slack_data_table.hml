@@ -1,0 +1,68 @@
+---
+kind: Command
+version: v1
+definition:
+  name: create_slack_data_table
+  outputType: "[slack_block!]!"
+  arguments:
+    - name: headers
+      type: json!
+    - name: data
+      type: String!
+      description: >-
+        - Array of objects representing table rows. Each object should have the
+        same keys.
+
+        The keys become column headers, values become cell data. Examples:
+
+        - Sales data: [{product: "Widget A", sales: 1250, region: "North"}, ...]
+
+        - User list: [{name: "John", email: "john@co.com", role: "Admin"}, ...]
+
+        - Metrics: [{date: "2024-01-01", visitors: 1500, conversions: 45}, ...]
+
+
+        Limitations:
+
+        - Maximum 10 rows displayed (shows "X of Y rows" if more)
+
+        - All values converted to strings for display
+
+        - Empty/null values show as empty cells
+    - name: title
+      type: String
+      description: >-
+        - Optional header title for the table (e.g., "Q4 Sales Report", "Active
+        Users", "System Metrics")
+
+        If provided, appears as a prominent header block above the table
+  source:
+    dataConnectorName: logic
+    dataConnectorCommand:
+      function: createSlackDataTable
+    argumentMapping:
+      headers: _headers
+      data: data
+      title: title
+  graphql:
+    rootFieldName: create_slack_data_table
+    rootFieldKind: Query
+  description: >-
+    Create a formatted data table from structured JSON data for Slack display
+
+
+    Converts an array of objects into a nicely formatted table with headers and rows.
+
+    Perfect for displaying query results, reports, lists of records, or any tabular data.
+
+    Automatically handles column headers and formats data for optimal Slack readability.
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: create_slack_data_table
+  permissions:
+    - role: admin
+      allowExecution: true
+

@@ -1,0 +1,80 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: thread
+  fields:
+    - name: build_id
+      type: String
+    - name: created_at
+      type: String!
+    - name: project_id
+      type: String!
+    - name: state
+      type: String
+    - name: thread_id
+      type: String!
+    - name: title
+      type: String
+    - name: user_id
+      type: String
+  graphql:
+    typeName: thread
+    inputTypeName: thread_input
+  dataConnectorTypeMapping:
+    - dataConnectorName: logic
+      dataConnectorObjectType: Thread
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: thread
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - build_id
+          - created_at
+          - project_id
+          - state
+          - thread_id
+          - title
+          - user_id
+
+---
+kind: Command
+version: v1
+definition:
+  name: get_all_threads
+  outputType: "[thread!]!"
+  arguments:
+    - name: from_thread_created_at
+      type: String
+      description: "ISO 8601-like with explicit timezone designation. Sample:
+        2025-04-14T14:57:03+05:30"
+    - name: sample_artifacts
+      type: Boolean
+      description: "Whether to sample table artifacts in the thread state. Default: true"
+    - name: to_thread_created_at
+      type: String
+      description: "ISO 8601-like with explicit timezone designation. Sample:
+        2025-04-14T14:57:03+05:30"
+  source:
+    dataConnectorName: logic
+    dataConnectorCommand:
+      function: getAllThreads
+  graphql:
+    rootFieldName: get_all_threads
+    rootFieldKind: Query
+  description: Get all threads of a project.
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: get_all_threads
+  permissions:
+    - role: admin
+      allowExecution: true
+

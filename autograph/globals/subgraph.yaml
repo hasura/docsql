@@ -1,0 +1,12 @@
+kind: Subgraph
+version: v2
+definition:
+  name: globals
+  generator:
+    rootPath: .
+  includePaths:
+    - metadata
+    - auth/prod
+  envMapping:
+    "ANTHROPIC_KEY":
+      fromEnv: ANTHROPIC_KEY
