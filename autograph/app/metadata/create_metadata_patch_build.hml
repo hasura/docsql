@@ -1,0 +1,122 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: metadata_patch
+  fields:
+    - name: description
+      type: String!
+      description: The description of the entity or field.
+    - name: field_name
+      type: String
+      description: Name of the field that the description should be added to
+        (applicable only if kind == ObjectType)
+    - name: kind
+      type: String!
+      description: Model, Command or ObjectType
+    - name: name
+      type: String!
+      description: Name of the entity
+    - name: subgraph
+      type: String!
+  graphql:
+    typeName: metadata_patch
+    inputTypeName: metadata_patch_input
+  dataConnectorTypeMapping:
+    - dataConnectorName: logic
+      dataConnectorObjectType: MetadataPatch
+      fieldMapping:
+        description:
+          column:
+            name: description
+        field_name:
+          column:
+            name: fieldName
+        kind:
+          column:
+            name: kind
+        name:
+          column:
+            name: name
+        subgraph:
+          column:
+            name: subgraph
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: metadata_patch
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - description
+          - field_name
+          - kind
+          - name
+          - subgraph
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: create_build_output
+  fields:
+    - name: build_version
+      type: String!
+    - name: description
+      type: String!
+    - name: promptql_url
+      type: String!
+  graphql:
+    typeName: create_build_output
+    inputTypeName: create_build_output_input
+  dataConnectorTypeMapping:
+    - dataConnectorName: logic
+      dataConnectorObjectType: CreateBuildOutput
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: create_build_output
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - build_version
+          - description
+          - promptql_url
+
+---
+kind: Command
+version: v1
+definition:
+  name: create_metadata_patch_build
+  outputType: create_build_output!
+  arguments:
+    - name: description
+      type: String
+      description: Optional description for the build
+    - name: patches
+      type: "[metadata_patch!]!"
+  source:
+    dataConnectorName: logic
+    dataConnectorCommand:
+      procedure: createMetadataPatchBuild
+  graphql:
+    rootFieldName: create_metadata_patch_build
+    rootFieldKind: Mutation
+  description: Creates a new supergraph build by applying the patches on the
+    metadata of the applied build of a project.
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: create_metadata_patch_build
+  permissions:
+    - role: admin
+      allowExecution: true
+

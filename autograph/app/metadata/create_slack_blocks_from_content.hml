@@ -1,0 +1,114 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: slack_block_text
+  fields:
+    - name: text
+      type: String!
+    - name: type
+      type: String!
+  graphql:
+    typeName: slack_block_text
+    inputTypeName: slack_block_text_input
+  dataConnectorTypeMapping:
+    - dataConnectorName: logic
+      dataConnectorObjectType: SlackBlock_text
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: slack_block_text
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - text
+          - type
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: slack_block
+  description: Slack Block Kit block element - simplified for NDC compatibility
+  fields:
+    - name: elements
+      type: "[slack_block_text!]"
+    - name: fields
+      type: "[slack_block_text!]"
+    - name: text
+      type: slack_block_text
+    - name: type
+      type: String!
+  graphql:
+    typeName: slack_block
+    inputTypeName: slack_block_input
+  dataConnectorTypeMapping:
+    - dataConnectorName: logic
+      dataConnectorObjectType: SlackBlock
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: slack_block
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - elements
+          - fields
+          - text
+          - type
+
+---
+kind: Command
+version: v1
+definition:
+  name: create_slack_blocks_from_content
+  outputType: "[slack_block!]!"
+  arguments:
+    - name: headers
+      type: json!
+    - name: content
+      type: String!
+      description: |-
+        - Text content to convert. Can be:
+        - Plain text string (will be converted to section blocks)
+        - Markdown-style text with # headers and ## subheaders
+        - Pre-built SlackBlock[] array (will be returned as-is)
+
+        Examples:
+        - "Hello world" → Simple section block
+        - "# Title\n## Subtitle\nContent" → Header + subheader + section blocks
+        - [{type: "section", text: {...}}] → Returned unchanged
+  source:
+    dataConnectorName: logic
+    dataConnectorCommand:
+      function: createSlackBlocksFromContent
+    argumentMapping:
+      headers: _headers
+      content: content
+  graphql:
+    rootFieldName: create_slack_blocks_from_content
+    rootFieldKind: Query
+  description: >-
+    Create Slack Block Kit blocks from simple text content with basic markdown
+    support
+
+
+    Converts plain text or simple markdown into properly formatted Slack Block Kit blocks.
+
+    Supports headers (# and ##) and automatically formats text into sections.
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: create_slack_blocks_from_content
+  permissions:
+    - role: admin
+      allowExecution: true
+

@@ -1,0 +1,82 @@
+---
+kind: Command
+version: v1
+definition:
+  name: create_slack_list_display
+  outputType: "[slack_block!]!"
+  arguments:
+    - name: headers
+      type: json!
+    - name: items
+      type: String!
+      description: >-
+        - Array of items to display in the list. Each item will be converted to
+
+        a string and displayed on its own line. Examples:
+
+        - Error messages: ["Database connection failed", "API timeout", "Invalid credentials"]
+
+        - Todo items: ["Review pull request #123", "Update documentation", "Deploy to staging"]
+
+        - Features: ["Real-time notifications", "Advanced search", "Mobile app"]
+
+        - Steps: ["Backup database", "Run migration", "Restart services", "Verify functionality"]
+
+
+        Notes:
+
+        - All items converted to strings for display
+
+        - Objects will show as "[object Object]" - convert to meaningful strings first
+
+        - Empty array shows "No items to display" message
+
+        - Very long lists may hit Slack message size limits
+    - name: ordered
+      type: Boolean!
+      description: |-
+        - Whether to use numbered list format instead of bullet points:
+        - false (default): Uses bullet points (• Item 1, • Item 2, ...)
+        - true: Uses numbers (1. Item 1, 2. Item 2, ...)
+        Use numbered lists for sequential steps, priorities, or ranked items
+    - name: title
+      type: String
+      description: >-
+        - Optional header title for the list (e.g., "Action Items", "System
+        Errors",
+
+        "Deployment Steps", "New Features"). If provided, appears as a prominent header
+
+        block above the list
+  source:
+    dataConnectorName: logic
+    dataConnectorCommand:
+      function: createSlackListDisplay
+    argumentMapping:
+      headers: _headers
+      items: items
+      ordered: ordered
+      title: title
+  graphql:
+    rootFieldName: create_slack_list_display
+    rootFieldKind: Query
+  description: >-
+    Create a formatted list display from array data with bullet points or
+    numbering
+
+
+    Converts an array of items into a clean, readable list format. Perfect for displaying
+
+    todo items, error messages, feature lists, steps in a process, or any collection
+
+    of related items that need to be presented in an organized, scannable format.
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: create_slack_list_display
+  permissions:
+    - role: admin
+      allowExecution: true
+

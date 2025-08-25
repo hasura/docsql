@@ -1,0 +1,167 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: slack_config
+  description: Slack configuration
+  fields:
+    - name: channel
+      type: String!
+    - name: icon_emoji
+      type: String
+    - name: icon_url
+      type: String
+    - name: username
+      type: String
+  graphql:
+    typeName: slack_config
+    inputTypeName: slack_config_input
+  dataConnectorTypeMapping:
+    - dataConnectorName: logic
+      dataConnectorObjectType: SlackConfig
+      fieldMapping:
+        channel:
+          column:
+            name: channel
+        icon_emoji:
+          column:
+            name: iconEmoji
+        icon_url:
+          column:
+            name: iconUrl
+        username:
+          column:
+            name: username
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: slack_config
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - channel
+          - icon_emoji
+          - icon_url
+          - username
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: slack_message_result
+  description: Slack message sending result
+  fields:
+    - name: error
+      type: String
+    - name: message_id
+      type: String
+    - name: success
+      type: Boolean!
+  graphql:
+    typeName: slack_message_result
+    inputTypeName: slack_message_result_input
+  dataConnectorTypeMapping:
+    - dataConnectorName: logic
+      dataConnectorObjectType: SlackMessageResult
+      fieldMapping:
+        error:
+          column:
+            name: error
+        message_id:
+          column:
+            name: messageId
+        success:
+          column:
+            name: success
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: slack_message_result
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - error
+          - message_id
+          - success
+
+---
+kind: Command
+version: v1
+definition:
+  name: send_slack_message_to_channel
+  outputType: slack_message_result!
+  arguments:
+    - name: blocks
+      type: String!
+      description: >-
+        - Message content to send. Can be:
+
+        - Array of SlackBlock objects (rich formatted content with sections, headers, etc.)
+
+        - Simple text string (will be auto-converted to basic blocks)
+
+
+        Examples:
+
+        - "Hello team!" → Simple text message
+
+        - [{type: "header", text: {type: "plain_text", text: "Alert"}}] → Rich formatted message
+    - name: config
+      type: slack_config!
+      description: >-
+        - Slack channel and bot configuration:
+
+        - channel: Target channel (e.g., "#general", "#alerts", or channel ID "C1234567890")
+
+        - username: Display name for the bot (e.g., "PromptQL Bot", "Alert System")
+
+        - iconEmoji: Bot avatar emoji (e.g., ":robot_face:", ":warning:", ":chart_with_upwards_trend:")
+
+        - iconUrl: Custom bot avatar image URL (alternative to iconEmoji)
+    - name: text
+      type: String
+      description: >-
+        - Fallback text for push notifications and accessibility. If not
+        provided,
+
+        defaults to "New message". This text appears in:
+
+        - Mobile push notifications
+
+        - Desktop notifications
+
+        - Screen readers
+
+        - Slack search results
+  source:
+    dataConnectorName: logic
+    dataConnectorCommand:
+      function: sendSlackMessageToChannel
+  graphql:
+    rootFieldName: send_slack_message_to_channel
+    rootFieldKind: Query
+  description: >-
+    Send a rich message with Block Kit blocks to a Slack channel
+
+
+    Posts a message to Slack using the Slack Web API. Supports rich formatting through
+
+    Block Kit blocks or simple text content. The message will appear from your bot
+
+    with customizable appearance.
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: send_slack_message_to_channel
+  permissions:
+    - role: admin
+      allowExecution: true
+

@@ -1,0 +1,23 @@
+{
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "ndc-lambda-sdk host -f functions.ts serve --configuration ./",
+    "watch": "ndc-lambda-sdk host -f functions.ts --watch serve --configuration ./ --pretty-print-logs",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@hasura/ndc-lambda-sdk": "1.13.0",
+    "axios": "^1.8.4",
+    "jose": "^6.0.11",
+    "openid-client": "^6.4.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "dotenv-cli": "^7.4.2",
+    "jest": "30.0.5",
+    "ts-jest": "^29.4.0"
+  }
+}

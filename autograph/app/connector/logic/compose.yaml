@@ -1,0 +1,23 @@
+services:
+  app_logic:
+    build:
+      context: .
+      dockerfile: .hasura-connector/Dockerfile
+    develop:
+      watch:
+        - action: rebuild
+          path: .
+    environment:
+      AUTH_JWKS_URI: $APP_LOGIC_AUTH_JWKS_URI
+      CONSOLE_HOST: $APP_LOGIC_CONSOLE_HOST
+      CONTROL_PLANE_URL: $APP_LOGIC_CONTROL_PLANE_URL
+      DDN_ACCESS_TOKEN: $APP_LOGIC_DDN_ACCESS_TOKEN
+      HASURA_SERVICE_TOKEN_SECRET: $APP_LOGIC_HASURA_SERVICE_TOKEN_SECRET
+      OTEL_EXPORTER_OTLP_ENDPOINT: $APP_LOGIC_OTEL_EXPORTER_OTLP_ENDPOINT
+      OTEL_SERVICE_NAME: $APP_LOGIC_OTEL_SERVICE_NAME
+      PROMPTQL_PLAYGROUND_URL: $APP_LOGIC_PROMPTQL_PLAYGROUND_URL
+      SLACK_BOT_TOKEN: $APP_LOGIC_SLACK_BOT_TOKEN
+    extra_hosts:
+      - local.hasura.dev:host-gateway
+    ports:
+      - 4734:8080

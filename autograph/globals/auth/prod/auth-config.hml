@@ -1,0 +1,19 @@
+kind: AuthConfig
+version: v3
+definition:
+  mode:
+    jwt:
+      claimsConfig:
+        locations:
+          x-hasura-default-role:
+            literal: admin
+          x-hasura-allowed-roles:
+            literal:
+              - admin
+      key:
+        jwkFromUrl: https://auth.pro.hasura.io/ddn/.well-known/jwks
+      tokenLocation:
+        type: BearerAuthorization
+      audience:
+        - promptql.hasura.io
+      issuer: https://auth.pro.hasura.io/ddn/token

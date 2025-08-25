@@ -1,0 +1,686 @@
+kind: DataConnectorLink
+version: v1
+definition:
+  name: logic
+  url:
+    readWriteUrls:
+      read:
+        valueFromEnv: APP_LOGIC_READ_URL
+      write:
+        valueFromEnv: APP_LOGIC_WRITE_URL
+  headers:
+    Authorization:
+      valueFromEnv: APP_LOGIC_AUTHORIZATION_HEADER
+  schema:
+    version: v0.1
+    schema:
+      collections: []
+      functions:
+        - arguments:
+            from_thread_created_at:
+              description: 'ISO 8601-like with explicit timezone designation. Sample: 2025-04-14T14:57:03+05:30'
+              type:
+                type: nullable
+                underlying_type:
+                  name: String
+                  type: named
+            headers:
+              description: Request Headers
+              type:
+                name: JSON
+                type: named
+            sample_artifacts:
+              description: 'Whether to sample table artifacts in the thread state. Default: true'
+              type:
+                type: nullable
+                underlying_type:
+                  name: Boolean
+                  type: named
+            to_thread_created_at:
+              description: 'ISO 8601-like with explicit timezone designation. Sample: 2025-04-14T14:57:03+05:30'
+              type:
+                type: nullable
+                underlying_type:
+                  name: String
+                  type: named
+          description: Get all threads of a project.
+          name: getAllThreads
+          result_type:
+            element_type:
+              name: Thread
+              type: named
+            type: array
+        - arguments:
+            headers:
+              type:
+                name: JSON
+                type: named
+          description: Get all Models Commands and ObjectTypes of all subgraphs of a build.
+          name: getAllModelsCommandsAndTypes
+          result_type:
+            name: Resources
+            type: named
+        - arguments:
+            _headers:
+              type:
+                name: JSON
+                type: named
+            content:
+              description: |-
+                - Text content to convert. Can be:
+                - Plain text string (will be converted to section blocks)
+                - Markdown-style text with # headers and ## subheaders
+                - Pre-built SlackBlock[] array (will be returned as-is)
+
+                Examples:
+                - "Hello world" → Simple section block
+                - "# Title\n## Subtitle\nContent" → Header + subheader + section blocks
+                - [{type: "section", text: {...}}] → Returned unchanged
+              type:
+                name: String
+                type: named
+          description: |-
+            Create Slack Block Kit blocks from simple text content with basic markdown support
+
+            Converts plain text or simple markdown into properly formatted Slack Block Kit blocks.
+            Supports headers (# and ##) and automatically formats text into sections.
+          name: createSlackBlocksFromContent
+          result_type:
+            element_type:
+              name: SlackBlock
+              type: named
+            type: array
+        - arguments:
+            blocks:
+              description: |-
+                - Message content to send. Can be:
+                - Array of SlackBlock objects (rich formatted content with sections, headers, etc.)
+                - Simple text string (will be auto-converted to basic blocks)
+
+                Examples:
+                - "Hello team!" → Simple text message
+                - [{type: "header", text: {type: "plain_text", text: "Alert"}}] → Rich formatted message
+              type:
+                name: String
+                type: named
+            config:
+              description: |-
+                - Slack channel and bot configuration:
+                - channel: Target channel (e.g., "#general", "#alerts", or channel ID "C1234567890")
+                - username: Display name for the bot (e.g., "PromptQL Bot", "Alert System")
+                - iconEmoji: Bot avatar emoji (e.g., ":robot_face:", ":warning:", ":chart_with_upwards_trend:")
+                - iconUrl: Custom bot avatar image URL (alternative to iconEmoji)
+              type:
+                name: SlackConfig
+                type: named
+            headers:
+              description: '- Request headers containing authentication tokens and user context'
+              type:
+                name: JSON
+                type: named
+            text:
+              description: |-
+                - Fallback text for push notifications and accessibility. If not provided,
+                defaults to "New message". This text appears in:
+                - Mobile push notifications
+                - Desktop notifications
+                - Screen readers
+                - Slack search results
+              type:
+                type: nullable
+                underlying_type:
+                  name: String
+                  type: named
+          description: |-
+            Send a rich message with Block Kit blocks to a Slack channel
+
+            Posts a message to Slack using the Slack Web API. Supports rich formatting through
+            Block Kit blocks or simple text content. The message will appear from your bot
+            with customizable appearance.
+          name: sendSlackMessageToChannel
+          result_type:
+            name: SlackMessageResult
+            type: named
+        - arguments:
+            _headers:
+              type:
+                name: JSON
+                type: named
+            data:
+              description: |-
+                - Array of objects representing table rows. Each object should have the same keys.
+                The keys become column headers, values become cell data. Examples:
+                - Sales data: [{product: "Widget A", sales: 1250, region: "North"}, ...]
+                - User list: [{name: "John", email: "john@co.com", role: "Admin"}, ...]
+                - Metrics: [{date: "2024-01-01", visitors: 1500, conversions: 45}, ...]
+
+                Limitations:
+                - Maximum 10 rows displayed (shows "X of Y rows" if more)
+                - All values converted to strings for display
+                - Empty/null values show as empty cells
+              type:
+                name: String
+                type: named
+            title:
+              description: |-
+                - Optional header title for the table (e.g., "Q4 Sales Report", "Active Users", "System Metrics")
+                If provided, appears as a prominent header block above the table
+              type:
+                type: nullable
+                underlying_type:
+                  name: String
+                  type: named
+          description: |-
+            Create a formatted data table from structured JSON data for Slack display
+
+            Converts an array of objects into a nicely formatted table with headers and rows.
+            Perfect for displaying query results, reports, lists of records, or any tabular data.
+            Automatically handles column headers and formats data for optimal Slack readability.
+          name: createSlackDataTable
+          result_type:
+            element_type:
+              name: SlackBlock
+              type: named
+            type: array
+        - arguments:
+            _headers:
+              type:
+                name: JSON
+                type: named
+            data:
+              description: |-
+                - Object containing key-value pairs to display. Keys become bold labels,
+                values are displayed below each label. Examples:
+                - User profile: {name: "John Doe", email: "john@company.com", department: "Engineering"}
+                - System status: {uptime: "99.9%", memory: "4.2GB", cpu: "23%", disk: "67%"}
+                - Order details: {orderId: "ORD-12345", customer: "Acme Corp", amount: "$1,250.00"}
+
+                Notes:
+                - All values converted to strings for display
+                - Nested objects will be displayed as "[object Object]" - flatten first if needed
+                - Arrays will be displayed as comma-separated values
+                - Maximum 10 fields per section (splits into multiple sections if more)
+              type:
+                name: String
+                type: named
+            title:
+              description: |-
+                - Optional header title for the key-value section (e.g., "User Details",
+                "System Information", "Order Summary"). If provided, appears as a prominent header
+                block above the key-value pairs
+              type:
+                type: nullable
+                underlying_type:
+                  name: String
+                  type: named
+          description: |-
+            Create a key-value pairs display from a JSON object for detailed information presentation
+
+            Transforms an object into a clean, organized display of key-value pairs with bold labels.
+            Perfect for showing configuration details, user profiles, system information, or any
+            structured data where you want to highlight specific fields and their values.
+          name: createSlackKeyValueDisplay
+          result_type:
+            element_type:
+              name: SlackBlock
+              type: named
+            type: array
+        - arguments:
+            _headers:
+              type:
+                name: JSON
+                type: named
+            details:
+              description: |-
+                - Optional additional context or explanation text. Appears in a separate
+                section below the main message. Use for:
+                - Technical details (error codes, timing, affected systems)
+                - Next steps or action items
+                - Additional context that supports the main message
+                - Links to dashboards, logs, or documentation
+              type:
+                type: nullable
+                underlying_type:
+                  name: String
+                  type: named
+            message:
+              description: |-
+                - Primary alert message that will be displayed prominently in bold.
+                Should be concise but descriptive. Examples:
+                - "Database Migration Complete"
+                - "Payment Service Unavailable"
+                - "New Feature Deployed Successfully"
+                - "Security Alert: Unusual Login Activity"
+              type:
+                name: String
+                type: named
+            status:
+              description: |-
+                - Alert severity level that determines the emoji and visual treatment:
+                - "success": ✅ Green checkmark for completed tasks, successful operations
+                - "warning": ⚠️ Yellow warning triangle for cautions, degraded performance
+                - "error": ❌ Red X for failures, critical issues, system down
+                - "info": ℹ️ Blue info circle for general updates, announcements, FYI messages
+              type:
+                name: String
+                type: named
+          description: |-
+            Create a status alert block with visual indicators for notifications and system updates
+
+            Generates eye-catching status messages with appropriate emoji indicators and formatting.
+            Perfect for system alerts, deployment notifications, error reports, or any status updates
+            that need to grab attention and convey urgency or success.
+          name: createSlackStatusAlert
+          result_type:
+            element_type:
+              name: SlackBlock
+              type: named
+            type: array
+        - arguments:
+            _headers:
+              type:
+                name: JSON
+                type: named
+            metrics:
+              description: |-
+                - Object containing metric names and their numeric values. Keys become
+                metric labels, values are automatically formatted with thousand separators. Examples:
+                - Business metrics: {revenue: 125000, customers: 1247, conversion_rate: 3.2}
+                - System metrics: {cpu_usage: 67, memory_gb: 4.2, disk_usage: 89, uptime_hours: 720}
+                - Analytics: {page_views: 45000, unique_visitors: 12500, bounce_rate: 2.1}
+
+                Notes:
+                - All values must be numbers (integers or floats)
+                - Numbers automatically formatted with commas (e.g., 1247 → "1,247")
+                - Decimal numbers preserved (e.g., 3.14159 → "3.14159")
+                - Maximum 10 metrics per section (splits into multiple sections if more)
+              type:
+                name: String
+                type: named
+            title:
+              description: |-
+                - Optional header title for the metrics section (e.g., "Daily Analytics",
+                "System Performance", "Q4 KPIs"). If provided, appears as a prominent header
+                block above the metrics grid
+              type:
+                type: nullable
+                underlying_type:
+                  name: String
+                  type: named
+          description: |-
+            Create a metrics dashboard display from numeric data with automatic formatting
+
+            Transforms numeric data into a clean, organized metrics display with proper number
+            formatting. Perfect for KPIs, analytics dashboards, performance metrics, or any
+            numeric data that needs to be presented in a professional, easy-to-scan format.
+          name: createSlackMetricsDisplay
+          result_type:
+            element_type:
+              name: SlackBlock
+              type: named
+            type: array
+        - arguments:
+            _headers:
+              type:
+                name: JSON
+                type: named
+            items:
+              description: |-
+                - Array of items to display in the list. Each item will be converted to
+                a string and displayed on its own line. Examples:
+                - Error messages: ["Database connection failed", "API timeout", "Invalid credentials"]
+                - Todo items: ["Review pull request #123", "Update documentation", "Deploy to staging"]
+                - Features: ["Real-time notifications", "Advanced search", "Mobile app"]
+                - Steps: ["Backup database", "Run migration", "Restart services", "Verify functionality"]
+
+                Notes:
+                - All items converted to strings for display
+                - Objects will show as "[object Object]" - convert to meaningful strings first
+                - Empty array shows "No items to display" message
+                - Very long lists may hit Slack message size limits
+              type:
+                name: String
+                type: named
+            ordered:
+              description: |-
+                - Whether to use numbered list format instead of bullet points:
+                - false (default): Uses bullet points (• Item 1, • Item 2, ...)
+                - true: Uses numbers (1. Item 1, 2. Item 2, ...)
+                Use numbered lists for sequential steps, priorities, or ranked items
+              type:
+                name: Boolean
+                type: named
+            title:
+              description: |-
+                - Optional header title for the list (e.g., "Action Items", "System Errors",
+                "Deployment Steps", "New Features"). If provided, appears as a prominent header
+                block above the list
+              type:
+                type: nullable
+                underlying_type:
+                  name: String
+                  type: named
+          description: |-
+            Create a formatted list display from array data with bullet points or numbering
+
+            Converts an array of items into a clean, readable list format. Perfect for displaying
+            todo items, error messages, feature lists, steps in a process, or any collection
+            of related items that need to be presented in an organized, scannable format.
+          name: createSlackListDisplay
+          result_type:
+            element_type:
+              name: SlackBlock
+              type: named
+            type: array
+      object_types:
+        CreateBuildOutput:
+          fields:
+            build_version:
+              type:
+                name: String
+                type: named
+            description:
+              type:
+                name: String
+                type: named
+            promptql_url:
+              type:
+                name: String
+                type: named
+        Field:
+          fields:
+            description:
+              type:
+                type: nullable
+                underlying_type:
+                  name: String
+                  type: named
+            name:
+              type:
+                name: String
+                type: named
+            type:
+              type:
+                name: String
+                type: named
+        MetadataPatch:
+          fields:
+            description:
+              description: The description of the entity or field.
+              type:
+                name: String
+                type: named
+            fieldName:
+              description: Name of the field that the description should be added to (applicable only if kind == ObjectType)
+              type:
+                type: nullable
+                underlying_type:
+                  name: String
+                  type: named
+            kind:
+              description: Model, Command or ObjectType
+              type:
+                name: String
+                type: named
+            name:
+              description: Name of the entity
+              type:
+                name: String
+                type: named
+            subgraph:
+              type:
+                name: String
+                type: named
+        ModelCommand:
+          fields:
+            description:
+              type:
+                type: nullable
+                underlying_type:
+                  name: String
+                  type: named
+            name:
+              type:
+                name: String
+                type: named
+            type:
+              type:
+                name: String
+                type: named
+        ObjectType:
+          fields:
+            description:
+              type:
+                type: nullable
+                underlying_type:
+                  name: String
+                  type: named
+            fields:
+              type:
+                element_type:
+                  name: Field
+                  type: named
+                type: array
+            name:
+              type:
+                name: String
+                type: named
+        Resources:
+          fields:
+            subgraphs:
+              description: The subgraphs of the project
+              type:
+                element_type:
+                  name: SubgraphData
+                  type: named
+                type: array
+        SlackBlock:
+          description: Slack Block Kit block element - simplified for NDC compatibility
+          fields:
+            elements:
+              type:
+                type: nullable
+                underlying_type:
+                  element_type:
+                    name: SlackBlock_text
+                    type: named
+                  type: array
+            fields:
+              type:
+                type: nullable
+                underlying_type:
+                  element_type:
+                    name: SlackBlock_text
+                    type: named
+                  type: array
+            text:
+              type:
+                type: nullable
+                underlying_type:
+                  name: SlackBlock_text
+                  type: named
+            type:
+              type:
+                name: String
+                type: named
+        SlackBlock_text:
+          fields:
+            text:
+              type:
+                name: String
+                type: named
+            type:
+              type:
+                name: String
+                type: named
+        SlackConfig:
+          description: Slack configuration
+          fields:
+            channel:
+              type:
+                name: String
+                type: named
+            iconEmoji:
+              type:
+                type: nullable
+                underlying_type:
+                  name: String
+                  type: named
+            iconUrl:
+              type:
+                type: nullable
+                underlying_type:
+                  name: String
+                  type: named
+            username:
+              type:
+                type: nullable
+                underlying_type:
+                  name: String
+                  type: named
+        SlackMessageResult:
+          description: Slack message sending result
+          fields:
+            error:
+              type:
+                type: nullable
+                underlying_type:
+                  name: String
+                  type: named
+            messageId:
+              type:
+                type: nullable
+                underlying_type:
+                  name: String
+                  type: named
+            success:
+              type:
+                name: Boolean
+                type: named
+        SubgraphData:
+          fields:
+            commands:
+              description: The commands in the subgraph
+              type:
+                element_type:
+                  name: ModelCommand
+                  type: named
+                type: array
+            models:
+              description: The models in the subgraph
+              type:
+                element_type:
+                  name: ModelCommand
+                  type: named
+                type: array
+            name:
+              description: The name of the subgraph
+              type:
+                name: String
+                type: named
+            objectTypes:
+              description: The object types in the subgraph
+              type:
+                element_type:
+                  name: ObjectType
+                  type: named
+                type: array
+        Thread:
+          fields:
+            build_id:
+              type:
+                type: nullable
+                underlying_type:
+                  name: String
+                  type: named
+            created_at:
+              type:
+                name: String
+                type: named
+            project_id:
+              type:
+                name: String
+                type: named
+            state:
+              type:
+                type: nullable
+                underlying_type:
+                  name: String
+                  type: named
+            thread_id:
+              type:
+                name: String
+                type: named
+            title:
+              type:
+                type: nullable
+                underlying_type:
+                  name: String
+                  type: named
+            user_id:
+              type:
+                type: nullable
+                underlying_type:
+                  name: String
+                  type: named
+      procedures:
+        - arguments:
+            description:
+              description: Optional description for the build
+              type:
+                type: nullable
+                underlying_type:
+                  name: String
+                  type: named
+            headers:
+              type:
+                name: JSON
+                type: named
+            patches:
+              type:
+                element_type:
+                  name: MetadataPatch
+                  type: named
+                type: array
+          description: Creates a new supergraph build by applying the patches on the metadata of the applied build of a project.
+          name: createMetadataPatchBuild
+          result_type:
+            name: CreateBuildOutput
+            type: named
+      scalar_types:
+        Boolean:
+          aggregate_functions: {}
+          comparison_operators:
+            _eq:
+              type: equal
+          representation:
+            type: boolean
+        JSON:
+          aggregate_functions: {}
+          comparison_operators: {}
+          representation:
+            type: json
+        String:
+          aggregate_functions: {}
+          comparison_operators:
+            _eq:
+              type: equal
+          representation:
+            type: string
+    capabilities:
+      capabilities:
+        mutation: {}
+        query:
+          nested_fields: {}
+          variables: {}
+      version: 0.1.6
+  argumentPresets:
+    - argument: headers
+      value:
+        httpHeaders:
+          forward:
+            - Authorization
+            - x-hasura-ddn-token
+            - x-hasura-autograph-project-id
+            - x-hasura-autograph-build-id
+          additional: {}

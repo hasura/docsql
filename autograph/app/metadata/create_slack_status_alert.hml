@@ -1,0 +1,71 @@
+---
+kind: Command
+version: v1
+definition:
+  name: create_slack_status_alert
+  outputType: "[slack_block!]!"
+  arguments:
+    - name: headers
+      type: json!
+    - name: details
+      type: String
+      description: |-
+        - Optional additional context or explanation text. Appears in a separate
+        section below the main message. Use for:
+        - Technical details (error codes, timing, affected systems)
+        - Next steps or action items
+        - Additional context that supports the main message
+        - Links to dashboards, logs, or documentation
+    - name: message
+      type: String!
+      description: |-
+        - Primary alert message that will be displayed prominently in bold.
+        Should be concise but descriptive. Examples:
+        - "Database Migration Complete"
+        - "Payment Service Unavailable"
+        - "New Feature Deployed Successfully"
+        - "Security Alert: Unusual Login Activity"
+    - name: status
+      type: String!
+      description: >-
+        - Alert severity level that determines the emoji and visual treatment:
+
+        - "success": ✅ Green checkmark for completed tasks, successful operations
+
+        - "warning": ⚠️ Yellow warning triangle for cautions, degraded performance
+
+        - "error": ❌ Red X for failures, critical issues, system down
+
+        - "info": ℹ️ Blue info circle for general updates, announcements, FYI messages
+  source:
+    dataConnectorName: logic
+    dataConnectorCommand:
+      function: createSlackStatusAlert
+    argumentMapping:
+      headers: _headers
+      details: details
+      message: message
+      status: status
+  graphql:
+    rootFieldName: create_slack_status_alert
+    rootFieldKind: Query
+  description: >-
+    Create a status alert block with visual indicators for notifications and
+    system updates
+
+
+    Generates eye-catching status messages with appropriate emoji indicators and formatting.
+
+    Perfect for system alerts, deployment notifications, error reports, or any status updates
+
+    that need to grab attention and convey urgency or success.
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: create_slack_status_alert
+  permissions:
+    - role: admin
+      allowExecution: true
+

@@ -1,0 +1,72 @@
+---
+kind: Command
+version: v1
+definition:
+  name: create_slack_metrics_display
+  outputType: "[slack_block!]!"
+  arguments:
+    - name: headers
+      type: json!
+    - name: metrics
+      type: String!
+      description: >-
+        - Object containing metric names and their numeric values. Keys become
+
+        metric labels, values are automatically formatted with thousand separators. Examples:
+
+        - Business metrics: {revenue: 125000, customers: 1247, conversion_rate: 3.2}
+
+        - System metrics: {cpu_usage: 67, memory_gb: 4.2, disk_usage: 89, uptime_hours: 720}
+
+        - Analytics: {page_views: 45000, unique_visitors: 12500, bounce_rate: 2.1}
+
+
+        Notes:
+
+        - All values must be numbers (integers or floats)
+
+        - Numbers automatically formatted with commas (e.g., 1247 → "1,247")
+
+        - Decimal numbers preserved (e.g., 3.14159 → "3.14159")
+
+        - Maximum 10 metrics per section (splits into multiple sections if more)
+    - name: title
+      type: String
+      description: >-
+        - Optional header title for the metrics section (e.g., "Daily
+        Analytics",
+
+        "System Performance", "Q4 KPIs"). If provided, appears as a prominent header
+
+        block above the metrics grid
+  source:
+    dataConnectorName: logic
+    dataConnectorCommand:
+      function: createSlackMetricsDisplay
+    argumentMapping:
+      headers: _headers
+      metrics: metrics
+      title: title
+  graphql:
+    rootFieldName: create_slack_metrics_display
+    rootFieldKind: Query
+  description: >-
+    Create a metrics dashboard display from numeric data with automatic
+    formatting
+
+
+    Transforms numeric data into a clean, organized metrics display with proper number
+
+    formatting. Perfect for KPIs, analytics dashboards, performance metrics, or any
+
+    numeric data that needs to be presented in a professional, easy-to-scan format.
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: create_slack_metrics_display
+  permissions:
+    - role: admin
+      allowExecution: true
+

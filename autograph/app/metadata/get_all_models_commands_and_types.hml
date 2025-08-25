@@ -1,0 +1,199 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: model_command
+  fields:
+    - name: description
+      type: String
+    - name: name
+      type: String!
+    - name: type
+      type: String!
+  graphql:
+    typeName: model_command
+    inputTypeName: model_command_input
+  dataConnectorTypeMapping:
+    - dataConnectorName: logic
+      dataConnectorObjectType: ModelCommand
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: model_command
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - description
+          - name
+          - type
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: field
+  fields:
+    - name: description
+      type: String
+    - name: name
+      type: String!
+    - name: type
+      type: String!
+  graphql:
+    typeName: field
+    inputTypeName: field_input
+  dataConnectorTypeMapping:
+    - dataConnectorName: logic
+      dataConnectorObjectType: Field
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: field
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - description
+          - name
+          - type
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: object_type
+  fields:
+    - name: description
+      type: String
+    - name: fields
+      type: "[field!]!"
+    - name: name
+      type: String!
+  graphql:
+    typeName: object_type
+    inputTypeName: object_type_input
+  dataConnectorTypeMapping:
+    - dataConnectorName: logic
+      dataConnectorObjectType: ObjectType
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: object_type
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - description
+          - fields
+          - name
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: subgraph_data
+  fields:
+    - name: commands
+      type: "[model_command!]!"
+      description: The commands in the subgraph
+    - name: models
+      type: "[model_command!]!"
+      description: The models in the subgraph
+    - name: name
+      type: String!
+      description: The name of the subgraph
+    - name: object_types
+      type: "[object_type!]!"
+      description: The object types in the subgraph
+  graphql:
+    typeName: subgraph_data
+    inputTypeName: subgraph_data_input
+  dataConnectorTypeMapping:
+    - dataConnectorName: logic
+      dataConnectorObjectType: SubgraphData
+      fieldMapping:
+        commands:
+          column:
+            name: commands
+        models:
+          column:
+            name: models
+        name:
+          column:
+            name: name
+        object_types:
+          column:
+            name: objectTypes
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: subgraph_data
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - commands
+          - models
+          - name
+          - object_types
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: resources
+  fields:
+    - name: subgraphs
+      type: "[subgraph_data!]!"
+      description: The subgraphs of the project
+  graphql:
+    typeName: resources
+    inputTypeName: resources_input
+  dataConnectorTypeMapping:
+    - dataConnectorName: logic
+      dataConnectorObjectType: Resources
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: resources
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - subgraphs
+
+---
+kind: Command
+version: v1
+definition:
+  name: get_all_models_commands_and_types
+  outputType: resources!
+  source:
+    dataConnectorName: logic
+    dataConnectorCommand:
+      function: getAllModelsCommandsAndTypes
+  graphql:
+    rootFieldName: get_all_models_commands_and_types
+    rootFieldKind: Query
+  description: Get all Models Commands and ObjectTypes of all subgraphs of a build.
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: get_all_models_commands_and_types
+  permissions:
+    - role: admin
+      allowExecution: true
+
