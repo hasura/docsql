@@ -23,6 +23,10 @@ definition:
       output:
         allowedFields:
           - values
+    - role: public
+      output:
+        allowedFields:
+          - values
 
 ---
 kind: Command
