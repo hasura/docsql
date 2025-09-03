@@ -23,6 +23,10 @@ definition:
       output:
         allowedFields:
           - values
+    - role: public
+      output:
+        allowedFields:
+          - values
 
 ---
 kind: Command
@@ -48,5 +52,7 @@ definition:
   commandName: transform_query_into_embedding
   permissions:
     - role: admin
+      allowExecution: true
+    - role: public
       allowExecution: true
 
